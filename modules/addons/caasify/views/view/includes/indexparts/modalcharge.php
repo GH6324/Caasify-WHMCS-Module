@@ -114,7 +114,7 @@ $CloudTopupLink = '/clientarea.php?action=addfunds';
                                                             <span class="input-group-text" id="chargecredit" disabled>≈</span>
                                                             <input type="number" class="form-control"  aria-label="qualchargecredite" aria-describedby="qualchargecredit" :value="showChargeAmountCloudUnit(chargeAmountInCaasifyCurrency)" disabled style="max-width: 130px;">
                                                             <span class="input-group-text" id="chargecredit" style="min-width: 50px;">
-                                                                {{ config.CaasifyDefaultCurrencySymbol }}
+                                                                {{ CaasifyDefaultCurrencySymbol }}
                                                             </span>
                                                         </div>
                                                     </div>

@@ -15,11 +15,8 @@ app = createApp({
 
 
 
-            PersonalRootDirectoryURL: '',
+            
             PanelLanguage: null,
-            moduleConfig: null,
-            moduleConfigIsLoaded: null,
-
             machinsLoaded: false,
             userHasNoorder: false,
 
