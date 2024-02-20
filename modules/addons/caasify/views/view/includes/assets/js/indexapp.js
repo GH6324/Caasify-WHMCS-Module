@@ -593,7 +593,6 @@ app = createApp({
         // old load
         async CreateUnpaidInvoice() {
             this.ConstChargeamountInWhmcs = Object.freeze({value: this.chargeAmountinWhmcs});            
-              
             const chargeAmountinWhmcs = this.ConstChargeamountInWhmcs.value 
             let chargingValidity = this.chargingValidity;
             this.theChargingSteps = 1;
@@ -609,7 +608,7 @@ app = createApp({
                     this.ConstantInvoiceId = Object.freeze({value: response?.data.invoiceid});
                     setTimeout(() => {
                         this.theStepStatus = 12;
-                        this.chargeCloud();
+                        this.chargeCaasify();
                     }, 6000);
                 } else {
                     this.GlobalError = 1
@@ -628,7 +627,7 @@ app = createApp({
 
 
 
-        async chargeCloud() {
+        async chargeCaasify() {
             const id = this.ConstUserId.value;
             const chargeamountInAutovm = this.ConverFromWhmcsToCloud(this.ConstChargeamountInWhmcs.value);
             const invoiceid = this.ConstantInvoiceId.value
@@ -644,7 +643,7 @@ app = createApp({
             };
 
             if(id > 0){
-                RequestLink = this.CreateRequestLink(action = 'chargeCloud');
+                RequestLink = this.CreateRequestLink(action = 'chargeCaasify');
                 let response = await axios.post(RequestLink, params);            
                 if(response?.data.data){
                     setTimeout(() => {
