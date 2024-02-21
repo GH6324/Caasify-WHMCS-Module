@@ -677,25 +677,25 @@ createApp({
             this.plans = [];
             let formData = new FormData();
             // formData.append('id', this.regions.id);
-            formData.append('CategoryID', 2);
+            formData.append('CategoryID', 1);
 
 
 
             RequestLink = this.CreateRequestLink(action = 'CaasifyGetPlans');
             let response = await axios.post(RequestLink, formData);
             this.plansAreLoading = true
-            response = response.data
-            if (response?.message) {
+            
+            if (response?.data?.message) {
                 this.plansAreLoading = false;
                 this.plansAreLoaded = true;
                 console.log('can not find any plans in this regin');
             }
 
-            if (response?.data) {
-                this.plansLength = response.data.length;
+            if (response?.data?.data) {
+                this.plansLength = response?.data?.data.length;
                 this.plansAreLoading = false;
                 this.plansAreLoaded = true;
-                this.plans = response.data
+                this.plans = response?.data?.data
             }
         },
 

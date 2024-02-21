@@ -22,6 +22,15 @@ class Request
      */
     protected $params;
 
+    
+    protected $method;
+
+    public function setMethod($method)
+    {
+        $this->method = $method;
+        return $this;
+    }
+
     /**
      * Documentation for this.
      */
@@ -139,14 +148,15 @@ class Request
             $headers = $this->mergeHeaders();
         }
 
-        return $this->send($address, $headers, $this->params);
+        return $this->send($address, $headers, $this->params, $this->method);
     }
 
     /**
      * Documentation for this.
      */
-    protected function send($address, $headers, $params)
+    protected function send($address, $headers, $params, $method = 'GET')
     {
+
         $curl = curl_init($address);
 
         $options = [CURLOPT_RETURNTRANSFER => true, CURLOPT_FOLLOWLOCATION => true, CURLOPT_SSL_VERIFYPEER => false, CURLOPT_TIMEOUT => 15];
@@ -155,15 +165,23 @@ class Request
             $options[CURLOPT_HTTPHEADER] = $headers;
         }
 
-        if ($params) {
-            $options[CURLOPT_POSTFIELDS] = $params;
+        if($method == 'POST'){
+            $options[CURLOPT_POST] = true;
+            if ($params) {
+                $options[CURLOPT_POSTFIELDS] = $params;
+            }
+        } elseif ($method === 'GET') {
+            if ($params) {
+                $address .= '?' . http_build_query($params);
+            }
         }
 
+        curl_setopt($curl, CURLOPT_URL, $address);
         curl_setopt_array($curl, $options);
-
         $response = curl_exec($curl);
         curl_close($curl);
 
         return new Response($response);
+
     }
 }

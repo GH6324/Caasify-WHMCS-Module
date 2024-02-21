@@ -2,17 +2,17 @@ new for caasify in hostnam.php
 <div class="mt-5 pt-5">
     <h1>regions</h1>
     <div class="row">
-        <div class="col-12 bg-dark text-light p-5 rounded-4">
+        <div class="col-12 bg-primary text-primary p-5 rounded-4 h5" style="--bs-bg-opacity: 0.3;">
             {{regions}}
         </div>
     </div>
 </div>
 
 <div class="mt-5 pt-5">
-    <h1>products</h1>
+    <h1>plans</h1>
     <div class="row">
-        <div class="col-12 bg-dark text-light p-5 rounded-4">
-            {{products}}
+        <div class="col-12 bg-primary text-primary p-5 rounded-4 h5" style="--bs-bg-opacity: 0.3;">
+            {{plans}}
         </div>
     </div>
 </div>

@@ -183,7 +183,7 @@ class ClientCaasifyController
         ];
         
         $params = [
-            'category' => $category,
+            'category' => $CategoryID,
         ];
         
         $BackendUrl = $this->BackendUrl;
@@ -191,8 +191,8 @@ class ClientCaasifyController
         $address = [
             $BackendUrl, 'common', 'products'
         ];
-
-        return Request::instance()->setAddress($address)->setHeaders($headers)->setParams($params)->mergeParams()->getResponse()->asObject();
+        
+        return Request::instance()->setAddress($address)->setHeaders($headers)->setParams($params)->setMethod('GET')->getResponse()->asObject();
     }
 
 
