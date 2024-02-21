@@ -127,6 +127,73 @@ class ClientCaasifyController
 
 
 
+    // New for create page
+    public function CaasifyGetRegions()
+    {
+        $UserToken = $this->getUserTokenFromDB();
+        $response = null;
+
+        if($UserToken){
+            $response = $this->sendCaasifyGetRegionsRequest($UserToken);
+        }
+        $this->response($response);
+    }
+
+    public function sendCaasifyGetRegionsRequest($UserToken)
+    {
+        
+        $headers = [
+            'Accept' => 'application/json',
+            'Authorization' => 'Bearer ' . $UserToken
+        ];
+        
+        $BackendUrl = $this->BackendUrl;
+        
+        $address = [
+            $BackendUrl, 'common', 'categories'
+        ];
+
+        return Request::instance()->setAddress($address)->setHeaders($headers)->getResponse()->asObject();
+    }
+
+
+
+
+
+    
+
+    public function CaasifyGetPlans()
+    {
+        $UserToken = $this->getUserTokenFromDB();
+        $response = null;
+        $CategoryID = caasify_get_post('CategoryID');
+        
+        if($UserToken && $CategoryID){
+            $response = $this->sendCaasifyGetPlansRequest($UserToken, $CategoryID);
+        }
+        $this->response($response);
+    }
+
+    public function sendCaasifyGetPlansRequest($UserToken, $CategoryID)
+    {
+        
+        $headers = [
+            'Accept' => 'application/json',
+            'Authorization' => 'Bearer ' . $UserToken
+        ];
+        
+        $params = [
+            'category' => $category,
+        ];
+        
+        $BackendUrl = $this->BackendUrl;
+        
+        $address = [
+            $BackendUrl, 'common', 'products'
+        ];
+
+        return Request::instance()->setAddress($address)->setHeaders($headers)->setParams($params)->mergeParams()->getResponse()->asObject();
+    }
 
 
 
@@ -164,7 +231,10 @@ class ClientCaasifyController
 
 
 
-    // Old Usabel Methids
+
+
+
+// Trans --------------------------
     public function CreateUnpaidInvoice()
     {
         $requestData = json_decode(file_get_contents("php://input"), true);
@@ -198,9 +268,6 @@ class ClientCaasifyController
         } 
     }
 
-
-
-
     public function markCancelInvoice()
     {
         $requestData = json_decode(file_get_contents("php://input"), true);
@@ -224,8 +291,6 @@ class ClientCaasifyController
             $results = localAPI($command, $postData);
             $this->response($results); 
     }
-
-
 
     public function chargeCaasify()
     {
@@ -253,7 +318,6 @@ class ClientCaasifyController
         $response = $this->sendChargeCaasifyRequest($userId, $chargeamount, $invoiceid);
         $this->response($response);
     }
-    
 
     public function sendChargeCaasifyRequest($userId, $chargeamount, $invoiceid)
     {
@@ -282,7 +346,6 @@ class ClientCaasifyController
         return Request::instance()->setAddress($address)->setHeaders($headers)->setParams($params)->getResponse()->asObject();
     }
 
-
     public function applyTheCredit()
     {
         $requestData = json_decode(file_get_contents("php://input"), true);
@@ -309,8 +372,7 @@ class ClientCaasifyController
             $this->response($results); 
         } 
     }  
-
-
+// End Trans --------------------------
 
 
 

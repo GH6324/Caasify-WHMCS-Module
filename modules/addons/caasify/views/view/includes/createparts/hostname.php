@@ -1,3 +1,23 @@
+new for caasify in hostnam.php
+<div class="mt-5 pt-5">
+    <h1>regions</h1>
+    <div class="row">
+        <div class="col-12 bg-dark text-light p-5 rounded-4">
+            {{regions}}
+        </div>
+    </div>
+</div>
+
+<div class="mt-5 pt-5">
+    <h1>products</h1>
+    <div class="row">
+        <div class="col-12 bg-dark text-light p-5 rounded-4">
+            {{products}}
+        </div>
+    </div>
+</div>
+
+
 <!-- Host Name -->
 <div class="row m-0 p-0 pt-0 pt-md-5 mt-0 mt-md-5"> 
     <div class="col-12 m-0 p-0" style="--bs-bg-opacity: 0.1;">
