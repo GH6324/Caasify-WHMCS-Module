@@ -1,18 +1,63 @@
 new for caasify in hostnam.php
-<div class="mt-5 pt-5">
-    <h1>regions</h1>
+<h1 class="mt-5 pt-5">regions</h1>
+<div v-for="region in regions" class="p-5">
     <div class="row">
         <div class="col-12 bg-primary text-primary p-5 rounded-4 h5" style="--bs-bg-opacity: 0.3;">
-            {{regions}}
+            <p>
+                id: {{region?. id}}
+            </p>
+            <p>
+                name: {{region?. name}}
+            </p>
+            <p>
+                type: {{region?. type}}
+            </p>
+            <p>
+                slug: {{region?. slug}}
+            </p>
+        </div>    
+        
+        <h5 class="mt-5">Categories</h5>
+        <div class="col-12 bg-primary text-primary p-5 rounded-4 h5" style="--bs-bg-opacity: 0.3;">
+            <div v-for="category in region.categories">
+                <p class="pt-5">
+                    ID: {{category.id}}
+                </p>
+                <hr>
+                <p>
+                    Name: {{category.name}}
+                </p>
+                <p>
+                    type: {{category.type}}
+                </p>
+                <p>
+                    slug: {{category.slug}}
+                </p>
+                <p>
+                    image: {{category.image}}
+                </p>
+            </div>
         </div>
     </div>
 </div>
 
-<div class="mt-5 pt-5">
-    <h1>plans</h1>
+<h1 class="mt-5 pt-5">plans</h1>
+<div v-for="plan in plans" class="p-4 my-3">
     <div class="row">
         <div class="col-12 bg-primary text-primary p-5 rounded-4 h5" style="--bs-bg-opacity: 0.3;">
-            {{plans}}
+            <p class="pt-5">
+                id = {{plan?.id}}
+            </p>
+            <hr>
+            <p>
+                title = {{plan?.title}}
+            </p>
+            <p>
+                description = {{plan?.description}}
+            </p>
+            <p>
+                price = {{plan?.price}}
+            </p>
         </div>
     </div>
 </div>
