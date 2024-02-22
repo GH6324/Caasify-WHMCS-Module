@@ -53,8 +53,18 @@ createApp({
 
             userCurrencyIdFromWhmcs: null,
 
+            DataCenters: [],
+            DataCenterName: '',
+            DataCenterID: '',
+            DataCentersAreLoaded: false,
+            DataCentersLength: 0,
+
             regions: [],
             regionsAreLoaded: false,
+            regionsLength: null,
+            regionIsSelected: null,
+            regionsAreLoading: null,
+
             plans: [],
             plansAreLoaded: false,
             plansAreLoading: false,
@@ -84,7 +94,7 @@ createApp({
             planTrafficPrice: null,
 
             plansLength: 0,
-            regionsLength: 0,
+
 
             templateId: null,
 
@@ -184,8 +194,7 @@ createApp({
         // new
         systemUrl(newsystemUrl) {
             if (newsystemUrl != '') {
-                this.loadRegions()
-                this.loadPlans()
+                this.loadDataCenters()
                 // this.loadRullesFromGit()
                 // this.loadCategories()
                 // this.readLanguageFirstTime()
@@ -195,9 +204,9 @@ createApp({
 
 
                 // // new
-                // this.LoadCaasifyUser();
-                // this.LoadWhmcsUser();
-                // this.LoadWhmcsCurrencies();
+                this.LoadCaasifyUser();
+                this.LoadWhmcsUser();
+                this.LoadWhmcsCurrencies();
             }
         }
     },
@@ -248,6 +257,7 @@ createApp({
         },
 
         CurrenciesRatioCloudToWhmcs() {
+            return 1;
             if (this.userCurrencyIdFromWhmcs != null && this.config.AutovmDefaultCurrencyID != null) {
                 let userCurrencyId = this.userCurrencyIdFromWhmcs;
                 let AutovmCurrencyID = this.config.AutovmDefaultCurrencyID;
@@ -621,24 +631,46 @@ createApp({
             }
         },
 
-        async loadRegions() {
-            RequestLink = this.CreateRequestLink(action = 'CaasifyGetRegions');
+        async loadDataCenters() {
+            RequestLink = this.CreateRequestLink(action = 'CaasifyGetDataCenters');
             let response = await axios.get(RequestLink);
             if (response?.data?.message) {
-                this.regionsAreLoaded = true
+                this.DataCentersAreLoaded = true
                 this.plansAreLoaded = false
-                console.log('can not find regins');
+                this.regionsAreLoaded = false
+                console.log('can not find DataCenters');
             }
             if (response?.data?.data) {
-                this.regionsLength = response?.data?.data.length;
+                this.DataCentersLength = response?.data?.data.length;
                 this.plansAreLoaded = false
-                this.regionsAreLoaded = true
-                this.regions = response?.data?.data
+                this.regionsAreLoaded = false
+                this.DataCentersAreLoaded = true
+                this.DataCenters = response?.data?.data
+            }
+        },
+
+        selectDataCenter(DataCenter) {
+            this.regionId = null
+            this.plansLength = 0
+            this.DataCenterName = DataCenter.name
+            this.DataCenterID = DataCenter.id
+
+            this.regionsAreLoaded = true
+            this.regionIsSelected = false
+            this.regions = DataCenter.categories
+            this.regionsLength = 2
+        },
+
+        isDataCenter(DataCenter) {
+            if (this.DataCenterID == DataCenter.id) {
+                return true
+            } else {
+                return false
             }
         },
 
         selectRegion(region) {
-
+            this.plansLength = 0
             this.plansAreLoading = true
             if (this.regionId == region.id) {
                 this.plansAreLoading = false
@@ -648,18 +680,9 @@ createApp({
             this.regionName = region.name
 
             this.planId = null
-            this.planName = null
-            this.planMemoryPrice = null
-            this.planCpuCorePrice = null
-            this.planCpuLimitPrice = null
-            this.planDiskPrice = null
-            this.planAddressPrice = null
-            this.planTrafficPrice = null
-
-            this.planMaxMemorySize = null
-            this.planMaxDiskSize = null
-            this.planMaxCpuCore = null
-            this.planMaxCpuLimit = null
+            this.planTitle = null
+            this.planDescription = null
+            this.planPrice = null
 
         },
 
@@ -674,11 +697,10 @@ createApp({
         },
 
         async loadPlans() {
+            this.plansAreLoaded = null;
             this.plans = [];
             let formData = new FormData();
-            // formData.append('id', this.regions.id);
-            formData.append('CategoryID', 1);
-
+            formData.append('CategoryID', this.regionId);
 
 
             RequestLink = this.CreateRequestLink(action = 'CaasifyGetPlans');
@@ -700,6 +722,8 @@ createApp({
         },
 
         selectPlan(plan) {
+            console.log(plan);
+            
             this.planIsSelected = true
             this.planId = plan.id
             this.planName = plan.name
@@ -851,9 +875,6 @@ createApp({
 
             return output
         },
-
-
-
 
 
 

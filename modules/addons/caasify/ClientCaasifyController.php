@@ -127,19 +127,34 @@ class ClientCaasifyController
 
 
 
-    // New for create page
-    public function CaasifyGetRegions()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// New for create page
+    public function CaasifyGetDataCenters()
     {
         $UserToken = $this->getUserTokenFromDB();
         $response = null;
 
         if($UserToken){
-            $response = $this->sendCaasifyGetRegionsRequest($UserToken);
+            $response = $this->sendCaasifyGetDataCentersRequest($UserToken);
         }
         $this->response($response);
     }
 
-    public function sendCaasifyGetRegionsRequest($UserToken)
+    public function sendCaasifyGetDataCentersRequest($UserToken)
     {
         
         $headers = [
@@ -155,8 +170,6 @@ class ClientCaasifyController
 
         return Request::instance()->setAddress($address)->setHeaders($headers)->getResponse()->asObject();
     }
-
-
 
 
 
@@ -196,8 +209,7 @@ class ClientCaasifyController
         return Request::instance()->setAddress($address)->setHeaders($headers)->getResponse()->asObject();
     }
 
-
-
+//
 
 
 

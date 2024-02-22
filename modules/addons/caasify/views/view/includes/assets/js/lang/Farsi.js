@@ -249,10 +249,10 @@ let common = {
 
 // create order page
     "backtoorderlist" : "بازگشت به لیست ماشین‌ها",
-    "datacenters" : "موقعیت جغرافیایی *",
+    "datacenters" : "مرکز داده",
     "locationlist" : "کشور",
     "chooseregion" : "انتخاب منطقه جغرافیایی قرارگیری مرکز داده",
-    "products" : "محصولات *",
+    "products" : "پلن های",
     "selectaproduct" : "یک محصول از این منطقه انتخاب کنید",
     "thereisnodatacenter" : "در منطقه‌ای که انتخاب کرده‌اید محصولی وجود ندارد",
     "pleaseselect" : "لطفاً ابتدا یک مرکز داده را از لیست بالا انتخاب کنید",

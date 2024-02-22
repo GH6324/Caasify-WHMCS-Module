@@ -249,9 +249,9 @@ let common = {
 
 // create order page
     "backtoorderlist" : "Back to order List",
-    "datacenters" : "Location * ",
+    "datacenters" : "Data Centers * ",
     "chooseregion" : "Choose Data Center Region",
-    "products" : "Products * ",
+    "products" : "Plans",
     "selectaproduct" : "Select a product from this region",
     "thereisnodatacenter" : "There is no product in the selected region",
     "pleaseselect" : "Please, select a Data Centers first form above list",

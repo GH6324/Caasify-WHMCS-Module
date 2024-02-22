@@ -1,5 +1,5 @@
 <!-- plan-->
-<div v-if="regionsAreLoaded && regionId != null " class="row m-0 p-0 py-5 my-5" id="plans">    
+<div v-if="regionId != null" class="row m-0 p-0 py-5 my-5" id="plans">    
     <div class="col-12" style="--bs-bg-opacity: 0.1;">
         
         <!-- title -->
@@ -7,6 +7,12 @@
             <div class="m-0 p-0">
                 <span class="text-dark h3">
                     {{ lang('products') }}
+                </span>
+                <span class="text-dark h3">
+                    in
+                </span>
+                <span class="text-dark h3">
+                    {{ regionName }}
                 </span>
             </div>
             <div class="m-0 p-0">
@@ -52,7 +58,7 @@
                             <div class="d-flex flex-row justify-content-center">
                                 <div class="">
                                     <span class="h5 m-0 p-0">
-                                        {{ plan.name }}
+                                        {{ plan.title }}
                                     </span>
                                 </div>
                             </div>
@@ -61,37 +67,27 @@
                     <div class="bg-white rounded-bottom-4 py-4 px-4">
                         <div class="m-0 p-0 px-3 px-md-0">
                             <!-- Description -->
-                            <?php if(isset($templatelang)): ?>
-                                <?php if(($templatelang == "Farsi")): ?>
-                                    <div class="d-flex flex-row justify-content-end py-2">
-                                        <div class="d-flex flex-row justify-content-end">
-                                            <span v-if="plan.description" class="fs-6 text-dark fw-medium text-end" v-html="formatDescription(plan.description)" style="height: 90px;"></span>                                                
-                                            <span v-else-if="!plan.description" class="fs-6 text-dark fw-medium">
-                                                ---
-                                            </span>
-                                        </div>
-                                    </div><!-- End MemDescriptionory -->
-                                <?php elseif($templatelang != "Farsi"): ?>
-                                    <div class="d-flex flex-row justify-content-start py-2">
-                                        <div class="d-flex flex-row justify-content-start">
-                                            <span v-if="plan.description" class="fs-6 text-dark fw-medium text-start" v-html="formatDescription(plan.description)" style="height: 90px;"></span>                                            
-                                            <span v-else-if="!plan.description" class="fs-6 text-dark fw-medium">
-                                                ---
-                                            </span>
-                                        </div>
-                                    </div>
-                                <?php endif ?>
-                            <?php endif ?>
+                            <div class="d-flex flex-row justify-content-start py-2">
+                                <div class="d-flex flex-row justify-content-start">
+                                    <span v-if="plan.description != null" class="fs-6 text-dark fw-medium text-start" style="height: 90px;">
+                                        {{ plan.description }}
+                                    </span>                                            
+                                    <span v-else class="fs-6 text-dark fw-medium">
+                                        ---
+                                    </span>
+                                </div>
+                            </div>
                             <!-- End MemDescriptionory -->
                             <hr>
+                            
                             <!-- Plan start from  -->
-                            <div v-if="planStartFrom(plan.memoryPrice, plan.cpuCorePrice, plan.cpuLimitPrice, plan.diskPrice, plan.addressPrice) != null && userCurrencySymbolFromWhmcs != null" class="d-flex flex-row justify-content-center py-2 btn bg-secondary" style="--bs-bg-opacity: 0.1;">
+                            <div v-if="plan.price != null && userCurrencySymbolFromWhmcs != null" class="d-flex flex-row justify-content-center py-2 btn bg-secondary" style="--bs-bg-opacity: 0.1;">
                                 <div class="d-flex flex-row justify-content-center">
                                     <span class="fs-6 fw-medium me-2">
                                     {{ lang('pricestartsfrom') }}
                                     </span>
                                     <span class="fs-6 fw-medium">
-                                        {{ formatCostMonthly(ConverFromAutoVmToWhmcs(planStartFrom(plan.memoryPrice, plan.cpuCorePrice, plan.cpuLimitPrice, plan.diskPrice, plan.addressPrice))) }} {{ userCurrencySymbolFromWhmcs }}
+                                        {{ formatCostMonthly(ConverFromAutoVmToWhmcs(plan.price)) }} {{ userCurrencySymbolFromWhmcs }}
                                     </span>
                                 </div>
                             </div><!-- End MemDescriptionory -->
