@@ -684,7 +684,7 @@ createApp({
             RequestLink = this.CreateRequestLink(action = 'CaasifyGetPlans');
             let response = await axios.post(RequestLink, formData);
             this.plansAreLoading = true
-            
+
             if (response?.data?.message) {
                 this.plansAreLoading = false;
                 this.plansAreLoaded = true;

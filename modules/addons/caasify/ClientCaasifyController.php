@@ -182,17 +182,18 @@ class ClientCaasifyController
             'Authorization' => 'Bearer ' . $UserToken
         ];
         
-        $params = [
+        $params = http_build_query([
             'category' => $CategoryID,
-        ];
+        ]);
         
         $BackendUrl = $this->BackendUrl;
-        
+
         $address = [
-            $BackendUrl, 'common', 'products'
+            $BackendUrl, 'common', 'products', "?{$params}"
         ];
+
         
-        return Request::instance()->setAddress($address)->setHeaders($headers)->setParams($params)->setMethod('GET')->getResponse()->asObject();
+        return Request::instance()->setAddress($address)->setHeaders($headers)->getResponse()->asObject();
     }
 
 
