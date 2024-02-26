@@ -1,5 +1,6 @@
 <!-- plan-->
-<div v-if="regionId != null" class="row m-0 p-0 py-5 my-5" id="plans">    
+<div v-if="regionId != null" class="" style="height:50px"></div>
+<div v-if="regionId != null" class="row m-0 p-0 border rounded-4 bg-body-secondary py-5 px-4 mt-5" id="plans">    
     <div class="col-12" style="--bs-bg-opacity: 0.1;">
         
         <!-- title -->
@@ -21,7 +22,7 @@
                 </span>
             </div>
         </div>
-    
+        <hr class="pb-4">
         <!-- No selection -->
         <div v-if="regionName == null">
             <div class="col-12 mb-5 mt-5">
@@ -38,7 +39,7 @@
                 <div class="d-flex flex-row justify-content-start align-items-center mt-4 text-primary">
                     <p class="h5 me-4">{{ lang('loadingmsg') }}</p>
                     <span>
-                        <?php include('./includes/commodules/threespinner.php'); ?>
+                        <?php include('./includes/baselayout/threespinner.php'); ?>
                     </span>
                 </div>
             </div>
@@ -51,7 +52,7 @@
                 {{ lang('thereisnodatacenter') }}
             </div>
 
-            <div v-if="plansLength > 0" v-for="plan in plans" class="col-12 col-md-6 col-lg-4 col-xl-3 m-0 p-0 mb-5 px-1" >
+            <div v-if="plansLength > 0" v-for="plan in plans" class="col-12 col-md-6 m-0 p-0 mb-5 px-1" >
                 <div class="border rounded-4 bg-white shadow-sm" :class="{ 'shadow-lg border-secondary border-2 ': isPlan(plan) }" @click="selectPlan(plan)">
                     <div class="bg-body-secondary rounded-top-4 py-4 px-5 px-md-3 px-xl-4" style="--bs-bg-opacity: 0.5;">
                         <div class="p-0 m-0">
@@ -99,7 +100,5 @@
         </div> <!-- end order  -->
 
     </div>
-</div>
-<div v-if="regionName == null" style="height: 400px;">
 </div>
 <!-- end plan -->

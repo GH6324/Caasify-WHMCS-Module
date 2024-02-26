@@ -1,13 +1,13 @@
 <!-- Operation System -->
-<div v-if="planIsSelected" class="row m-0 p-0 py-5 my-5">
+<div v-if="planIsSelected" class="row m-0 p-0 border rounded-4 bg-body-secondary py-5 px-4 mt-5">
     <div class="col-12" style="--bs-bg-opacity: 0.1;">
         <div class="m-0 p-0">
-            <p class="text-dark h5">
+            <p class="text-dark h3">
             {{ lang('operationsystem') }}
             </p>
-            <p class="fs-6 pt-1 text-secondary pb-3">{{ lang('selectatemplate') }}</p>
+            <p class="fs-6 pt-1 text-secondary">{{ lang('selectatemplate') }}</p>
         </div>
-        
+        <hr class="pb-4">
         <!-- tems -->
         <form>
             <!-- body -->    
@@ -38,6 +38,14 @@
                                 </select>
                             </div>
                         </div>
+                    </div>
+                </div>
+                <div class="col-12 col-md-6 col-xl-4 mb-3" v-if="categories != null">
+                    <div class="d-flex flex-row justify-content-start align-items-center mt-4 text-primary ">
+                        <span class="h5 text-primary"> loading </span>
+                        <span>
+                            <?php include('./includes/baselayout/threespinner.php'); ?>                        
+                        </span>
                     </div>
                 </div>
             </div>

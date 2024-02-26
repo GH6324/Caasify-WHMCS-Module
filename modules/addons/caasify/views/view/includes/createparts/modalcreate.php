@@ -35,7 +35,7 @@
                                                     
                                                     <!-- Three spinner -->
                                                     <span v-else-if="!themachinename">    
-                                                        <?php  include('./includes/commodules/threespinner.php');      ?>
+                                                        <?php  include('./includes/baselayout/threespinner.php');      ?>
                                                     </span>
 
                                                 </td>
@@ -54,7 +54,7 @@
                                                     
                                                     <!-- Three spinner -->
                                                     <span v-else-if="!regionName">    
-                                                        <?php  include('./includes/commodules/threespinner.php');      ?>
+                                                        <?php  include('./includes/baselayout/threespinner.php');      ?>
                                                     </span>
 
                                                 </td>
@@ -73,7 +73,7 @@
                                                     
                                                     <!-- Three spinner -->
                                                     <span v-else-if="!planName">
-                                                        <?php  include('./includes/commodules/threespinner.php');      ?>
+                                                        <?php  include('./includes/baselayout/threespinner.php');      ?>
                                                     </span>
                                                 </td>
                                             </tr>
@@ -99,7 +99,7 @@
                                                     
                                                     <!-- Three spinner -->
                                                     <span v-else-if="!templateId">
-                                                        <?php  include('./includes/commodules/threespinner.php');      ?>
+                                                        <?php  include('./includes/baselayout/threespinner.php');      ?>
                                                     </span>
                                                 </td>
                                             </tr>
@@ -129,36 +129,7 @@
                                     </div>
                                 </div>
 
-                                <!-- Table of IPV -->
-                                <div class="mt-5 px-4 px-lg-5 py-4 rounded-4 bg-primary" style="--bs-bg-opacity: 0.15;">
-                                    <div class="row m-0 p-0">
-                                        <p class="h5 mb-4">
-                                            {{ lang('ipv') }}
-                                        </p>
-                                        <div class="col-12 col-md-6 m-0 p-0 d-flex flex-row align-items-center">
-                                            <input class="form-check-input p-0 m-0 border-2" type="checkbox" v-model="ipv4Checkbox" :value="ipv4Checkbox" id="ipv4checkbox">
-                                            <label class="form-check-label ms-2" for="ipv4checkbox">
-                                                <span>
-                                                    {{ lang('ipvversion4') }}
-                                                </span>
-                                                <span class="ps-2 fw-medium">
-                                                    Ipv4
-                                                </span>
-                                            </label>
-                                        </div>
-                                        <div class="col-12 col-md-6 m-0 p-0 d-flex flex-row align-items-center">
-                                            <input class="form-check-input p-0 m-0 border-2" type="checkbox" v-model="ipv6Checkbox" :value="ipv6Checkbox" id="ipv6checkbox">
-                                            <label class="form-check-label ms-2" for="ipv6checkbox">
-                                                <span>
-                                                    {{ lang('ipvversion6') }}
-                                                </span>
-                                                <span class="ps-2 fw-medium">
-                                                    Ipv6
-                                                </span>
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
+                                
 
                                 <!-- Low Balance -->
                                 <div v-if="user.balance < 2">
@@ -224,7 +195,7 @@
                             {{ showBalanceWhmcsUnit(ConverFromAutoVmToWhmcs(user.balance)) }} {{ userCurrencySymbolFromWhmcs }}
                         </span>
                         <span v-else>
-                            <?php include('./includes/commodules/threespinner.php'); ?>
+                            <?php include('./includes/baselayout/threespinner.php'); ?>
                         </span>                                        
                     </span>
                     <span v-else class="text-primary fw-medium"> --- </span>

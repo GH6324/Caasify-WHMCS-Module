@@ -198,7 +198,7 @@ createApp({
                 this.loadDataCenters()
                 // this.loadRullesFromGit()
                 // this.loadCategories()
-                // this.readLanguageFirstTime()
+                this.readLanguageFirstTime()
 
 
 
@@ -214,12 +214,12 @@ createApp({
 
     mounted() {
 
+
+
         this.fetchModuleConfig();
     },
 
     computed: {
-
-
 
         config() {
             return {
@@ -377,9 +377,6 @@ createApp({
             if (imageAddress != null && BackendUrl != null) {
                 let FullImageAddress = null;
                 FullImageAddress = BackendUrl + '/' + imageAddress
-                console.log(FullImageAddress);
-
-
                 return FullImageAddress
             } else {
                 return null
@@ -430,7 +427,6 @@ createApp({
                         rate = item.rate;
                     }
                 });
-                // console.log(rate);
 
                 if (rate) {
                     return rate
@@ -477,7 +473,7 @@ createApp({
 
         async loadRullesFromGit() {
             try {
-                let response = await axios.get('https://raw.githubusercontent.com/autovm-modules/AutoVM-WhModules-Reseller/main/modules/addons/cloudsnp/views/autovm/includes/commodules/rulles.php');
+                let response = await axios.get('https://raw.githubusercontent.com/autovm-modules/AutoVM-WhModules-Reseller/main/modules/addons/cloudsnp/views/autovm/includes/baselayout/rulles.php');
                 this.RullesText = response.data;
             } catch (error) {
                 console.error('Error fetching the file:', error);
@@ -485,7 +481,7 @@ createApp({
         },
 
         openConfirmDialog(title, text) {
-
+            window.scrollTo({ top: 0, behavior: 'smooth' });
             // Open dialog
             this.confirmDialog = true
 
@@ -656,7 +652,7 @@ createApp({
                 this.DataCentersAreLoaded = true
                 this.plansAreLoaded = false
                 this.regionsAreLoaded = false
-                console.log('can not find DataCenters');
+                console.error('can not find DataCenters');
             }
             if (response?.data?.data) {
                 this.DataCentersLength = response?.data?.data.length;
@@ -728,7 +724,7 @@ createApp({
             if (response?.data?.message) {
                 this.plansAreLoading = false;
                 this.plansAreLoaded = true;
-                console.log('can not find any plans in this regin');
+                console.error('can not find any plans in this regin');
             }
 
             if (response?.data?.data) {
@@ -740,8 +736,6 @@ createApp({
         },
 
         selectPlan(plan) {
-            console.log(plan);
-
             this.planIsSelected = true
             this.planId = plan.id
             this.planName = plan.name

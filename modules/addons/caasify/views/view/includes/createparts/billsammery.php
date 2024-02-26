@@ -1,5 +1,5 @@
 <!-- Cost Table -->
-<div v-if="planIsSelected" class="row m-0 p-0 py-5 my-5 border border-2 p-4 bg-body-secondary rounded-4 ms-md-2" style="height: 550px;">    
+<div class="row m-0 p-0 border border-2 bg-body-secondary rounded-4 px-2 py-5" style="height: 550px;">    
     <div class="col-12" style="--bs-bg-opacity: 0.1;">
         
         <!-- title -->

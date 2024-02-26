@@ -210,7 +210,7 @@
                                             </span>
                                         </div>
                                         <div class="text-secondary" v-if="theStepStatus == 11">
-                                            <?php include('./includes/commodules/threespinner.php'); ?>
+                                            <?php include('./includes/baselayout/threespinner.php'); ?>
                                         </div>
                                         <div class="text-danger" v-if="theStepStatus == 13">
                                             <span class="ps-3">{{ lang('error') }}</span>
@@ -233,7 +233,7 @@
                                             </span>
                                             </div>
                                         <div class="text-secondary" v-if="theStepStatus == 21">
-                                            <?php include('./includes/commodules/threespinner.php'); ?>
+                                            <?php include('./includes/baselayout/threespinner.php'); ?>
                                         </div>
                                         <div class="text-danger" v-if="theStepStatus == 23">
                                             <span class="ps-3">{{ lang('error') }}</span>
@@ -256,7 +256,7 @@
                                             </span>
                                         </div>
                                         <div class="text-secondary" v-if="theStepStatus == 31">
-                                            <?php include('./includes/commodules/threespinner.php'); ?>
+                                            <?php include('./includes/baselayout/threespinner.php'); ?>
                                         </div>
                                         <div class="text-danger" v-if="theStepStatus == 33">
                                             <span class="ps-3">{{ lang('error') }}</span>

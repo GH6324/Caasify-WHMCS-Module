@@ -36,6 +36,22 @@ $AssetsPath = __DIR__;
         <?php endif ?>
         <!-- END RTL  -->
 
+
+
+        <style>
+            .sidebar {
+              position: -webkit-sticky !important;
+              position: sticky !important;
+              top: 80px !important;
+              padding-top: 20px !important; /* Add padding to prevent content from being covered */
+            }
+
+            .content {
+              /* Add some padding-top to compensate for the sticky sidebar */
+              padding-top: 20px !important;
+            }
+        </style>
+
     </head>
         
 
