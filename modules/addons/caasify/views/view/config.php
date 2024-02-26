@@ -31,6 +31,32 @@ if(empty($templatelang)){
 $configs = caasify_get_config();
 
 $systemUrl = $configs['systemUrl'];
+$BackendUrl = $configs['BackendUrl'];
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Settign: should move to to module config
+$ChargeModuleEnable = true;
+$ChargeModuleDetailsViews = true;
+$CloudTopupLink = '/clientarea.php?action=addfunds';
+if(empty($BackendUrl)){
+    $BackendUrl = 'https://test.caasify.com';
+}
 
 
 ?>

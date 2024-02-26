@@ -1,11 +1,3 @@
-<?php 
-
-$ChargeModuleEnable = true;
-$ChargeModuleDetailsViews = true;
-$CloudTopupLink = '/clientarea.php?action=addfunds';
-
-?>  
-
 <!-- create order modal -->
 <div class="modal fade modal-lg" id="chargeModal"  data-bs-keyboard="false" data-bs-backdrop="static" tabindex="-1" aria-labelledby="chargeModalLabel" aria-hidden="false">
     <div class="modal-dialog">

@@ -15,21 +15,33 @@
             </div>
         </div> 
         
+
+
         <div class="row">
-            <div v-if="DataCentersAreLoaded && DataCentersLength > 0" v-for="DataCenter in DataCenters" class="col-6 col-sm-4 col-md-3 col-lg-2 mb-4">
-                <div class="d-flex flex-column align-items-center border rounded-5 bg-light shadow-sm py-4 mx-1 px-2" 
-                style="max-width: 165px !important; --bs-bg-opacity: 0.5 !important;"
+            <div v-if="DataCentersAreLoaded && DataCentersLength > 0" v-for="DataCenter in DataCenters" 
+            class="col-6 col-sm-4 col-md-4 mb-4">
+                <div class="d-flex flex-row align-items-strat shadow-lg mx-1 rounded-4" 
+                style="--bs-bg-opacity: 0.5 !important;"
                 :class="{ 'shadow-lg border border-2 border-secondary': isDataCenter(DataCenter) }" 
                 @click="selectDataCenter(DataCenter)">
-                    <div class="d-flex flex-row justify-content-center" style="width: 50px !important; height: 50px !important">
-                        <img :src="DataCenter?.image" class="m-0 p-0" style="width: 50px !important; height: 50px !important">
+                    <div v-if="CaasifyConfigs != null" class="m-0 p-0" style="width: 120px;">
+                        <img class="img-fluid rounded-start-4 border" :src="showImage(DataCenter?.image)">
                     </div>
                     
-                    <div class="row text-center mt-3">
-                        <span class="text-secondary m-0 p-0 mt-3">
-                            {{ DataCenter.name }}
-                        </span>
+
+
+                    <div class="text-start ps-3 pt-3">
+                        <p v-if="DataCenter.name" class="h3 text-dark m-0 p-0">
+                            {{ DataCenter?.name }}
+                        </p>
+                        <p v-if="DataCenter.type" class="text-secondary fw-medium mt-1">
+                            {{ DataCenter?.type.toUpperCase() }}
+                        </p>
+                        <p v-if="DataCenter.categories" class="text-secondary fw-medium mt-1">
+                            {{ DataCenter?.categories?.length }} Locations
+                        </p>
                     </div>
+                    
                 </div>
             </div>
             <div v-if="!DataCentersAreLoaded" class="d-flex flex-row justify-content-start align-items-center mt-4 text-primary">

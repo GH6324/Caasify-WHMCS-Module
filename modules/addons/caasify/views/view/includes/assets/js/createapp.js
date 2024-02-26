@@ -131,6 +131,7 @@ createApp({
             // new
 
             CaasifyConfigs: [],
+            BackendUrl: null,
             systemUrl: null,
             UserOrders: null,
             CaasifyUserInfo: null,
@@ -217,6 +218,9 @@ createApp({
     },
 
     computed: {
+
+
+
         config() {
             return {
                 minimumChargeInCaasifyCurrency: 2,
@@ -367,6 +371,20 @@ createApp({
     },
 
     methods: {
+
+        showImage(imageAddress = null) {
+            let BackendUrl = this.BackendUrl
+            if (imageAddress != null && BackendUrl != null) {
+                let FullImageAddress = null;
+                FullImageAddress = BackendUrl + '/' + imageAddress
+                console.log(FullImageAddress);
+
+
+                return FullImageAddress
+            } else {
+                return null
+            }
+        },
 
         normallizeRangeValues(percentage, min, max, step) {
             let value = Math.ceil(percentage / 100 * (max - min) / step) * step + min
@@ -723,7 +741,7 @@ createApp({
 
         selectPlan(plan) {
             console.log(plan);
-            
+
             this.planIsSelected = true
             this.planId = plan.id
             this.planName = plan.name
@@ -904,6 +922,7 @@ createApp({
                 .then(data => {
                     this.CaasifyConfigs = data.configs;
                     this.systemUrl = data.configs.systemUrl;
+                    this.BackendUrl = data.configs.BackendUrl;
                     if (this.systemUrl == '') {
                         console.error('systemUrl is empty');
                     }

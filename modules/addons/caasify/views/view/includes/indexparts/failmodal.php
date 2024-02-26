@@ -1,4 +1,3 @@
-
 <!-- create order modal -->
 <div class="modal fade modal-lg" id="failModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="failModalLabel" aria-hidden="false">
     <div class="modal-dialog">

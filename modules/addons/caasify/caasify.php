@@ -45,8 +45,9 @@ function caasify_config(){
 
     
     // Labels
-    $BackendUrl = 'Default is https://test.caasify.com/api';
-    $ResellerTokenLabel = 'Insert your Reseller Token here, as an Example "de8fs953k49ho3ellg9x"';
+    $DefaultBackendUrl = 'https://test.caasify.com';
+    $BackendUrlLabel = 'Default is " ' . $DefaultBackendUrl . ' "';
+    $ResellerTokenLabel = 'Insert your Reseller Token here, as an Example " de8fs953k49ho3ellg9x "';
     $DefLangLabel = '';
     $CaasifyCurrency = '';
 
@@ -56,7 +57,7 @@ function caasify_config(){
         "version" => "1.0.1",
         "author" => "Caasify",
         "fields" => array(
-            "BackendUrl" => array ("FriendlyName" => "Backend URL", "Type" => "text", "Size" => "31", "Description" => $BackendUrl, "Default" => "https://test.caasify.com/api"),
+            "BackendUrl" => array ("FriendlyName" => "Backend URL", "Type" => "text", "Size" => "31", "Description" => $BackendUrlLabel, "Default" => $DefaultBackendUrl),
             "ResellerToken" => array ("FriendlyName" => "Reseller Token", "Type" => "text", "Size" => "31", "Description" => $ResellerTokenLabel, "Default" => ""),
             "DefLang" => array ("FriendlyName" => "Panel Language", "Type" => "dropdown", "Options" => $LanguageOptions, "Description" => $DefLangLabel, "Default" => "English"),
             "CaasifyCurrency" => array ("FriendlyName" => "Caasify Currency", "Type" => "dropdown", "Options" => $CurrencyOptions, "Description" => $CaasifyCurrency, "Default" => 'USD'),

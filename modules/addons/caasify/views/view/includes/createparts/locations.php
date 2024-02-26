@@ -32,17 +32,18 @@
                     </div>
                 </div>
             </div>
-            <div v-if="regionsAreLoaded" v-for="region in regions" class="col-6 col-sm-4 col-md-3 col-lg-2 mb-4">
-                <div class="d-flex flex-column align-items-center border rounded-5 bg-light shadow-sm py-4 mx-1 px-2" 
-                style="max-width: 165px !important; --bs-bg-opacity: 0.5 !important;"
-                :class="{ 'shadow-lg border border-2 border-secondary': isRegion(region) }" 
+            <div v-if="regionsAreLoaded" v-for="region in regions" class="col-6 col-sm-4 col-md-3 p-2 m-0">
+                <div 
+                style="--bs-bg-opacity: 0.5 !important;"
+                class="d-flex flex-row align-items-start bg-body-secondary rounded-3"
+                :class="{ 'shadow-lg border border-2 border-dark': isRegion(region) }" 
                 @click="selectRegion(region)">
-                    <div class="d-flex flex-row justify-content-center" style="width: 50px !important; height: 50px !important">
-                        <img :src="region?.image" class="m-0 p-0" style="width: 50px !important; height: 50px !important">
+                    <div class="px-3">
+                        <img :src="showImage(region?.image)" class="img-fluid m-0 p-0" style="width: 75px; height: 70px">
                     </div>
                     
-                    <div class="row text-center mt-3">
-                        <span class="text-secondary m-0 p-0 mt-3">
+                    <div class="text-center pt-3 pe-5">
+                        <span class="h4 text-dark m-0 p-0">
                             {{ region.name }}
                         </span>
                     </div>
@@ -62,3 +63,5 @@
         </div>
     </div>
 </div>
+
+

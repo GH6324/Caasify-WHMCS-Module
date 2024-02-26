@@ -89,7 +89,7 @@ class ClientCaasifyController
         $BackendUrl = $this->BackendUrl;
 
         $address = [
-            $BackendUrl, 'orders'
+            $BackendUrl, 'api', 'orders'
         ];
         
         return Request::instance()->setAddress($address)->setHeaders($headers)->getResponse()->asObject();
@@ -116,7 +116,7 @@ class ClientCaasifyController
         $BackendUrl = $this->BackendUrl;
 
         $address = [
-            $BackendUrl, 'profile', 'show'
+            $BackendUrl, 'api', 'profile', 'show'
         ];
 
         return Request::instance()->setAddress($address)->setHeaders($headers)->getResponse()->asObject();
@@ -165,7 +165,7 @@ class ClientCaasifyController
         $BackendUrl = $this->BackendUrl;
         
         $address = [
-            $BackendUrl, 'common', 'categories'
+            $BackendUrl, 'api', 'common', 'categories'
         ];
 
         return Request::instance()->setAddress($address)->setHeaders($headers)->getResponse()->asObject();
@@ -202,7 +202,7 @@ class ClientCaasifyController
         $BackendUrl = $this->BackendUrl;
 
         $address = [
-            $BackendUrl, 'common', 'products', "?{$params}"
+            $BackendUrl, 'api', 'common', 'products', "?{$params}"
         ];
 
         
@@ -353,7 +353,7 @@ class ClientCaasifyController
         $BackendUrl = $this->BackendUrl;
 
         $address = [
-            $BackendUrl, 'users', $userId, 'transactions', 'create'
+            $BackendUrl, 'api', 'users', $userId, 'transactions', 'create'
         ];
         
         return Request::instance()->setAddress($address)->setHeaders($headers)->setParams($params)->getResponse()->asObject();

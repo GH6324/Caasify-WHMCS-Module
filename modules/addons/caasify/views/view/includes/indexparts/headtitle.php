@@ -2,15 +2,6 @@
 <?php include_once('successmodal.php'); ?>
 <?php include_once('failmodal.php'); ?>
 
-<?php 
-
-$ChargeModuleEnable = true;
-$ChargeModuleDetailsViews = true;
-$CloudTopupLink = '/clientarea.php?action=addfunds';
-
-?>  
-
-
 
 <div class="mt-5 px-3 px-md-4 mb-5">
     <p class="m-0 p-0 h3 fw-bolder text-dark d-block d-md-none">{{ lang('cloudaccount') }}</p>
