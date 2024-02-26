@@ -1,11 +1,4 @@
 <!-- SAME -->
-
-
-
-
-
-
-
 <div class="row justify-content-center">
     <div class="col-12 px-2 px-md-4">
         <div class="row justify-content-end px-2 px-md-4 px-xl-5 pt-5 pb-5 border border-2 rounded-4 bg-light" style="--bs-bg-opacity: 0.6;">
