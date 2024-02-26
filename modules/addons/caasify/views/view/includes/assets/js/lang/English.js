@@ -277,7 +277,7 @@ let common = {
     "productmissed" : "Product Name is missed",
     "templatemissed" : "Template is missed",
     "allinfoprovided" : "All nessessery information is provided",
-    "name" : "Name : ",
+    "name" : "Name",
     "datacenter" : "Data Center : ",
     "product" : "Product : ",
     "producttemplate" : "Template : ",

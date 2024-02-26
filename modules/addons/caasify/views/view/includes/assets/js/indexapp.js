@@ -15,7 +15,7 @@ app = createApp({
 
 
 
-            
+
             PanelLanguage: null,
             machinsLoaded: false,
             userHasNoorder: false,
@@ -74,7 +74,7 @@ app = createApp({
 
 
             // new
-            
+
             CaasifyConfigs: [],
             systemUrl: null,
             UserOrders: null,
@@ -570,39 +570,39 @@ app = createApp({
 
 
 
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         // old load
         async CreateUnpaidInvoice() {
-            this.ConstChargeamountInWhmcs = Object.freeze({value: this.chargeAmountinWhmcs});            
-            const chargeAmountinWhmcs = this.ConstChargeamountInWhmcs.value 
+            this.ConstChargeamountInWhmcs = Object.freeze({ value: this.chargeAmountinWhmcs });
+            const chargeAmountinWhmcs = this.ConstChargeamountInWhmcs.value
             let chargingValidity = this.chargingValidity;
             this.theChargingSteps = 1;
             this.theStepStatus = 11;
-            
-            const params = {chargeamount: chargeAmountinWhmcs};
 
-            if(chargingValidity == 'fine'){
+            const params = { chargeamount: chargeAmountinWhmcs };
+
+            if (chargingValidity == 'fine') {
                 RequestLink = this.CreateRequestLink(action = 'CreateUnpaidInvoice');
-                let response = await axios.post(RequestLink, params);            
-                if(response?.data.result == 'success'){    
+                let response = await axios.post(RequestLink, params);
+                if (response?.data.result == 'success') {
                     this.invoice = response?.data;
-                    this.ConstantInvoiceId = Object.freeze({value: response?.data.invoiceid});
+                    this.ConstantInvoiceId = Object.freeze({ value: response?.data.invoiceid });
                     setTimeout(() => {
                         this.theStepStatus = 12;
                         this.chargeCaasify();
@@ -612,9 +612,9 @@ app = createApp({
                     setTimeout(() => {
                         this.theStepStatus = 13;
                         this.TransactionError = 'error 1',
-                        setTimeout(() => {
-                            this.FailWindow();
-                        }, 3000);
+                            setTimeout(() => {
+                                this.FailWindow();
+                            }, 3000);
                     }, 3000);
                 }
             } else {
@@ -637,10 +637,10 @@ app = createApp({
 
             };
 
-            if(id > 0){
+            if (id > 0) {
                 RequestLink = this.CreateRequestLink(action = 'chargeCaasify');
-                let response = await axios.post(RequestLink, params);            
-                if(response?.data.data){
+                let response = await axios.post(RequestLink, params);
+                if (response?.data.data) {
                     setTimeout(() => {
                         this.theStepStatus = 22;
                         this.applyTheCredit();
@@ -651,9 +651,9 @@ app = createApp({
                     setTimeout(() => {
                         this.theStepStatus = 23;
                         this.TransactionError = 'error 2',
-                        setTimeout(() => {
-                            this.FailWindow();
-                        }, 3000);
+                            setTimeout(() => {
+                                this.FailWindow();
+                            }, 3000);
                     }, 3000);
                 }
             } else {
@@ -663,30 +663,30 @@ app = createApp({
 
         async markCancelInvoice() {
             const invoiceid = this.ConstantInvoiceId.value;
-            const params = {invoiceid: invoiceid};
+            const params = { invoiceid: invoiceid };
             RequestLink = this.CreateRequestLink(action = 'markCancelInvoice');
-            let response = await axios.post(RequestLink, params);            
-            if(response?.data.result == 'success'){    
+            let response = await axios.post(RequestLink, params);
+            if (response?.data.result == 'success') {
                 console.log('Invoice is marked cancelled successfully');
             } else {
-                console.log('can not able to clear invoice'); 
+                console.log('can not able to clear invoice');
             }
         },
-        
+
         async applyTheCredit() {
             const invoiceid = this.ConstantInvoiceId.value;
             const chargeamountinWhmcs = this.ConstChargeamountInWhmcs.value
-            
+
             this.theChargingSteps = 3;
             this.theStepStatus = 31;
 
-            const params = {invoiceid: invoiceid, chargeamount : chargeamountinWhmcs};
+            const params = { invoiceid: invoiceid, chargeamount: chargeamountinWhmcs };
 
-            if(invoiceid > 0){
+            if (invoiceid > 0) {
                 RequestLink = this.CreateRequestLink(action = 'applyTheCredit');
-                let response = await axios.post(RequestLink, params);            
-                
-                if(response?.data.result == 'success'){
+                let response = await axios.post(RequestLink, params);
+
+                if (response?.data.result == 'success') {
                     setTimeout(() => {
                         this.theStepStatus = 32;
                         setTimeout(() => {
@@ -698,9 +698,9 @@ app = createApp({
                     setTimeout(() => {
                         this.theStepStatus = 33;
                         this.TransactionError = 'error 3',
-                        setTimeout(() => {
-                            this.FailWindow();
-                        }, 3000);
+                            setTimeout(() => {
+                                this.FailWindow();
+                            }, 3000);
                     }, 3000);
                 }
             } else {
@@ -819,7 +819,7 @@ app = createApp({
             if (response.data?.data != null) {
                 this.UserOrders = response.data.data
 
-                this.orders = response?.data
+                this.orders = response?.data?.data
                 this.machinsLoaded = true
 
             } else if (response.data?.message) {

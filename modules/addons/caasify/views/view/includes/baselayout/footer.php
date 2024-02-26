@@ -1,6 +1,6 @@
 
 <footer>
-
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <?php 
         $environ = 'dev'; 
         // $environ = 'prod'; 
@@ -17,14 +17,14 @@
 
 
         if($environ == 'dev'){
-            echo ('<script src="./includes/assets/js/vue.global.js"></script>');
+            // echo ('<script src="./includes/assets/js/vue.global.js"></script>');
             echo ('<script src="./includes/assets/js/lang/' . $templatelang . '.js?v=' . time() . '"></script>');
             echo ('<script src="./includes/assets/js/' . $currentfilename . 'app.js?v=' . time() . '"></script>');
         }
 
 
         if($environ == 'prod'){
-            echo ('<script src="./includes/assets/js/vue.global.prod.js"></script>');
+            // echo ('<script src="./includes/assets/js/vue.global.prod.js"></script>');
             echo ('<script src="./includes/assets/js/lang/' . $templatelang. '.js"></script>');
             echo ('<script src="./includes/assets/js/' . $currentfilename . 'app.js?"></script>');
         }
