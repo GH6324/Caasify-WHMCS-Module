@@ -3,7 +3,6 @@
 <body class="container-fluid p-1 p-md-3" style="background-color: #ff000000 !important;" > 
 <div id="createapp" class="row px-1 px-md-2 py-5 mx-auto" style="max-width: 1500px;">
     <div class="" v-cloak>
-        adfsdfdsafsdfsfsdfsd
         <?php  include('./includes/createparts/modalcreate.php');  ?>
         <?php  include('./includes/baselayout/backflash.php');     ?>
         <div class="col-12 bg-white rounded-4 border border-2 border-body-secondary m-0 p-0 mt-5" style="min-height: 900px">
