@@ -52,6 +52,11 @@ class ClientCaasifyController
         return ['templatefile' => 'views/create'];
     }
 
+    public function pageView()
+    {
+        return ['templatefile' => 'views/view'];
+    }
+
     public function WhmcsUserInfo()
     {
         $clientId = $this->clientId;
@@ -171,10 +176,6 @@ class ClientCaasifyController
         return Request::instance()->setAddress($address)->setHeaders($headers)->getResponse()->asObject();
     }
 
-
-
-    
-
     public function CaasifyGetPlans()
     {
         $UserToken = $this->getUserTokenFromDB();
@@ -209,6 +210,43 @@ class ClientCaasifyController
         return Request::instance()->setAddress($address)->setHeaders($headers)->getResponse()->asObject();
     }
 
+    public function CaasifyCreateOrder()
+    {
+        $UserToken = $this->getUserTokenFromDB();
+        $response = null;
+        $product_id = caasify_get_post('product_id');
+        $note = caasify_get_post('note');
+        
+        if($UserToken && $product_id){
+            $response = $this->sendCaasifyCreateOrderRequest($UserToken, $product_id, $note);
+        }
+
+        $this->response($response);
+
+    }
+    
+    public function sendCaasifyCreateOrderRequest($UserToken, $product_id, $note)
+    {
+
+        $headers = [
+            'Accept' => 'application/json',
+            'Authorization' => 'Bearer ' . $UserToken
+        ];
+        
+        $params = [
+            'product_id' => $product_id,
+            'note' => $note,
+        ];
+        
+        $BackendUrl = $this->BackendUrl;
+
+        $address = [
+            $BackendUrl, 'api', 'orders', 'create'
+        ];
+
+        return Request::instance()->setAddress($address)->setHeaders($headers)->setParams($params)->getResponse()->asObject();
+    }
+
 //
 
 
@@ -230,6 +268,91 @@ class ClientCaasifyController
 
 
 
+
+
+// New for view page
+    public function CaasifyGetOrderViews()
+    {
+        $UserToken = $this->getUserTokenFromDB();
+        $response = null;
+
+        $machineID = caasify_get_post('machineID');
+
+        if($UserToken){
+            $response = $this->sendOrderViewsRequest($UserToken, $machineID);
+        }
+
+        $this->response($response);
+    }
+
+    public function sendOrderViewsRequest($UserToken, $machineID)
+    {
+        
+        $headers = [
+            'Accept' => 'application/json',
+            'Authorization' => 'Bearer ' . $UserToken
+        ];
+        
+        $BackendUrl = $this->BackendUrl;
+        
+        $address = [
+            $BackendUrl, 'api', 'orders', $machineID, 'views'
+        ];
+
+        return Request::instance()->setAddress($address)->setHeaders($headers)->getResponse()->asObject();
+    }
+
+
+    public function CaasifyGetOrderControllers()
+    {
+        $UserToken = $this->getUserTokenFromDB();
+        $response = null;
+
+        $machineID = caasify_get_post('machineID');
+
+        if($UserToken){
+            $response = $this->sendOrderControllersRequest($UserToken, $machineID);
+        }
+
+        $this->response($response);
+    }
+
+    public function sendOrderControllersRequest($UserToken, $machineID)
+    {
+        
+        $headers = [
+            'Accept' => 'application/json',
+            'Authorization' => 'Bearer ' . $UserToken
+        ];
+        
+        $BackendUrl = $this->BackendUrl;
+        
+        $address = [
+            $BackendUrl, 'api', 'orders', $machineID, 'actions'
+        ];
+
+        return Request::instance()->setAddress($address)->setHeaders($headers)->getResponse()->asObject();
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//
 
 
 

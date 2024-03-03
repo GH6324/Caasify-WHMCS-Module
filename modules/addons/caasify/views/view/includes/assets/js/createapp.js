@@ -13,40 +13,22 @@ createApp({
             moduleConfig: null,
             moduleConfigIsLoaded: null,
 
-            planConfig: {
-                Memory: {
-                    min: 1,
-                    step: 1,
-                },
-                CpuCore: {
-                    min: 1,
-                    step: 1,
-                },
-                CpuLimit: {
-                    min: 1,
-                    step: 1,
-                },
-                Disk: {
-                    min: 20,
-                    step: 10,
-                },
-            },
 
+            plans: [],
+            planId: null,
+            planName: null,
+            planPrice: null,
+            plansAreLoaded: false,
+            plansAreLoading: false,
+            planIsSelected: false,
+            plansLength: 0,
 
             checkboxconfirmation: null,
             msg: null,
 
             RullesText: null,
-            planMaxMemorySize: null,
-            planMaxDiskSize: null,
-            planMaxCpuCore: null,
-            planMaxCpuLimit: null,
+            
 
-            RangeValueMemoryString: 1,
-            RangeValueCpuCoreString: 1,
-            RangeValueDiskString: 20,
-
-            RangeValueOverallString: 1,
 
             WhmcsCurrencies: null,
             userCreditinWhmcs: null,
@@ -65,10 +47,6 @@ createApp({
             regionIsSelected: null,
             regionsAreLoading: null,
 
-            plans: [],
-            plansAreLoaded: false,
-            plansAreLoading: false,
-            planIsSelected: false,
 
             categories: [],
             user: {},
@@ -84,19 +62,12 @@ createApp({
             regionId: null,
             regionName: null,
 
-            planId: null,
-            planName: null,
-            planMemoryPrice: null,
-            planCpuCorePrice: null,
-            planCpuLimitPrice: null,
-            planDiskPrice: null,
-            planAddressPrice: null,
-            planTrafficPrice: null,
+            
 
-            plansLength: 0,
+            
 
 
-            templateId: null,
+            templateId: 2,
 
             themachinename: null,
             MachineNameValidationError: false,
@@ -157,20 +128,6 @@ createApp({
             }
         },
 
-        RangeValueOverall() {
-            let percentage = this.RangeValueOverall
-
-            if (percentage == 1) {
-                this.RangeValueMemoryString = this.planConfig.Memory.min
-                this.RangeValueDiskString = this.planConfig.Disk.min
-                this.RangeValueCpuCoreString = this.planConfig.CpuCore.min
-            } else {
-                this.RangeValueMemoryString = this.normallizeRangeValues(percentage, this.planConfig.Memory.min, this.planMaxMemorySize, this.planConfig.Memory.step)
-                this.RangeValueDiskString = this.normallizeRangeValues(percentage, this.planConfig.Disk.min, this.planMaxDiskSize, this.planConfig.Disk.step)
-                this.RangeValueCpuCoreString = this.normallizeRangeValues(percentage, this.planConfig.CpuCore.min, this.planMaxCpuCore, this.planConfig.CpuCore.step)
-            }
-
-        },
 
 
 
@@ -291,37 +248,14 @@ createApp({
             }
         },
 
-        RangeValueMemory() {
-            return parseFloat(this.RangeValueMemoryString);
-        },
-
-        RangeValueCpuCore() {
-            return parseFloat(this.RangeValueCpuCoreString);
-        },
-
-        RangeValueDisk() {
-            return parseFloat(this.RangeValueDiskString);
-        },
-
-        RangeValueCpuLimit() {
-            return parseFloat(this.RangeValueCpuCore)
-        },
-
-        RangeValueOverall() {
-            return parseFloat(this.RangeValueOverallString)
-        },
+        
 
         NewMachinePrice() {
             let decimal = this.config.DefaultMonthlyDecimal
-            if (this.planCpuCorePrice != null && this.planCpuLimitPrice != null && this.planDiskPrice != null && this.planMemoryPrice != null && this.planAddressPrice != null) {
-                if (this.RangeValueCpuCore != null && this.RangeValueCpuLimit != null && this.RangeValueDisk != null && this.RangeValueMemory != null) {
-                    let value = (this.planCpuCorePrice * this.RangeValueCpuCore) + (this.planCpuLimitPrice * this.RangeValueCpuLimit) + (this.planDiskPrice * this.RangeValueDisk) + (this.planMemoryPrice * this.RangeValueMemory) + (this.planAddressPrice)
-                    return value
-                } else {
-                    return null
-                }
-            } else {
-                return null
+            let value = this.planPrice
+            
+            if(value){
+                return value.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
             }
         },
 
@@ -568,6 +502,11 @@ createApp({
             }
         },
 
+        showMachinePriceInWhmcsUnit(value) {
+            let decimal = this.config.DefaultMonthlyDecimal
+            return this.formatNumbers(value, decimal)
+        },
+
         showBalanceWhmcsUnit(value) {
             let decimal = this.config.DefaultBalanceDecimalWhmcs
             return this.formatNumbers(value, decimal)
@@ -710,46 +649,14 @@ createApp({
 
         },
 
-        async loadPlans() {
-            this.plansAreLoaded = null;
-            this.plans = [];
-            let formData = new FormData();
-            formData.append('CategoryID', this.regionId);
-
-
-            RequestLink = this.CreateRequestLink(action = 'CaasifyGetPlans');
-            let response = await axios.post(RequestLink, formData);
-            this.plansAreLoading = true
-
-            if (response?.data?.message) {
-                this.plansAreLoading = false;
-                this.plansAreLoaded = true;
-                console.error('can not find any plans in this regin');
-            }
-
-            if (response?.data?.data) {
-                this.plansLength = response?.data?.data.length;
-                this.plansAreLoading = false;
-                this.plansAreLoaded = true;
-                this.plans = response?.data?.data
-            }
-        },
+        
 
         selectPlan(plan) {
             this.planIsSelected = true
             this.planId = plan.id
-            this.planName = plan.name
-            this.planMemoryPrice = parseFloat(plan.memoryPrice)
-            this.planCpuCorePrice = parseFloat(plan.cpuCorePrice)
-            this.planCpuLimitPrice = parseFloat(plan.cpuLimitPrice)
-            this.planDiskPrice = parseFloat(plan.diskPrice)
-            this.planAddressPrice = parseFloat(plan.addressPrice)
-            this.planTrafficPrice = parseFloat(plan.trafficPrice)
-
-            this.planMaxMemorySize = parseFloat(plan.maxMemorySize) / 1024
-            this.planMaxCpuCore = parseFloat(plan.maxCpuCore)
-            this.planMaxCpuLimit = parseFloat(plan.maxCpuLimit)
-            this.planMaxDiskSize = parseFloat(plan.maxDiskSize)
+            this.planName = plan.title
+            this.planPrice = plan.price
+            
         },
 
         isPlan(plan) {
@@ -773,65 +680,14 @@ createApp({
             }
         },
 
-        async create() {
-            let accept = await this.openConfirmDialog(this.lang('Create Machine'), this.lang('Are you sure about this?'))
-
-            if (accept) {
-                let formData = new FormData()
-
-                if (this.themachinename != null) { formData.append('name', this.themachinename) }
-                if (this.themachinename != null) { formData.append('publicKey', this.themachinessh) }
-                if (this.planId != null) { formData.append('planId', this.planId) }
-                if (this.templateId != null) { formData.append('templateId', this.templateId) }
-                if (this.RangeValueMemory != null) { formData.append('memorySize', this.RangeValueMemory * 1024) }
-                if (this.RangeValueCpuCore != null) { formData.append('cpuCore', this.RangeValueCpuCore) }
-                if (this.RangeValueCpuLimit != null) { formData.append('cpuLimit', this.RangeValueCpuLimit * 1000) }
-                if (this.RangeValueDisk != null) { formData.append('diskSize', this.RangeValueDisk) }
-
-                if (this.ipv4Checkbox == true) { formData.append('ipv4', 1) }
-                else if (this.ipv4Checkbox == false) { formData.append('ipv4', 0) }
-
-                if (this.ipv6Checkbox == true) { formData.append('ipv6', 1) }
-                else if (this.ipv6Checkbox == false) { formData.append('ipv6', 0) }
-
-                formData.append('traffic', 5)
-
-                let response = await axios.post(this.PersonalRootDirectoryURL + '/index.php?m=cloudsnp&action=create', formData)
-
-                response = response.data
-
-                if (response?.data) {
-                    this.createActionSucced = true
-                } else if (response?.message) {
-                    this.msg = response?.message
-                    this.openMessageDialog(this.lang(response?.message))
-                    this.createActionFailed = true
-                } else {
-                    this.createActionFailed = true
-                }
-            }
-        },
+        
 
 
         OpenMachineList() {
             window.open(this.PersonalRootDirectoryURL + '/index.php?m=cloudsnp&action=pageIndex')
         },
 
-        planStartFrom(MemoryPrice, CpuCorePrice, CpuLimitPrice, DiskPrice, AddressPrice) {
-            if (MemoryPrice != null && CpuCorePrice != null && CpuLimitPrice != null && DiskPrice != null && AddressPrice != null) {
-                MemoryPrice = parseFloat(MemoryPrice)
-                CpuCorePrice = parseFloat(CpuCorePrice)
-                CpuLimitPrice = parseFloat(CpuLimitPrice)
-                DiskPrice = parseFloat(DiskPrice)
-                AddressPrice = parseFloat(AddressPrice)
-
-                let totalPrice = MemoryPrice + CpuCorePrice + CpuLimitPrice + 20 * DiskPrice + AddressPrice
-                return totalPrice
-            } else {
-                return null
-            }
-        },
-
+        
         reloadPage() {
 
             location.reload()
@@ -965,6 +821,62 @@ createApp({
                 this.WhmcsCurrencies = response.data.currencies
             } else {
                 console.error('WhmcsCurrencies: ' + 'no response');
+            }
+        },
+
+
+
+        async loadPlans() {
+            this.plansAreLoaded = null;
+            this.plans = [];
+            let formData = new FormData();
+            formData.append('CategoryID', this.regionId);
+
+
+            RequestLink = this.CreateRequestLink(action = 'CaasifyGetPlans');
+            let response = await axios.post(RequestLink, formData);
+            this.plansAreLoading = true
+
+            if (response?.data?.message) {
+                this.plansAreLoading = false;
+                this.plansAreLoaded = true;
+                console.error('can not find any plans in this regin');
+            }
+
+            if (response?.data?.data) {
+                this.plansLength = response?.data?.data.length;
+                this.plansAreLoading = false;
+                this.plansAreLoaded = true;
+                this.plans = response?.data?.data
+            }
+        },
+
+
+        async create() {
+            let accept = await this.openConfirmDialog(this.lang('Create Machine'), this.lang('Are you sure about this?'))
+
+            if (accept) {
+
+                let formData = new FormData();
+                formData.append('note', this.themachinename);
+                formData.append('product_id', this.planId);
+                formData.append('templateId', this.templateId);
+                formData.append('ipv4Checkbox', this.ipv4Checkbox);
+                formData.append('ipv6Checkbox', this.ipv6Checkbox);
+
+                RequestLink = this.CreateRequestLink(action = 'CaasifyCreateOrder');
+                let response = await axios.post(RequestLink, formData);
+                response = response.data
+
+                if (response?.data) {
+                    this.createActionSucced = true
+                } else if (response?.message) {
+                    this.msg = response?.message
+                    this.openMessageDialog(this.lang(response?.message))
+                    this.createActionFailed = true
+                } else {
+                    this.createActionFailed = true
+                }
             }
         },
     }

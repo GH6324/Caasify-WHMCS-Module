@@ -1,26 +1,19 @@
 <!-- Data Centers -->
 <div v-if="regionIsSelected != null" class="" style="height:50px"></div>
-<div v-if="regionIsSelected != null" class="row m-0 p-0 mt-5 border rounded-4 py-5 px-4 bg-body-secondary">
+<div v-if="regionIsSelected != null" class="row m-0 p-0 mt-5 py-5 px-4 ">
     <div class="col-12 m-0 p-0" style="--bs-bg-opacity: 0.1;">
         <div class="row">
-            <div class="row">
+            <div class="col-12 mb-5">
                 <p class=" h3">
                     <span class="pe-2">
                         {{ DataCenterName }}
                     </span>
                     <span class="">
-                        {{ lang('Locations') }}
+                        {{ lang('Locations') }} *
                     </span>
                 </p>    
             </div>
-
-            <div class="row">
-                <span class="fs-6 pt-1 text-secondary">
-                {{ lang('chooseregion') }}
-                </span>
-            </div>
         </div> 
-        <hr class="pb-4">
         <div class="row">
              <!-- Selected but loading -->
             <div v-if="regionsAreLoading" class="row mt-5">
@@ -33,10 +26,10 @@
                     </div>
                 </div>
             </div>
-            <div v-if="regionsAreLoaded" v-for="region in regions" class="col-6 col-sm-4 p-2 m-0">
+            <div v-if="regionsAreLoaded" v-for="region in regions" class="col-6 col-sm-4 col-md-3 p-2 m-0">
                 <div 
                 style="--bs-bg-opacity: 0.5 !important; height: 70px !important;"
-                class="d-flex flex-row align-items-center bg-light rounded-4 shadow-lg bg-body-secondary"
+                class="d-flex flex-row align-items-center bg-light rounded-4 shadow-lg bg-white border"
                 :class="{ 'border border-2 border-dark': isRegion(region) }" 
                 @click="selectRegion(region)">
                     <div class="px-3">

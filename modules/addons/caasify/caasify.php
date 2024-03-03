@@ -39,8 +39,18 @@ function caasify_config(){
     $CurrencyOptions = caasify_create_currency_options();
     $LanguageOptions = array (
         'English' => 'English',
-        'Farsi' => 'Farsi',
-        'Turkish' => 'Turkish',
+        'Farsi' => 'فارسی',
+        'Turkish' => 'Türkçe',
+        'French' => 'Français',
+        'Deutsch' => 'Deutsch',
+        'Russian' => 'Pусский',
+        'Brizilian' => 'Brizilian',
+        'Italian' => 'Italian',
+    );
+
+    $YesNoOption = array (
+        'on' => 'on',
+        'off' => 'off',
     );
 
     
@@ -50,6 +60,10 @@ function caasify_config(){
     $ResellerTokenLabel = 'Insert your Reseller Token here, as an Example " de8fs953k49ho3ellg9x "';
     $DefLangLabel = '';
     $CaasifyCurrency = '';
+    $DevelopeModeLabel = 'Switch on Developing Mode for debuging, Otherwise do not turn this on';
+    $ChargeModuleLabel = 'Switch on if wish to use Charging Module';
+    $ViewExchangesLabel = 'Switch on if wish to see exchange in caasify currency';
+    $CloudTopupLinkLabel = 'Insert relative TopUp Link, as an Example "/clientarea.php?action=addfunds"';
 
     $configarray = array(
         "name" => "Caasify",
@@ -61,7 +75,14 @@ function caasify_config(){
             "ResellerToken" => array ("FriendlyName" => "Reseller Token", "Type" => "text", "Size" => "31", "Description" => $ResellerTokenLabel, "Default" => ""),
             "DefLang" => array ("FriendlyName" => "Panel Language", "Type" => "dropdown", "Options" => $LanguageOptions, "Description" => $DefLangLabel, "Default" => "English"),
             "CaasifyCurrency" => array ("FriendlyName" => "Caasify Currency", "Type" => "dropdown", "Options" => $CurrencyOptions, "Description" => $CaasifyCurrency, "Default" => 'USD'),
+            
+            "CloudTopupLink" => array ("FriendlyName" => "Topup Link", "Type" => "text", "Size" => "51", "Description" => $CloudTopupLinkLabel, "Default" => "/clientarea.php?action=addfunds"),
+            "DevelopeMode" => array ("FriendlyName" => "Develope Mode", "Type" => "dropdown", "Options" => $YesNoOption, "Description" => $DevelopeModeLabel, "Default" => 'off'),
+            "ChargeModule" => array ("FriendlyName" => "Chargeing Module", "Type" => "dropdown", "Options" => $YesNoOption, "Description" => $ChargeModuleLabel, "Default" => 'on'),
+            "ViewExchanges" => array ("FriendlyName" => "View Exchange", "Type" => "dropdown", "Options" => $YesNoOption, "Description" => $ViewExchangesLabel, "Default" => 'off'),
+            
         ));
+
     return $configarray;
 }
 

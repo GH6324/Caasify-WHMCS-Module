@@ -1,45 +1,45 @@
 <!-- Cost Table -->
-<div class="row m-0 p-0 border border-2 bg-body-secondary rounded-4 px-2 py-5" style="height: 550px;">    
-    <div class="col-12" style="--bs-bg-opacity: 0.1;">
-        
-        <!-- title -->
+<div v-if="planId != null" class="row m-0 p-0 py-5 px-4 mt-5">    
+    <div class="col-12 " style="--bs-bg-opacity: 0.1;">
         <div class="row">
             <div class="m-0 p-0">
                 <p class="text-dark h3">
                     {{ lang('billsummary') }}
                 </p>
             </div>
-            <div class="m-0 p-0 mt-3">
-                <span class="fs-6 pt-1 pb-4 text-secondary"> 
-                    {{ lang('seeyourorderdetails') }}
-                </span>
+        </div>
+        <hr class="row pb-4">
+        <div class="p-0 m-0">
+            <div class="">
+                <p class="h6">
+                    PLACE: {{ regionName }}
+                </p>
+                <p class="h6">
+                    Data Center: {{ DataCenterName }}
+                </p>
+                <p class="h6">
+                    NAME : {{ planName }}
+            
+                </p>
+                <p class="h6">
+                    PRICE: {{ planPrice }}
+                </p>
             </div>
         </div>
-
-        <!-- Ready to show Table -->
-        <div class="row p-0 m-0 mt-4">
-            <!-- ordertable  -->
-            <div class="col-12 col-md-12 m-0 p-0 mb-4">
-                <?php include('ordertable.php'); ?>
-            </div>
-        </div>
-    
-
+        
         <!-- Summery Table -->
         <div class="row mt-5">
             <div class="m-0 p-0">
                 <p class="text-dark h4">
                     <i class="bi bi-currency-exchange text-secondary p-0 m-0 me-3 h5"></i>
                     <span>
-                        {{ lang('totalcost') }}
+                        {{ lang('totalcost') }} = 
+                    </span>
+                    <span>
+                        {{ planPrice }}
                     </span>
                 </p>
             </div>
-        </div>
-            
-        <!-- Total Price -->
-        <div class="col-12 col-md-12 py-4"> 
-            <?php include('totalprice.php'); ?>
         </div>
     </div>
 </div>

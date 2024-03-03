@@ -1,10 +1,8 @@
 <!-- plan-->
 <div v-if="regionId != null" class="" style="height:50px"></div>
-<div v-if="regionId != null" class="row m-0 p-0 border rounded-4 bg-body-secondary py-5 px-4 mt-5" id="plans">    
+<div v-if="regionId != null" class="row m-0 p-0 py-5 px-4 mt-5" id="plans">    
     <div class="col-12" style="--bs-bg-opacity: 0.1;">
-        
-        <!-- title -->
-        <div class="row">
+        <div class="row mb-5">
             <div class="m-0 p-0">
                 <span class="text-dark h3">
                     {{ lang('products') }}
@@ -13,16 +11,10 @@
                     in
                 </span>
                 <span class="text-dark h3">
-                    {{ regionName }}
-                </span>
-            </div>
-            <div class="m-0 p-0">
-                <span class="fs-6 pt-1 pb-4 text-secondary">
-                    {{ lang('selectaproduct') }}
+                    {{ regionName }} *
                 </span>
             </div>
         </div>
-        <hr class="pb-4">
         <!-- No selection -->
         <div v-if="regionName == null">
             <div class="col-12 mb-5 mt-5">
@@ -52,7 +44,7 @@
                 {{ lang('thereisnodatacenter') }}
             </div>
 
-            <div v-if="plansLength > 0" v-for="plan in plans" class="col-12 col-md-6 m-0 p-0 mb-5 px-1" >
+            <div v-if="plansLength > 0" v-for="plan in plans" class="col-12 col-md-6 col-lg-4 m-0 p-0 mb-5 px-1" >
                 <div class="border rounded-4 bg-white shadow-sm" :class="{ 'shadow-lg border-secondary border-2 ': isPlan(plan) }" @click="selectPlan(plan)">
                     <div class="bg-body-secondary rounded-top-4 py-4 px-5 px-md-3 px-xl-4" style="--bs-bg-opacity: 0.5;">
                         <div class="p-0 m-0">
@@ -85,10 +77,10 @@
                             <div v-if="plan.price != null && userCurrencySymbolFromWhmcs != null" class="d-flex flex-row justify-content-center py-2 btn bg-secondary" style="--bs-bg-opacity: 0.1;">
                                 <div class="d-flex flex-row justify-content-center">
                                     <span class="fs-6 fw-medium me-2">
-                                    {{ lang('pricestartsfrom') }}
+                                    {{ lang('price') }}
                                     </span>
                                     <span class="fs-6 fw-medium">
-                                        {{ formatCostMonthly(ConverFromAutoVmToWhmcs(plan.price)) }} {{ userCurrencySymbolFromWhmcs }}
+                                        {{ formatCostMonthly(ConverFromCaasifyToWhmcs(plan.price)) }} {{ userCurrencySymbolFromWhmcs }}
                                     </span>
                                 </div>
                             </div><!-- End MemDescriptionory -->

@@ -116,10 +116,14 @@ if ($service) {
 // Create an array to store config
 function get_config_array_temp(){
     $ModuleConfigArray = [
-        'BackendUrl' => '',
-        'DefLang' => '',
-        'CaasifyCurrency' => '',
-        'errorMessage' => ''
+        'BackendUrl' => null,
+        'DefLang' => null,
+        'CaasifyCurrency' => null,
+        'errorMessage' => null,
+        'DevelopeMode' => null,
+        'ChargeModule' => null,
+        'ViewExchanges' => null,
+        'CloudTopupLink' => null,
     ];
     return $ModuleConfigArray;
 }
@@ -224,7 +228,7 @@ function caasify_create_currency_options(){
 // Get Default Language
 function caasify_GetDefaulLanguage(){
     $CaasifyConfig = caasify_get_config();
-    $allowedLanguages = ['English', 'Farsi', 'Turkish'];
+    $allowedLanguages = ['English', 'Farsi', 'Turkish', 'Russian', 'French', 'Deutsch', 'Brizilian', 'Italian'];
     
     // Find DefLang
     if(!empty($CaasifyConfig) && !empty($CaasifyConfig['DefLang']) && in_array($CaasifyConfig['DefLang'], $allowedLanguages)){    
@@ -232,6 +236,8 @@ function caasify_GetDefaulLanguage(){
     } else {
         $DefLang = 'English';
     }
+    
+  
 
     // Manage Cookies
     if(isset($_COOKIE['temlangcookie'])) {
@@ -241,14 +247,14 @@ function caasify_GetDefaulLanguage(){
         setcookie('temlangcookie', $DefLang, time() + 365 * 24 * 60 * 60, '/');
     }
     
-    
+
     // Get templatelang for Client panel
     if(in_array($langFromCookies, $allowedLanguages)){
         $templatelang = $langFromCookies;
     } else {
         $templatelang = $DefLang;
     }
-
+    
     return $templatelang;
 }
 

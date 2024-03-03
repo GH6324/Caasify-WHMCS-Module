@@ -1,6 +1,8 @@
 <?php
 // This file aims to get configs from WHMCS and use it inside module
 
+
+
 // INCLUDE NEEDED FILES
 $position = strpos($_SERVER['PHP_SELF'], "modules");
 $directoryPath = substr($_SERVER['PHP_SELF'], 0, $position);
@@ -33,30 +35,37 @@ $configs = caasify_get_config();
 $systemUrl = $configs['systemUrl'];
 $BackendUrl = $configs['BackendUrl'];
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// Settign: should move to to module config
-$ChargeModuleEnable = true;
-$ChargeModuleDetailsViews = true;
-$CloudTopupLink = '/clientarea.php?action=addfunds';
-if(empty($BackendUrl)){
-    $BackendUrl = 'https://test.caasify.com';
+// DevelopeMode
+$DevelopeMode = $configs['DevelopeMode'];
+if(!isset($DevelopeMode)){
+    $DevelopeMode = 'off';
 }
+
+// ChargeModule
+$ChargeModule = $configs['ChargeModule'];
+if(isset($ChargeModule) && $ChargeModule == 'off' ){
+    $ChargeModuleEnable = false;
+} else {
+    $ChargeModuleEnable = true;
+}
+
+// ViewExchanges
+$ViewExchanges = $configs['ViewExchanges'];
+if(isset($ViewExchanges) && $ViewExchanges =='on'){
+    $ChargeModuleDetailsViews = true;
+} else {
+    $ChargeModuleDetailsViews = false;
+}
+
+
+// CloudTopupLink
+$CloudTopupLink = $configs['CloudTopupLink'];
+if(!isset($CloudTopupLink)){
+    $CloudTopupLink = '/clientarea.php?action=addfunds';
+}
+
+
+
 
 
 ?>

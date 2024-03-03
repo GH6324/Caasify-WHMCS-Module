@@ -7,9 +7,9 @@
                 <div class="modal-body" style="min-height: 350px !important;">
                     <div class="row m-0 p-0 pt-5">
                         <div class="col-12 text-start lh-lg pb-3">
-
+                        
                             <!-- Just Open window, Ready to order -->
-                            <div v-if="!userClickedCreationBtn">    
+                            <div v-if="!userClickedCreationBtn">   
 
                                 <!-- enough data to push btn -->
                                 <div v-if="themachinename && regionName && planName && templateId">
@@ -19,25 +19,21 @@
 
                                 <!-- Table of parameters -->
                                 <div class="px-4 px-lg-5 py-5 rounded-4 bg-primary" style="--bs-bg-opacity: 0.15;">
-                                    <table class="table table-borderless m-0 p-0" style="--bs-table-bg: #fff0;">
+                                    <table class="table table-borderless m-0 p-0 my-5" style="--bs-table-bg: #fff0;">
                                         <tbody>
                                             
                                             <!-- HostName -->
                                             <tr>
                                                 <td class="m-0 p-0" style="width: 110px;">
                                                     <i v-if="themachinename" class="bi bi-check-circle-fill me-1"></i>
-                                                    <i v-if="!themachinename" class="bi bi-circle me-1"></i>
+                                                    <i v-if="!themachinename" class="bi bi-circle me-1"></i>                                                    
                                                     <span>{{ lang('name') }}</span>
                                                 </td>
-
                                                 <td class="text-primary fw-medium m-0 p-0">
                                                     <span v-if="themachinename" class="m-0 p-0">{{ themachinename }}</span>
-                                                    
-                                                    <!-- Three spinner -->
                                                     <span v-else-if="!themachinename">    
                                                         <?php  include('./includes/baselayout/threespinner.php');      ?>
                                                     </span>
-
                                                 </td>
                                             </tr>
 
@@ -48,15 +44,11 @@
                                                     <i v-if="!regionName" class="bi bi-circle me-1"></i>
                                                     <span>{{ lang('datacenter') }}</span>
                                                 </td>
-
                                                 <td class="text-primary fw-medium m-0 p-0">
                                                     <span v-if="regionName" class="m-0 p-0">{{ regionName }}</span>
-                                                    
-                                                    <!-- Three spinner -->
                                                     <span v-else-if="!regionName">    
                                                         <?php  include('./includes/baselayout/threespinner.php');      ?>
                                                     </span>
-
                                                 </td>
                                             </tr>
 
@@ -67,54 +59,34 @@
                                                     <i v-if="!planName" class="bi bi-circle me-1"></i>
                                                     {{ lang('product') }}
                                                 </td>
-
                                                 <td class="text-primary fw-medium m-0 p-0">
                                                     <span v-if="planName" class="m-0 p-0">{{ planName }}</span>
-                                                    
-                                                    <!-- Three spinner -->
                                                     <span v-else-if="!planName">
                                                         <?php  include('./includes/baselayout/threespinner.php');      ?>
                                                     </span>
                                                 </td>
                                             </tr>
 
-                                            <!-- Template -->
-                                            <tr>
+                                            <!-- Section Configs -->
+                                            <tr v-if="PlanConfigs" v-for="PlanConfig in PlanConfigs">
                                                 <td class="m-0 p-0" style="width: 110px;">
-                                                    <i v-if="templateId" class="bi bi-check-circle-fill me-1"></i>
-                                                    <i v-if="!templateId" class="bi bi-circle me-1"></i>
-                                                    <span>{{ lang('producttemplate') }}</span>
+                                                    <i v-if="PlanConfigValue[PlanConfig.name]" class="bi bi-check-circle-fill me-1"></i>
+                                                    <i v-else class="bi bi-circle me-1"></i>
+                                                    <span>
+                                                        {{ PlanConfig.name }}:
+                                                    </span>
                                                 </td>
-
                                                 <td class="text-primary fw-medium m-0 p-0">
-                                                    <div v-if="templateId">
-                                                        <div v-for="category in categories" class="m-0 p-0">
-                                                            <div v-for="template in category.templates" class="m-0 p-0">
-                                                                <span v-if="template.id == templateId" class="m-0 p-0">
-                                                                    {{ template.name }}
-                                                                </span>
-                                                            </div>
-                                                        </div>
+                                                    <div v-if="PlanConfigValue[PlanConfig.name]">
+                                                        <span class="m-0 p-0">
+                                                            {{ FindNameConfigFromValue(PlanConfig.name, PlanConfigValue[PlanConfig.name]) }}
+                                                        </span>
                                                     </div>    
-                                                    
-                                                    <!-- Three spinner -->
-                                                    <span v-else-if="!templateId">
+                                                    <span v-if="PlanConfigValue[PlanConfig.name] == 'default'">
                                                         <?php  include('./includes/baselayout/threespinner.php');      ?>
                                                     </span>
                                                 </td>
                                             </tr>
-
-                                            <!-- SSH Key -->
-                                            <tr v-if="themachinessh">
-                                                <td class="m-0 p-0 py-2" style="width: 110px;">
-                                                    <i class="bi bi-check-circle-fill me-1"></i>
-                                                    <span>{{ lang('sshkey') }}</span>
-                                                </td>
-                                                <td class="text-primary fw-medium m-0 p-0 py-2">
-                                                    <span>{{ themachinessh }}</span>
-                                                </td>
-                                            </tr>
-
                                         </tbody>
                                     </table>
 
@@ -124,12 +96,19 @@
                                     
 
                                     <!-- Total Price -->
-                                    <div v-if="NewMachinePrice">
-                                        <?php include('totalprice.php'); ?>
+                                    <div v-if="NewMachinePrice" class="float-end text-primary fw-medium">
+                                        <p>
+                                            Total Price : {{ showMachinePriceInWhmcsUnit(ConverFromCaasifyToWhmcs(NewMachinePrice)) }} {{ userCurrencySymbolFromWhmcs }}
+                                        </p>
                                     </div>
                                 </div>
 
-                                
+                                <!-- not enough data -->
+                                <div v-if="!themachinename || !regionName || !planName || !templateId" class="row m-0 p-0 mt-5">
+                                    <p class="alert alert-danger">
+                                        {{ lang('notprovideallinformation') }}
+                                    </p>        
+                                </div>    
 
                                 <!-- Low Balance -->
                                 <div v-if="user.balance < 2">
@@ -192,7 +171,7 @@
                     <span class="text-dark fw-medium me-2">{{ lang('balance') }} : </span>
                     <span v-if="user.balance" class="text-primary fw-medium">
                         <span v-if="CurrenciesRatioCloudToWhmcs != null">
-                            {{ showBalanceWhmcsUnit(ConverFromAutoVmToWhmcs(user.balance)) }} {{ userCurrencySymbolFromWhmcs }}
+                            {{ showBalanceWhmcsUnit(ConverFromCaasifyToWhmcs(user.balance)) }} {{ userCurrencySymbolFromWhmcs }}
                         </span>
                         <span v-else>
                             <?php include('./includes/baselayout/threespinner.php'); ?>
@@ -200,14 +179,6 @@
                     </span>
                     <span v-else class="text-primary fw-medium"> --- </span>
                 </div>
-
-                <!-- not enough data -->
-                <div v-if="!themachinename || !regionName || !planName || !templateId" class="row m-0 p-0 px-3 py-4 py-md-0">
-                    <p class="h6 fw-Medium text-danger m-0 p-0">
-                        <i class="bi bi-exclamation-diamond-fill me-1"></i>
-                        {{ lang('notprovideallinformation') }}
-                    </p>        
-                </div> 
                 
                 <!-- BTN's -->
                 <div class="d-flex flex-row">

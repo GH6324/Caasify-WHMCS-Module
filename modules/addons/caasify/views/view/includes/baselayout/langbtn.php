@@ -42,8 +42,7 @@
     <div class="dropdown-menu border-1 shadow-lg p-4" style="min-width: 300px !important;">
         <p class="fs-6">{{ lang('chooselanguage') }}</p>    
         <div>
-            <select name="language" class="form-select" aria-label="Default select example" v-model="PanelLanguage">
-                <option value="babam" selected> babam </option>
+            <select name="language" class="form-select" aria-label="Default select example" v-model="PanelLanguage">                
                 <option value="English" <?php if( $templatelang == 'English'){echo 'selected';} ?>> English </option>
                 <option value="Farsi" <?php if( $templatelang == 'Farsi'){echo 'selected';} ?>> فارسی </option>
                 <option value="Turkish" <?php if( $templatelang == 'Turkish'){echo 'selected';} ?>> Türkçe </option>

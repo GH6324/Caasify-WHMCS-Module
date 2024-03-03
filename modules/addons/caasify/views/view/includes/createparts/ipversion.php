@@ -1,5 +1,5 @@
 <!-- Host Name -->
-<div v-if="planId != null" class="row m-0 p-0 border rounded-4 bg-body-secondary py-5 px-4 mt-5"> 
+<div v-if="planId != null" class="row m-0 p-0 py-5 px-4 mt-5"> 
     <div class="col-12 m-0 p-0" style="--bs-bg-opacity: 0.1;">
         <div class="m-0 p-0">
             <!-- name -->
@@ -15,7 +15,7 @@
                 <hr class="pb-4">
                 <div class="row m-0 p-0">
                     <!-- Table of IPV -->
-                    <div class="mt-5 px-4 px-lg-5 py-4 rounded-4 bg-primary" style="--bs-bg-opacity: 0.05;">
+                    <div class="bg-primary rounded-4 px-4 px-lg-5 py-4" style="--bs-bg-opacity: 0.05;">
                         <div class="row m-0 p-0">
                             <div class="col-12 col-md-6 m-0 p-0 d-flex flex-row align-items-center">
                                 <input class="form-check-input p-0 m-0 border-2 h4" type="checkbox" v-model="ipv4Checkbox" :value="ipv4Checkbox" id="ipv4checkbox">
