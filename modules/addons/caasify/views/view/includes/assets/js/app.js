@@ -1344,7 +1344,7 @@ app = createApp({
                 let records = this.thisOrder.records;
                 for(var i = 0; i < records?.length; i++){
                     let record = records[i];
-                    if(record.status == "completed" && this.ValidControllerItems === null){
+                    if(this.ValidControllerItems === null){
                         let groups = record.product.groups
                         for(var j = 0; j < groups.length; j++){
                             let group = groups[j]
