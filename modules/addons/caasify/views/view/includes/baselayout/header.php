@@ -50,6 +50,13 @@ $AssetsPath = __DIR__;
               /* Add some padding-top to compensate for the sticky sidebar */
               padding-top: 20px !important;
             }
+
+            
+            .waiting-cursor
+            {
+                cursor: wait !important;
+            }
+
         </style>
 
     </head>

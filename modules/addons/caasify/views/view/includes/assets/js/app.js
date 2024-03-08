@@ -5,6 +5,8 @@ app = createApp({
     data() {
         return {
 
+            alert: null,
+
             // views
             machineID: null,
 
@@ -22,7 +24,9 @@ app = createApp({
             ControllersAreLoading: true,
             NoValidControllerItems: null,
             
-            
+            anActionIsDoing: null,
+            anActionIsDone: null,
+            theAction: null,
             
 
 
@@ -181,8 +185,7 @@ app = createApp({
 
         machineID(newmachineID) {
             if (newmachineID != '') {
-                this.LoadOrderViews();
-                
+                this.LoadRequestNewView();
             }
         },
 
@@ -1468,6 +1471,54 @@ app = createApp({
             }
         },
 
+        findTheActionIsDoin(button_id){
+            if (button_id != null && this.ValidControllerItems != null){
+                for(let Controller of this.ValidControllerItems){
+                    if(Controller.id == button_id){
+                        this.theAction = Controller.name
+                        return this.theAction
+                    }
+                }
+            }
+
+            return null;
+        },
+        
+        async PushButtonController(button_id) {
+            let machineID = this.machineID;
+
+            if (machineID != null && button_id != null) {
+                let formData = new FormData();
+                formData.append('machineID', machineID);
+                formData.append('button_id', button_id);
+                this.anActionIsDoing = true
+                this.theAction = this.findTheActionIsDoin(button_id)
+
+                RequestLink = this.CreateRequestLink(action = 'CaasifyOrderDoAction');
+                let response = await axios.post(RequestLink, formData);
+
+                if (response?.data?.message) {
+                    this.anActionIsDoing = false;
+                    this.anActionIsDone = true;
+                    this.alert = response?.data?.message
+                    console.error('can not send action');
+                }
+
+                if (response?.data?.data) {
+                    this.anActionIsDoing = false;
+                    this.anActionIsDone = true;
+                    this.alert = this.theAction + ' Successfully'
+                    this.findValidViews()
+                }
+
+                setTimeout(() => {
+                    this.anActionIsDoing = null
+                    this.anActionIsDone = null
+                    this.theAction = null
+                    this.alert = null
+                }, 5000);
+            }
+        },
 
         }
 });

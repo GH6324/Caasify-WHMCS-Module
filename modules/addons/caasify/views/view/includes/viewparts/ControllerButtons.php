@@ -7,8 +7,8 @@
     </div>
     <div class="">
         <div v-if="!ControllersAreLoading">
-            <div v-if="NoValidControllerItems != true" class="d-flex flex-row">
-                <a v-for="button in ValidControllerItems" :href="button.id" class="btn btn-primary me-3 px-3 px-lg-5">
+            <div v-if="NoValidControllerItems != true" class="d-flex flex-row flex-wrap gap-4 justify-content-between">
+                <a v-for="button in ValidControllerItems" class="btn btn-primary px-3 px-lg-5" style="width: 140px;" @click="PushButtonController(button.id)">
                     {{ button.name }}
                 </a>
             </div>
@@ -18,3 +18,15 @@
         </div>
     </div>
 </div>
+
+
+
+<div class="col-12" v-if="alert">
+    <div class="px-4">
+        <p class="alert alert-danger">
+            {{ alert }}
+        </p>
+    </div>
+</div>
+
+

@@ -1,7 +1,10 @@
 <div class="py-5 px-4 px-lg-5">
 
     <h1>
-        Order Details
+        <span class="me-3">
+            Order Details
+        </span>
+        <button @click="LoadRequestNewView" class="btn btn-primary px-3">New view</button>
     </h1>
 
     <div v-if="viewsAreLoading" class="d-flex flex-row mt-5 text-primary">
@@ -11,13 +14,10 @@
         </span>
     </div>
     
-    <div v-if="viewsAreLoaded" class="">
-        <div v-if="NoValidViewItems != true" class="">
-            <div class="bg-body-secondary rounded-4 py-5 px-4 mt-5 border h5 lh-lg">
-                <div v-for="(item, index) in ValidViewItems" class="">
-                    <div class="" v-html="item.content"></div>
-                </div>
-                <hr>
+    <div v-if="viewsAreLoaded" class="row">
+        <div v-if="NoValidViewItems != true" class="col-12 m-0 p-0">
+            <div v-for="(item, index) in ValidViewItems" class="">
+                <div class="" v-html="item.content"></div>
             </div>
         </div>
         <div v-if="NoValidViewItems === true" class="alert alert-primary my-5">

@@ -216,13 +216,12 @@ class ClientCaasifyController
         $response = null;
         
         $params = caasify_get_post_array_all();
-
-        if($UserToken && $product_id){
+       
+        if($UserToken && $params){
             $response = $this->sendCaasifyCreateOrderRequest($UserToken, $params);
         }
 
         $this->response($response);
-
     }
     
     public function sendCaasifyCreateOrderRequest($UserToken, $params)
@@ -298,6 +297,41 @@ class ClientCaasifyController
     }
 
 
+    public function CaasifyOrderDoAction()
+    {
+        $UserToken = $this->getUserTokenFromDB();
+        $response = null;
+
+        $machineID = caasify_get_post('machineID');
+        $button_id = caasify_get_post('button_id');
+
+        if($UserToken){
+            $response = $this->sendOrderAction($UserToken, $machineID, $button_id);
+        }
+
+        $this->response($response);
+    }
+
+    public function sendOrderAction($UserToken, $machineID, $button_id)
+    {
+        
+        $headers = [
+            'Accept' => 'application/json',
+            'Authorization' => 'Bearer ' . $UserToken
+        ];
+        
+        $params = array(
+            'button_id' => $button_id,
+        );
+
+        $BackendUrl = $this->BackendUrl;
+        
+        $address = [
+            $BackendUrl, 'api', 'orders', $machineID, 'action'
+        ];
+
+        return Request::instance()->setAddress($address)->setHeaders($headers)->setParams($params)->getResponse()->asObject();
+    }
 
 
     public function CaasifyRequestNewView()
