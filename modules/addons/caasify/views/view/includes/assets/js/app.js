@@ -15,23 +15,15 @@ app = createApp({
             ValidViewItems: null,
             NoValidViewItems: null,
 
+            NewViewStatus: null,
 
             Controllers: null,
-            ControllersBtnAreLoading: null,
-            ControllersBtnAreLoaded: null,
             ValidControllerItems: null,
+            ControllersAreLoading: true,
             NoValidControllerItems: null,
             
             
-            PlanSections: null,
-            PlanSectionsLoading: null,
-            PlanSectionsLoaded: null,
             
-            
-            
-            PlanConfigs: null,
-            EmptyPlanConfigs: true,
-
 
 
 
@@ -132,19 +124,32 @@ app = createApp({
 
             
             
-            PlanConfigValue: {},
+            PlanSections: null,
+            PlanSectionsLoading: null,
+            PlanSectionsLoaded: null,
             
             
+            PlanConfigs: null,
+            EmptyPlanConfigs: true,
+            PlanConfigSelectedOptions: {},
+            PlanConfigPrice: {},
+
+            
 
 
 
-
+            
 
 
         }
     },
 
     watch: {
+
+        thisOrder(){
+            this.findValidControllers();
+        },
+
         fileName(newFielName) {
             if (newFielName != null) {
                 if (newFielName == "index.php") {
@@ -177,7 +182,7 @@ app = createApp({
         machineID(newmachineID) {
             if (newmachineID != '') {
                 this.LoadOrderViews();
-                this.LoadControllersButtons();
+                
             }
         },
 
@@ -198,6 +203,22 @@ app = createApp({
     },
 
     computed: {
+
+        thisOrder(){ 
+            if(this.machineID != null && this.UserOrders != null){
+                for (var i = 0; i < this.UserOrders.length; i++) {
+                    var order = this.UserOrders[i];
+                    if(order.id = this.machineID){
+                        return order
+                    }
+                }
+            }
+            return false
+        },
+
+        planConfigsPrice(){
+            
+        },
 
         config() {
             return {
@@ -383,19 +404,38 @@ app = createApp({
         },
 
         NewMachinePrice() {
-            let decimal = this.config.DefaultMonthlyDecimal
-            let value = this.planPrice
+            let NewMachinePrice = 0
 
-            if (value) {
-                return value.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+            let decimal = this.config.DefaultMonthlyDecimal
+            let planPrice = this.planPrice
+            let ConfigPrice = this.SumConfigPrice()
+
+            let planPriceFloat = parseFloat(planPrice);
+            let ConfigPriceFloat = parseFloat(ConfigPrice);
+
+            if (!isNaN(planPriceFloat) && !isNaN(ConfigPriceFloat)) {
+                NewMachinePrice = planPriceFloat + ConfigPriceFloat;
             }
+
+            return NewMachinePrice
+        },
+
+        ConfigsAreComplete(){
+            let obj = this.PlanConfigSelectedOptions;
+
+            for (let key in obj) {
+                if(obj[key] == 'empty'){
+                    return false
+                }
+            }
+
+            return true
         },
 
     },
 
     methods: {
 
-        
         // Commons
         loadUrl() {
             let url = window.location.href;
@@ -1161,6 +1201,8 @@ app = createApp({
             }
         },
 
+       
+
         formatDescription(description) {
             return description.replace(/\n/g, "<br />");
         },
@@ -1207,7 +1249,12 @@ app = createApp({
                 let formData = new FormData();
                 formData.append('note', this.themachinename);
                 formData.append('product_id', this.planId);
-
+                
+                let configs = this.PlanConfigSelectedOptions;
+                for (let key in configs) {
+                    formData.append(key, configs[key].value);
+                }
+                
                 RequestLink = this.CreateRequestLink(action = 'CaasifyCreateOrder');
                 let response = await axios.post(RequestLink, formData);
                 response = response.data
@@ -1237,6 +1284,7 @@ app = createApp({
             for (var view of views) {
                 if (view?.status == "completed" && view?.items?.length > 0 && this.ValidViewItems === null) {
                     this.ValidViewItems = view.items
+                    this.NewViewStatus = 'completed';
                 }
             }
 
@@ -1281,20 +1329,31 @@ app = createApp({
 
             if (PlanConfigs != null) {
                 this.EmptyPlanConfigs = false
-                this.initPlanConfigValue();
+                this.initPlanConfigSelectedOptions();
             }
         },
 
         findValidControllers() {
             this.ValidControllerItems = null;
-            let Controllers = this.Controllers;
-            for (var Controller of Controllers) {
-                if (Controller?.status == "delivered" && this.ValidControllerItems === null) {
-                    this.ValidControllerItems = Controller
+            this.NoValidControllerItems = false            
+
+            if(this.thisOrder?.records){
+                let records = this.thisOrder.records;
+                for(var i = 0; i < records?.length; i++){
+                    let record = records[i];
+                    if(record.status == "completed" && this.ValidControllerItems === null){
+                        let groups = record.product.groups
+                        for(var j = 0; j < groups.length; j++){
+                            let group = groups[j]
+                            if(group?.buttons && this.ValidControllerItems === null){
+                                this.ValidControllerItems = group.buttons
+                                this.ControllersAreLoading = false
+                            }
+                        }
+                    }
                 }
             }
-
-            if (this.ValidControllerItems === null) {
+            if(this.ValidControllerItems == null){
                 this.NoValidControllerItems = true
             }
         },
@@ -1327,11 +1386,13 @@ app = createApp({
             return null;
         },
 
-        initPlanConfigValue(){
-            let PlanConfigs = this.PlanConfigs
+        initPlanConfigSelectedOptions(){
+            let PlanConfigs = this.PlanConfigs;
+            this.PlanConfigSelectedOptions = {};
+
             if(PlanConfigs != null){
-                for(PlanConfig of PlanConfigs){
-                    this.PlanConfigValue[PlanConfig.name] = 'default'
+                for(let PlanConfig of PlanConfigs){
+                    this.PlanConfigSelectedOptions[PlanConfig.name] = 'empty'
                 }
             }
         },
@@ -1339,7 +1400,24 @@ app = createApp({
         makeNullAll(){
             this.FindSections()
             this.FindPlanConfigs()
-            this.initPlanConfigValue()
+            this.initPlanConfigSelectedOptions()
+        },
+
+
+        SumConfigPrice(){
+            let ConfigPrice = 0
+            let PlanConfigSelectedOptions = this.PlanConfigSelectedOptions
+            
+            for (let key in PlanConfigSelectedOptions) {
+                if (PlanConfigSelectedOptions.hasOwnProperty(key)) {
+                    let price = parseFloat(PlanConfigSelectedOptions[key].price);
+                    if (!isNaN(price)) {
+                        ConfigPrice += price;
+                    }
+                }
+            }
+            
+            return ConfigPrice
         },
 
         async LoadOrderViews() {
@@ -1365,37 +1443,34 @@ app = createApp({
                         this.findValidViews()
                     }
                 }
-            },
+        },
 
-        async LoadControllersButtons() {
-                let machineID = this.machineID;
-                if (machineID != null) {
-                    let formData = new FormData();
-                    formData.append('machineID', machineID);
-                    this.ControllersBtnAreLoading = true
+        async LoadRequestNewView() {
+            this.NewViewStatus = null;
 
-                    RequestLink = this.CreateRequestLink(action = 'CaasifyGetOrderControllers');
-                    let response = await axios.post(RequestLink, formData);
+            let machineID = this.machineID;
+            if (machineID != null) {
+                let formData = new FormData();
+                formData.append('machineID', machineID);
 
-                    if (response?.data?.message) {
-                        this.ControllersBtnAreLoading = false;
-                        this.ControllersBtnAreLoaded = true;
-                        console.error('can not find any views');
-                    }
+                RequestLink = this.CreateRequestLink(action = 'CaasifyRequestNewView');
+                let response = await axios.post(RequestLink, formData);
 
-                    if (response?.data?.data) {
-                        this.ControllersBtnAreLoading = false;
-                        this.ControllersBtnAreLoaded = true;
-                        this.Controllers = response?.data?.data
-                        this.findValidControllers()
-                    }
+                if (response?.data?.message) {
+                    console.error('can not reguest new view');
                 }
 
-            },
+                if (response?.data?.data) {
+                    this.NewViewStatus = response?.data?.data?.status
+                    this.LoadOrderViews();
+                    console.log('reguest new view done');
+                }
+            }
+        },
 
 
         }
-    });
+});
 
 app.config.compilerOptions.isCustomElement = tag => tag === 'btn'
 app.mount('#app') 

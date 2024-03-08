@@ -58,6 +58,15 @@ function caasify_get_post_array($names)
     return $params;
 }
 
+function caasify_get_post_array_all()
+{
+    $params = [];
+    foreach ($_POST as $key => $value) {
+        $params[$key] = $value;
+    }
+    return $params;
+}
+
 function caasify_has_session($name)
 {
     if (array_key_exists($name, $_SESSION)) {
@@ -277,7 +286,7 @@ function caasify_create_user($BackendUrl, $ResellerToken, $client, $password){
     ];
 
     $address = [
-        $BackendUrl, 'users', 'create'
+        $BackendUrl, 'api', 'users', 'create'
     ];
     
     return Request::instance()->setAddress($address)->setHeaders($headers)->setParams($params)->getResponse()->asObject();
@@ -297,7 +306,7 @@ function caasify_get_user_token_from_api($BackendUrl, $client, $password){
     $headers = ['Accept' =>  'application/json'];
     
     $address = [
-        $BackendUrl, 'auth', 'login'
+        $BackendUrl, 'api', 'auth', 'login'
     ];
     
     return Request::instance()->setAddress($address)->setHeaders($headers)->setParams($params)->getResponse()->asObject();

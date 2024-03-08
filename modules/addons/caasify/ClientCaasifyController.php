@@ -214,28 +214,23 @@ class ClientCaasifyController
     {
         $UserToken = $this->getUserTokenFromDB();
         $response = null;
-        $product_id = caasify_get_post('product_id');
-        $note = caasify_get_post('note');
         
+        $params = caasify_get_post_array_all();
+
         if($UserToken && $product_id){
-            $response = $this->sendCaasifyCreateOrderRequest($UserToken, $product_id, $note);
+            $response = $this->sendCaasifyCreateOrderRequest($UserToken, $params);
         }
 
         $this->response($response);
 
     }
     
-    public function sendCaasifyCreateOrderRequest($UserToken, $product_id, $note)
+    public function sendCaasifyCreateOrderRequest($UserToken, $params)
     {
 
         $headers = [
             'Accept' => 'application/json',
             'Authorization' => 'Bearer ' . $UserToken
-        ];
-        
-        $params = [
-            'product_id' => $product_id,
-            'note' => $note,
         ];
         
         $BackendUrl = $this->BackendUrl;
@@ -303,7 +298,9 @@ class ClientCaasifyController
     }
 
 
-    public function CaasifyGetOrderControllers()
+
+
+    public function CaasifyRequestNewView()
     {
         $UserToken = $this->getUserTokenFromDB();
         $response = null;
@@ -311,13 +308,13 @@ class ClientCaasifyController
         $machineID = caasify_get_post('machineID');
 
         if($UserToken){
-            $response = $this->sendOrderControllersRequest($UserToken, $machineID);
+            $response = $this->sendNewViewRequest($UserToken, $machineID);
         }
 
         $this->response($response);
     }
 
-    public function sendOrderControllersRequest($UserToken, $machineID)
+    public function sendNewViewRequest($UserToken, $machineID)
     {
         
         $headers = [
@@ -328,15 +325,11 @@ class ClientCaasifyController
         $BackendUrl = $this->BackendUrl;
         
         $address = [
-            $BackendUrl, 'api', 'orders', $machineID, 'actions'
+            $BackendUrl, 'api', 'orders', $machineID, 'view'
         ];
 
         return Request::instance()->setAddress($address)->setHeaders($headers)->getResponse()->asObject();
     }
-
-
-
-
 
 
 
