@@ -1,5 +1,5 @@
 <!-- Host Name -->
-<div v-if="planId != null" class="row m-0 p-0 py-5 px-4 mt-5"> 
+<div v-if="SelectedPlan != null" class="row m-0 p-0 py-5 px-4 mt-5"> 
     <div class="col-12 m-0 p-0" style="--bs-bg-opacity: 0.1;">
         <div class="m-0 p-0">
             <div class="m-0 p-0">

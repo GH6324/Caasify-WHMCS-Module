@@ -7,6 +7,20 @@
         <button @click="LoadRequestNewView" class="btn btn-primary px-3">New view</button>
     </h1>
 
+    <div v-if="thisProduct" class="h4 pt-5">
+        Product Name: {{ thisProduct?.title }}
+    </div>
+    
+    <div v-if="thisOrder" class="h4 pt-5">
+        Price: {{ thisOrder.records[0].price }}
+    </div>
+    
+    <div v-if="thisOrder" class="h4 pt-5">
+            {{ thisOrder?.note }} 
+        <span class="text-primary">
+            ({{ thisOrder?.status }})
+        </span>
+    </div>
     <div v-if="viewsAreLoading" class="d-flex flex-row mt-5 text-primary">
         <p class="h5 me-4 ">{{ lang('Views Are Loading') }}</p>
         <span>

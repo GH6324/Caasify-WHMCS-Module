@@ -1,5 +1,5 @@
 <!-- create machine modal -->
-<div class="modal fade modal-lg" id="createModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="actionModalLabel" aria-hidden="false" v-cloak>
+<div class="modal fade modal-lg" id="createModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="actionModalLabel" aria-hidden="false">
     <div class="modal-dialog" style="max-width: 800px !important;">
         <div class="modal-content border-0">
             <!-- Modal Body -->
@@ -12,7 +12,7 @@
                             <div v-if="!userClickedCreationBtn">   
 
                                 <!-- enough data to push btn -->
-                                <div v-if="themachinename && regionName && planName && ConfigsAreComplete">
+                                <div v-if="themachinename && SelectedRegion && SelectedPlan && PlanConfigSelectedOptions">
                                     <p class="h5 fw-Medium">{{ lang('youarecreating') }}</p>
                                     <p class="fs-6 fw-light mt-3">{{ lang('makesure') }}</p>
                                 </div>
@@ -38,53 +38,61 @@
                                             </tr>
 
                                             <!-- Datacenter -->
-                                            <tr>
+                                            <tr v-if="SelectedRegion && SelectedDataCenter">
                                                 <td class="m-0 p-0">
-                                                    <i v-if="regionName && DataCenterName" class="bi bi-check-circle-fill me-1"></i>
-                                                    <i v-if="!regionName || !DataCenterName" class="bi bi-circle me-1"></i>
+                                                    <i v-if="SelectedRegion?.name && SelectedDataCenter?.name" class="bi bi-check-circle-fill me-1"></i>
+                                                    <i v-if="!SelectedRegion?.name || !SelectedDataCenter?.name" class="bi bi-circle me-1"></i>
                                                     <span>{{ lang('datacenter') }}</span>
                                                 </td>
                                                 <td class="text-primary fw-medium m-0 p-0">
-                                                    <span v-if="DataCenterName" class="m-0 p-0 pe-2">{{ DataCenterName }}</span>
-                                                    <span v-else-if="!DataCenterName">    
+                                                    <span v-if="SelectedDataCenter?.name" class="m-0 p-0 pe-2">{{ SelectedDataCenter?.name }}</span>
+                                                    <span v-else-if="!SelectedDataCenter?.name">    
                                                         <?php  include('./includes/baselayout/threespinner.php');      ?>
                                                     </span>
 
-                                                    <span v-if="regionName" class="m-0 p-0">({{ regionName }})</span>
-                                                    <span v-else-if="!regionName">    
+                                                    <span v-if="SelectedRegion?.name" class="m-0 p-0">({{ SelectedRegion?.name }})</span>
+                                                    <span v-else-if="!SelectedRegion?.name">    
                                                         <?php  include('./includes/baselayout/threespinner.php');      ?>
                                                     </span>
                                                 </td>
                                             </tr>
 
                                             <!-- plan -->
-                                            <tr>
+                                            <tr v-if="SelectedPlan">
                                                 <td class="m-0 p-0">
-                                                    <i v-if="planName" class="bi bi-check-circle-fill me-1"></i>
-                                                    <i v-if="!planName" class="bi bi-circle me-1"></i>
+                                                    <i v-if="SelectedPlan.title" class="bi bi-check-circle-fill me-1"></i>
+                                                    <i v-if="!SelectedPlan.title" class="bi bi-circle me-1"></i>
                                                     {{ lang('product') }}
                                                 </td>
                                                 <td class="text-primary fw-medium m-0 p-0">
-                                                    <span v-if="planName" class="m-0 p-0">{{ planName }}</span>
-                                                    <span v-else-if="!planName">
+                                                    <span v-if="SelectedPlan.title" class="m-0 p-0">{{ SelectedPlan.title }}</span>
+                                                    <span v-else-if="!SelectedPlan.title">
                                                         <?php  include('./includes/baselayout/threespinner.php');      ?>
                                                     </span>
                                                 </td>
                                             </tr>
 
                                             <!-- Section Configs -->
-                                            <tr v-if="PlanConfigs" v-for="PlanConfig in PlanConfigs">
+                                            <tr v-if="PlanConfigSelectedOptions" v-for="(value, key) in PlanConfigSelectedOptions">
                                                 <td class="m-0 p-0">
-                                                    <i v-if="PlanConfigSelectedOptions[PlanConfig.name].hasOwnProperty('name')" class="bi bi-check-circle-fill me-1"></i>
+                                                    <i v-if="key" class="bi bi-check-circle-fill me-1"></i>
                                                     <i v-else class="bi bi-circle me-1"></i>
                                                     <span>
-                                                        {{ PlanConfig.name }}:
+                                                        {{ key }}:
                                                     </span>
                                                 </td>
                                                 <td class="text-primary fw-medium m-0 p-0">
-                                                    <div v-if="PlanConfigSelectedOptions[PlanConfig.name].hasOwnProperty('name')">
+                                                    <div v-if="value?.value">
                                                         <span class="m-0 p-0">
-                                                            {{ PlanConfigSelectedOptions[PlanConfig.name].name }}
+                                                            {{ value.name }}
+                                                        </span>
+                                                    </div> 
+                                                    <div v-else-if="value?.options">
+                                                        <span v-if="value.options != ''" class="m-0 p-0">
+                                                            {{ value.options }}
+                                                        </span>
+                                                        <span v-else class="m-0 p-0">
+                                                            <?php  include('./includes/baselayout/threespinner.php');      ?>
                                                         </span>
                                                     </div>    
                                                     <span v-else>
@@ -106,7 +114,7 @@
                                 </div>
 
                                 <!-- not enough data -->
-                                <div v-if="!themachinename || !regionName || !planName || !ConfigsAreComplete" class="row m-0 p-0 mt-5">
+                                <div v-if="!themachinename || !SelectedRegion || !SelectedPlan" class="row m-0 p-0 mt-5">
                                     <p class="alert alert-danger">
                                         {{ lang('notprovideallinformation') }}
                                     </p>        
@@ -117,7 +125,7 @@
                                     <p class="alert alert-danger text-center py-2 mt-5">
                                         {{ lang('balanceisnotenough') }}
                                     </p>
-                                    <a class="btn btn-danger float-end" href="<?php echo($PersonalRootDirectoryURL); ?>/index.php?m=caasify&action=pageIndex">{{ lang('movebalance') }}</a>
+                                    <a class="btn btn-danger float-end" href="<?php echo($PersonalRootDirectoryURL); ?>/index.php?m=caasify&action=pageIndex" target='_top'>{{ lang('movebalance') }}</a>
                                 </div>
                             </div>
 
@@ -134,7 +142,7 @@
                                         </p>
                                     </div> 
                                     <div class="row d-flex flex-row justify-content-end p-0 m-0">
-                                        <a class="col-auto btn btn-primary px-4 py-2" href="<?php echo($PersonalRootDirectoryURL); ?>/index.php?m=caasify&action=pageIndex">{{ lang('machinelink') }}</a>        
+                                        <a class="col-auto btn btn-primary px-4 py-2" href="<?php echo($PersonalRootDirectoryURL); ?>/index.php?m=caasify&action=pageIndex" target='_top'>{{ lang('machinelink') }}</a>        
                                     </div> 
                                 </div>
 
@@ -144,8 +152,8 @@
                                         <p class="fs-5 fw-Medium text-dark p-0 m-0">
                                             {{ lang('createmachinefailed') }}  
                                         </p>
-                                        <p v-if="msg != null" class="text-danger p-0 m-0 mt-5 h5">
-                                            {{ msg }}
+                                        <p v-if="CreateMSG != null" class="text-danger p-0 m-0 mt-5 h5">
+                                            {{ CreateMSG }}
                                         </p>
                                     </div> 
                                 </div>
@@ -211,7 +219,7 @@
 
                     <!-- Create BTN -->
                     <div v-if="!userClickedCreationBtn">
-                        <div class="m-0 p-0" v-if="themachinename && regionName && planName && ConfigsAreComplete && NewMachinePrice">
+                        <div class="m-0 p-0" v-if="themachinename && SelectedRegion && SelectedPlan && NewMachinePrice">
                             <a v-if="checkboxconfirmation" @click="acceptConfirmDialog" type="button" class="btn btn-primary px-5 mx-2">
                                 <span>{{ lang('createthismachine') }}</span>
                             </a>

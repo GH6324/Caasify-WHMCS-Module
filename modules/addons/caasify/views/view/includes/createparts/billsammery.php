@@ -1,5 +1,5 @@
 <!-- Cost Table -->
-<div v-if="planId != null" class="row m-0 p-0 py-5 px-4 mt-5">    
+<div v-if="PlanSections != null && SelectedPlan != null" class="row m-0 p-0 py-5 px-4 mt-5">    
     <div class="col-12 " style="--bs-bg-opacity: 0.1;">
         <div class="row">
             <div class="m-0 p-0">
@@ -15,35 +15,34 @@
                     Plan
                 </p>
                 <p class="h6 ms-3">
-                    PLACE: {{ regionName }}
+                    PLACE: {{ SelectedRegion.name }}
                 </p>
                 <p class="h6 ms-3">
-                    Data Center: {{ DataCenterName }}
+                    Data Center: {{ SelectedDataCenter.name }}
                 </p>
                 <p class="h6 ms-3">
-                    NAME : {{ planName }}
-            
+                    NAME : {{ SelectedPlan.title }}
                 </p>
                 <p class="h6 ms-3">
-                    PRICE: {{ showMachinePriceInWhmcsUnit(ConverFromCaasifyToWhmcs(planPrice)) }} {{ userCurrencySymbolFromWhmcs }}
+                    PRICE: {{ showMachinePriceInWhmcsUnit(ConverFromCaasifyToWhmcs(SelectedPlan.price)) }} {{ userCurrencySymbolFromWhmcs }}
                 </p>
             </div>
-            <div v-if="!EmptyPlanConfigs" class="mt-5">
+            <div v-if="PlanConfigSelectedOptions" class="mt-5">
                 <p class="h4 mb-3">
                     Add-ons features
                 </p>
-                <div v-for="(PlanConfig, index) in PlanConfigs" class="d-flex flex-row justify-content-start align-items-center">
-                    <div>
-                        <span class="h6 ms-3" v-if="PlanConfig?.name">
-                            {{ PlanConfig.name }}
+                <div v-for="(value, key) in PlanConfigSelectedOptions" :key="key" class="d-flex flex-row justify-content-start align-items-center">
+                    <div v-if="value?.price">
+                        <span class="h6 ms-3">
+                            {{ key }}
                         </span>
                     </div>    
-                    <div v-if="PlanConfigSelectedOptions[PlanConfig.name]['price']" class="m-0 p-0 ps-4 text-primary">
-                        <span v-if="PlanConfigSelectedOptions[PlanConfig.name]['price'] == 0">
+                    <div v-if="value?.price" class="m-0 p-0 ps-4 text-primary">
+                        <span v-if="value?.price == 0">
                             free
                         </span>
                         <span v-else>
-                            {{ showMachinePriceInWhmcsUnit(ConverFromCaasifyToWhmcs(PlanConfigSelectedOptions[PlanConfig.name]['price'])) }} {{ userCurrencySymbolFromWhmcs }}
+                            {{ showMachinePriceInWhmcsUnit(ConverFromCaasifyToWhmcs(value?.price)) }} {{ userCurrencySymbolFromWhmcs }}
                         </span>
                     </div>
                 </div>

@@ -9,7 +9,7 @@ app = createApp({
 
             // views
             machineID: null,
-
+            thisProduct:null,
 
             views: null,
             viewsAreLoading: null,
@@ -77,34 +77,34 @@ app = createApp({
 
 
             checkboxconfirmation: null,
-            msg: null,
+            CreateMSG: null,
             RullesText: null,
 
 
-            categories: [],
-            DataCenters: [],
-            DataCenterName: '',
-            DataCenterID: '',
+            DataCenters: [],            
+            SelectedDataCenter: null,
             DataCentersAreLoaded: false,
             DataCentersLength: 0,
 
             regions: [],
-            regionId: null,
-            regionName: null,
-            regionsAreLoaded: false,
-            regionsLength: null,
-            regionIsSelected: null,
-            regionsAreLoading: null,
+            SelectedRegion: null,
 
             plans: [],
-            planId: null,
-            planName: null,
-            planPrice: null,
+            SelectedPlan: null,
             plansAreLoaded: false,
             plansAreLoading: false,
-            planIsSelected: false,
-            plansLength: 0,
+            
 
+            PlanSections: null,
+            PlanConfigs: [],
+            PlanConfigSelectedOptions: {},
+            PlanConfigPrice: {},
+
+            
+
+
+
+            
             confirmDialog: false,
             confirmTitle: null,
             confirmText: null,
@@ -125,24 +125,6 @@ app = createApp({
             createActionFailed: false,
             createActionSucced: false,
             userClickedCreationBtn: false,
-
-            
-            
-            PlanSections: null,
-            PlanSectionsLoading: null,
-            PlanSectionsLoaded: null,
-            
-            
-            PlanConfigs: null,
-            EmptyPlanConfigs: true,
-            PlanConfigSelectedOptions: {},
-            PlanConfigPrice: {},
-
-            
-
-
-
-            
 
 
         }
@@ -195,7 +177,7 @@ app = createApp({
             }
         },
 
-        regionId() {
+        SelectedRegion() {
             this.loadPlans()
         },
 
@@ -210,17 +192,13 @@ app = createApp({
         thisOrder(){ 
             if(this.machineID != null && this.UserOrders != null){
                 for (var i = 0; i < this.UserOrders.length; i++) {
-                    var order = this.UserOrders[i];
-                    if(order.id = this.machineID){
+                    let order = this.UserOrders[i];
+                    if(order.id == this.machineID){
                         return order
                     }
                 }
             }
             return false
-        },
-
-        planConfigsPrice(){
-            
         },
 
         config() {
@@ -408,31 +386,21 @@ app = createApp({
 
         NewMachinePrice() {
             let NewMachinePrice = 0
-
             let decimal = this.config.DefaultMonthlyDecimal
-            let planPrice = this.planPrice
-            let ConfigPrice = this.SumConfigPrice()
 
-            let planPriceFloat = parseFloat(planPrice);
-            let ConfigPriceFloat = parseFloat(ConfigPrice);
+            if(this.SelectedPlan?.price && this.SumConfigPrice()){
+                let planPrice = this.SelectedPlan.price
+                let ConfigPrice = this.SumConfigPrice()
 
-            if (!isNaN(planPriceFloat) && !isNaN(ConfigPriceFloat)) {
-                NewMachinePrice = planPriceFloat + ConfigPriceFloat;
-            }
+                let planPriceFloat = parseFloat(planPrice);
+                let ConfigPriceFloat = parseFloat(ConfigPrice);
 
-            return NewMachinePrice
-        },
-
-        ConfigsAreComplete(){
-            let obj = this.PlanConfigSelectedOptions;
-
-            for (let key in obj) {
-                if(obj[key] == 'empty'){
-                    return false
+                if (!isNaN(planPriceFloat) && !isNaN(ConfigPriceFloat)) {
+                    NewMachinePrice = planPriceFloat + ConfigPriceFloat;
                 }
             }
 
-            return true
+            return NewMachinePrice
         },
 
     },
@@ -956,8 +924,9 @@ app = createApp({
             const pattern = /^[A-Za-z0-9]+$/;
             if (!pattern.test(this.themachinename)) {
                 this.MachineNameValidationError = true;
-                // Restore the previous valid value
-                this.themachinename = this.MachineNamePreviousValue;
+                if (this.themachinename.trim() !== '') {
+                    this.themachinename = this.MachineNamePreviousValue;
+                }
             } else {
                 this.MachineNameValidationError = false;
                 // Update the previous valid value
@@ -966,8 +935,9 @@ app = createApp({
 
             if (!pattern.test(this.themachinessh)) {
                 this.SshNameValidationError = true;
-                // Restore the previous valid value
-                this.themachinessh = this.SshNamePreviousValue;
+                if (this.themachinessh.trim() !== '') {
+                    this.themachinessh = this.SshNamePreviousValue;
+                }
             } else {
                 this.SshNameValidationError = false;
                 // Update the previous valid value
@@ -1118,39 +1088,35 @@ app = createApp({
         },
 
         async loadDataCenters() {
+            this.DataCentersAreLoaded = false
+
             RequestLink = this.CreateRequestLink(action = 'CaasifyGetDataCenters');
             let response = await axios.get(RequestLink);
             if (response?.data?.message) {
                 this.DataCentersAreLoaded = true
                 this.plansAreLoaded = false
-                this.regionsAreLoaded = false
                 console.error('can not find DataCenters');
             }
             if (response?.data?.data) {
                 this.DataCentersLength = response?.data?.data.length;
-                this.plansAreLoaded = false
-                this.regionsAreLoaded = false
                 this.DataCentersAreLoaded = true
+                this.plansAreLoaded = false
                 this.DataCenters = response?.data?.data
             }
         },
 
         selectDataCenter(DataCenter) {
-            this.regionId = null
-            this.plansLength = 0
-            this.DataCenterName = DataCenter.name
-            this.DataCenterID = DataCenter.id
-
-            this.regionsAreLoaded = true
-            this.regionIsSelected = false
+            this.PlanConfigSelectedOptions = {}
+            this.plans = [];
+            this.SelectedPlan = null
+            this.SelectedRegion = null
+            this.PlanSections = null
+            this.SelectedDataCenter = DataCenter
             this.regions = DataCenter.categories
-            this.regionsLength = 2
-            
-            this.makeNullAll()
         },
-
+        
         isDataCenter(DataCenter) {
-            if (this.DataCenterID == DataCenter.id) {
+            if (this.SelectedDataCenter == DataCenter) {
                 return true
             } else {
                 return false
@@ -1158,53 +1124,41 @@ app = createApp({
         },
 
         selectRegion(region) {
-            this.plansLength = 0
+            this.PlanConfigSelectedOptions = {}
+            this.plans = [];
+            this.SelectedPlan = null
             this.plansAreLoading = true
-            if (this.regionId == region.id) {
-                this.plansAreLoading = false
-            }
-            this.planIsSelected = false
-            this.regionId = region.id
-            this.regionName = region.name
+            this.plansAreLoaded = false
+            this.PlanSections = null
 
-            this.planId = null
-            this.planTitle = null
-            this.planDescription = null
-            this.planPrice = null
-
-            
-            this.makeNullAll()
+            this.SelectedRegion = region
         },
 
         isRegion(region) {
-
-            if (this.regionId == region.id) {
+            if (this.SelectedRegion == region) {
                 return true
             } else {
                 return false
             }
-
         },
 
         selectPlan(plan) {
-            this.planIsSelected = true
-            this.planId = plan.id
-            this.planName = plan.title
-            this.planPrice = plan.price
-
-            this.FindSections()
+            this.PlanConfigSelectedOptions = {}
+            this.SelectedPlan = plan
+            this.PlanSections = null
+            if(this.SelectedPlan != null && this.SelectedPlan?.sections){
+                this.PlanSections = this.SelectedPlan?.sections
+            }
+            this.initPlanConfigSelectedOptions()
         },
 
         isPlan(plan) {
-
-            if (this.planId == plan.id) {
+            if (this.SelectedPlan == plan) {
                 return true
             } else {
                 return false
             }
         },
-
-       
 
         formatDescription(description) {
             return description.replace(/\n/g, "<br />");
@@ -1220,27 +1174,27 @@ app = createApp({
         },
 
         async loadPlans() {
-            this.plansAreLoaded = null;
-            this.plans = [];
-            let formData = new FormData();
-            formData.append('CategoryID', this.regionId);
-
-
-            RequestLink = this.CreateRequestLink(action = 'CaasifyGetPlans');
-            let response = await axios.post(RequestLink, formData);
+            this.plansAreLoaded = false;
             this.plansAreLoading = true
+            this.plans = [];
 
-            if (response?.data?.message) {
-                this.plansAreLoading = false;
-                this.plansAreLoaded = true;
-                console.error('can not find any plans in this regin');
-            }
+            if(this.SelectedRegion?.id){
+                let formData = new FormData();
+                formData.append('CategoryID', this.SelectedRegion?.id);
+                RequestLink = this.CreateRequestLink(action = 'CaasifyGetPlans');
+                let response = await axios.post(RequestLink, formData);
+                
+                if (response?.data?.message) {
+                    this.plansAreLoading = false;
+                    this.plansAreLoaded = true;
+                    console.error('can not find any plans in this regin');
+                }
 
-            if (response?.data?.data) {
-                this.plansLength = response?.data?.data.length;
-                this.plansAreLoading = false;
-                this.plansAreLoaded = true;
-                this.plans = response?.data?.data
+                if (response?.data?.data) {
+                    this.plansAreLoading = false;
+                    this.plansAreLoaded = true;
+                    this.plans = response?.data?.data
+                }
             }
         },
 
@@ -1251,7 +1205,7 @@ app = createApp({
 
                 let formData = new FormData();
                 formData.append('note', this.themachinename);
-                formData.append('product_id', this.planId);
+                formData.append('product_id', this.SelectedPlan.id);
                 
                 let configs = this.PlanConfigSelectedOptions;
                 for (let key in configs) {
@@ -1265,7 +1219,7 @@ app = createApp({
                 if (response?.data) {
                     this.createActionSucced = true
                 } else if (response?.message) {
-                    this.msg = response?.message
+                    this.CreateMSG = response?.message
                     this.openMessageDialog(this.lang(response?.message))
                     this.createActionFailed = true
                 } else {
@@ -1296,46 +1250,6 @@ app = createApp({
             }
         },
 
-        FindSections() {
-            this.PlanSectionsLoading = true
-            let plans = this.plans
-            let sections = null
-            this.PlanConfigs = null
-            if (plans != null) {
-                for (var plan of plans) {
-                    if (plan.id == this.planId && sections === null) {
-                        sections = plan.sections
-                        this.PlanSections = sections
-                        this.PlanSectionsLoading = false
-                        this.PlanSectionsLoaded = true
-                    }
-                }
-            }
-
-            if(sections != null){
-                this.FindPlanConfigs()
-            }
-        },
-        
-        FindPlanConfigs() {
-            let sections = this.PlanSections
-            let PlanConfigs = null
-            
-            if (sections != null) {
-                for (var section of sections) {
-                    if (section.name == "Config") {
-                        PlanConfigs = section.fields
-                        this.PlanConfigs = PlanConfigs
-                    }
-                }
-            }
-
-            if (PlanConfigs != null) {
-                this.EmptyPlanConfigs = false
-                this.initPlanConfigSelectedOptions();
-            }
-        },
-
         findValidControllers() {
             this.ValidControllerItems = null;
             this.NoValidControllerItems = false            
@@ -1345,12 +1259,16 @@ app = createApp({
                 for(var i = 0; i < records?.length; i++){
                     let record = records[i];
                     if(this.ValidControllerItems === null){
+                        this.thisProduct = record.product
                         let groups = record.product.groups
                         for(var j = 0; j < groups.length; j++){
                             let group = groups[j]
-                            if(group?.buttons && this.ValidControllerItems === null){
-                                this.ValidControllerItems = group.buttons
-                                this.ControllersAreLoading = false
+                            if (group?.buttons) {
+                                if (this.ValidControllerItems === null) {
+                                    this.ValidControllerItems = [];
+                                }
+                                this.ValidControllerItems = this.ValidControllerItems.concat(group.buttons);
+                                this.ControllersAreLoading = false;
                             }
                         }
                     }
@@ -1361,65 +1279,62 @@ app = createApp({
             }
         },
 
-        FindNameConfigFromValue(arrayName, value){
-            for (const planConfig of this.PlanConfigs) {
-                if (planConfig.name === arrayName && planConfig.options) {
-                    const options = planConfig.options;
-                    for (const option of options) {
-                        if (option.value === value) {
-                            return option.name;
-                        }
-                    }
-                }
-            }
-            return null;
-        },
+        // FindNameConfigFromValue(arrayName, value){
+        //     for (const planConfig of this.PlanConfigs) {
+        //         if (planConfig.name === arrayName && planConfig.options) {
+        //             const options = planConfig.options;
+        //             for (const option of options) {
+        //                 if (option.value === value) {
+        //                     return option.name;
+        //                 }
+        //             }
+        //         }
+        //     }
+        //     return null;
+        // },
         
-        FindIDConfigFromValue(arrayName, value){
-            for (const planConfig of this.PlanConfigs) {
-                if (planConfig.name === arrayName && planConfig.options) {
-                    const options = planConfig.options;
-                    for (const option of options) {
-                        if (option.value === value) {
-                            return option.id;
-                        }
-                    }
-                }
-            }
-            return null;
-        },
+        // FindIDConfigFromValue(arrayName, value){
+        //     for (const planConfig of this.PlanConfigs) {
+        //         if (planConfig.name === arrayName && planConfig.options) {
+        //             const options = planConfig.options;
+        //             for (const option of options) {
+        //                 if (option.value === value) {
+        //                     return option.id;
+        //                 }
+        //             }
+        //         }
+        //     }
+        //     return null;
+        // },
 
         initPlanConfigSelectedOptions(){
-            let PlanConfigs = this.PlanConfigs;
             this.PlanConfigSelectedOptions = {};
-
-            if(PlanConfigs != null){
-                for(let PlanConfig of PlanConfigs){
-                    this.PlanConfigSelectedOptions[PlanConfig.name] = 'empty'
+            if(this.PlanSections != null && Array.isArray(this.PlanSections)){
+                for(let PlanSection of this.PlanSections){
+                    for(let field of PlanSection.fields){
+                        if(field?.type == 'dropdown'){
+                            this.PlanConfigSelectedOptions[field.name] = field.options[0]
+                        } else if (field?.type == 'text'){
+                            this.PlanConfigSelectedOptions[field.name] = field
+                        }
+                    }
                 }
             }
         },
-        
-        makeNullAll(){
-            this.FindSections()
-            this.FindPlanConfigs()
-            this.initPlanConfigSelectedOptions()
-        },
-
 
         SumConfigPrice(){
             let ConfigPrice = 0
-            let PlanConfigSelectedOptions = this.PlanConfigSelectedOptions
-            
-            for (let key in PlanConfigSelectedOptions) {
-                if (PlanConfigSelectedOptions.hasOwnProperty(key)) {
-                    let price = parseFloat(PlanConfigSelectedOptions[key].price);
+            let obj = this.PlanConfigSelectedOptions
+
+            for (let key in obj) {
+                if (obj.hasOwnProperty(key)) {
+                    let price = parseFloat(obj[key]?.price);
                     if (!isNaN(price)) {
                         ConfigPrice += price;
                     }
                 }
             }
-            
+
             return ConfigPrice
         },
 
@@ -1520,7 +1435,7 @@ app = createApp({
             }
         },
 
-        }
+    }
 });
 
 app.config.compilerOptions.isCustomElement = tag => tag === 'btn'
