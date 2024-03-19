@@ -1,10 +1,10 @@
 <!-- create machine modal -->
-<div class="modal fade modal-lg" id="createModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="actionModalLabel" aria-hidden="false">
+<div class="modal fade modal-lg" id="createModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="actionModalLabel" aria-hidden="false" ref="myModal" >
     <div class="modal-dialog" style="max-width: 800px !important;">
         <div class="modal-content border-0">
             <!-- Modal Body -->
             <div class="m-0 p-0">
-                <div class="modal-body" style="min-height: 350px !important;">
+                <div class="modal-body" style="min-height: 350px !important;" id="CreateModalTop">
                     <div class="row m-0 p-0 pt-5">
                         <div class="col-12 text-start lh-lg pb-3">
                         
@@ -115,17 +115,21 @@
 
                                 <!-- not enough data -->
                                 <div v-if="!themachinename || !SelectedRegion || !SelectedPlan" class="row m-0 p-0 mt-5">
-                                    <p class="alert alert-danger">
-                                        {{ lang('notprovideallinformation') }}
+                                    <p class="alert alert-danger py-1">
+                                        Warning: {{ lang('notprovideallinformation') }}
                                     </p>        
                                 </div>    
 
                                 <!-- Low Balance -->
-                                <div v-if="user.balance < 2">
-                                    <p class="alert alert-danger text-center py-2 mt-5">
-                                        {{ lang('balanceisnotenough') }}
-                                    </p>
-                                    <a class="btn btn-danger float-end" href="<?php echo($PersonalRootDirectoryURL); ?>/index.php?m=caasify&action=pageIndex" target='_top'>{{ lang('movebalance') }}</a>
+                                <div v-if="user.balance < 2" class="d-flex flex-row justify-content-between align-items-center mt-5">
+                                    <div class="flex-grow-1 me-4">
+                                        <p class="alert alert-warning text-start m-0 p-0 px-3 py-1">
+                                            {{ lang('balanceisnotenough') }}
+                                        </p>
+                                    </div>
+                                    <div>
+                                        <a class="btn btn-outline-secondary float-end py-2 btn-sm" href="<?php echo($PersonalRootDirectoryURL); ?>/index.php?m=caasify&action=pageIndex" target='_top'>{{ lang('movebalance') }}</a>
+                                    </div>
                                 </div>
                             </div>
 
@@ -219,9 +223,9 @@
 
                     <!-- Create BTN -->
                     <div v-if="!userClickedCreationBtn">
-                        <div class="m-0 p-0" v-if="themachinename && SelectedRegion && SelectedPlan && NewMachinePrice">
+                        <div class="m-0 p-0" v-if="themachinename && SelectedRegion && SelectedPlan && NewMachinePrice != null">
                             <a v-if="checkboxconfirmation" @click="acceptConfirmDialog" type="button" class="btn btn-primary px-5 mx-2">
-                                <span>{{ lang('createthismachine') }}</span>
+                                <span>{{ lang('Create Machine') }}</span>
                             </a>
                         </div>
                     </div>

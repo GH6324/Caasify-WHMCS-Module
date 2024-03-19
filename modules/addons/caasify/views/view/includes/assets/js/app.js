@@ -96,9 +96,7 @@ app = createApp({
             
 
             PlanSections: null,
-            PlanConfigs: [],
             PlanConfigSelectedOptions: {},
-            PlanConfigPrice: {},
 
             
 
@@ -184,6 +182,7 @@ app = createApp({
     },
 
     mounted() {
+        this.scrollToTop();
         this.fetchModuleConfig();
     },
 
@@ -385,10 +384,10 @@ app = createApp({
         },
 
         NewMachinePrice() {
-            let NewMachinePrice = 0
+            let NewMachinePrice = null
             let decimal = this.config.DefaultMonthlyDecimal
 
-            if(this.SelectedPlan?.price && this.SumConfigPrice()){
+            if(this.SelectedPlan?.price != null && this.SumConfigPrice() != null){
                 let planPrice = this.SelectedPlan.price
                 let ConfigPrice = this.SumConfigPrice()
 
@@ -529,7 +528,33 @@ app = createApp({
             }
         },
 
+        scrollToTop() {
+            const topElement = document.getElementById('top');
+            if (topElement) {
+                topElement.scrollIntoView({ behavior: 'smooth' });
+            }
+        },
 
+        scrollToRegions() {
+            const Element = document.getElementById('RegionsPoint');
+            if (Element) {
+                Element.scrollIntoView({ behavior: 'smooth' });
+            }
+        },
+
+        scrollToPlans() {
+            const Element = document.getElementById('plansPoint');
+            if (Element) {
+                Element.scrollIntoView({ behavior: 'smooth' });
+            }
+        },
+
+        scrollToConfig() {
+            const Element = document.getElementById('configsPoint');
+            if (Element) {
+                Element.scrollIntoView({ behavior: 'smooth' });
+            }
+        },
 
 
 
@@ -1106,6 +1131,7 @@ app = createApp({
         },
 
         selectDataCenter(DataCenter) {
+            this.scrollToRegions()
             this.PlanConfigSelectedOptions = {}
             this.plans = [];
             this.SelectedPlan = null
@@ -1124,6 +1150,8 @@ app = createApp({
         },
 
         selectRegion(region) {
+            this.scrollToPlans();
+
             this.PlanConfigSelectedOptions = {}
             this.plans = [];
             this.SelectedPlan = null
@@ -1143,6 +1171,7 @@ app = createApp({
         },
 
         selectPlan(plan) {
+            this.scrollToConfig()
             this.PlanConfigSelectedOptions = {}
             this.SelectedPlan = plan
             this.PlanSections = null
@@ -1199,21 +1228,28 @@ app = createApp({
         },
 
         async create() {
+            this.scrollToTop();
+
             let accept = await this.openConfirmDialog(this.lang('Create Machine'), this.lang('Are you sure about this?'))
 
             if (accept) {
-
                 let formData = new FormData();
                 formData.append('note', this.themachinename);
                 formData.append('product_id', this.SelectedPlan.id);
                 
                 let configs = this.PlanConfigSelectedOptions;
                 for (let key in configs) {
-                    formData.append(key, configs[key].value);
-                }
-                
+                    if(configs[key].hasOwnProperty('value')){ // type dropdown
+                        formData.append(key, configs[key].value);
+                    } else if(configs[key].hasOwnProperty('options')){ // type text
+                        formData.append(key, configs[key].options);
+                    }
+                }                
+
                 RequestLink = this.CreateRequestLink(action = 'CaasifyCreateOrder');
                 let response = await axios.post(RequestLink, formData);
+                console.log(response);
+
                 response = response.data
 
                 if (response?.data) {
@@ -1278,34 +1314,6 @@ app = createApp({
                 this.NoValidControllerItems = true
             }
         },
-
-        // FindNameConfigFromValue(arrayName, value){
-        //     for (const planConfig of this.PlanConfigs) {
-        //         if (planConfig.name === arrayName && planConfig.options) {
-        //             const options = planConfig.options;
-        //             for (const option of options) {
-        //                 if (option.value === value) {
-        //                     return option.name;
-        //                 }
-        //             }
-        //         }
-        //     }
-        //     return null;
-        // },
-        
-        // FindIDConfigFromValue(arrayName, value){
-        //     for (const planConfig of this.PlanConfigs) {
-        //         if (planConfig.name === arrayName && planConfig.options) {
-        //             const options = planConfig.options;
-        //             for (const option of options) {
-        //                 if (option.value === value) {
-        //                     return option.id;
-        //                 }
-        //             }
-        //         }
-        //     }
-        //     return null;
-        // },
 
         initPlanConfigSelectedOptions(){
             this.PlanConfigSelectedOptions = {};

@@ -308,7 +308,7 @@ let common = {
     "costonegigtraffic" : "Cost for one GB traffic",
     "freeprice" : "Free",
     "pricestartsfrom" : "Price Starts From",
-    "confirmationtext" : "I affirm my agreement with all the terms and regulations for utilizing the global network cloud.",
+    "confirmationtext" : "I affirm my agreement with all the terms and regulations for utilizing CAASIFY.",
     "optional" : "Optional",
     "readmore" : "Read More ...",
     

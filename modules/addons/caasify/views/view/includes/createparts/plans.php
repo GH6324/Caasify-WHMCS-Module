@@ -80,3 +80,4 @@
     </div>
 </div>
 <!-- end plan -->
+<div id="configsPoint"></div>
