@@ -5,11 +5,11 @@ app = createApp({
     data() {
         return {
 
-            alert: null,
+            
 
             // views
             machineID: null,
-            thisProduct:null,
+            thisProduct:null,            
 
             views: null,
             viewsAreLoading: null,
@@ -24,9 +24,9 @@ app = createApp({
             ControllersAreLoading: true,
             NoValidControllerItems: null,
             
-            anActionIsDoing: null,
-            anActionIsDone: null,
-            theAction: null,
+            actionWouldBeHappened:null,
+            ActionAlert: null,
+            ActionHistory: null,
             
 
 
@@ -166,6 +166,7 @@ app = createApp({
         machineID(newmachineID) {
             if (newmachineID != '') {
                 this.LoadRequestNewView();
+                this.LoadActionsHistory();
             }
         },
 
@@ -749,11 +750,11 @@ app = createApp({
         },
 
         open(order) {
-            let address = '/index.php?m=caasify'
+            let address = '/modules/addons/caasify/views/view/view.php'
             let params = new URLSearchParams({
-                'action': 'pageView', 'id': order.id
+                'id': order.id
             }).toString()
-            window.open([address, params].join('&'), "_top")
+            window.open([address, params].join('?'), "_top")
         },
 
         address(order) {
@@ -970,54 +971,17 @@ app = createApp({
             }
         },
 
-        openConfirmDialog(title, text) {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-            // Open dialog
-            this.confirmDialog = true
-
-            // Content
-            this.confirmText = text
-            this.confirmTitle = title
-
-            // Reset click Btn 
-            this.createActionFailed = false
-            this.createActionSucced = false
-            this.userClickedCreationBtn = false
-
-            // Promise
+        openConfirmDialog(action) {
+            this.actionWouldBeHappened = action
             return new Promise((resolve) => this.confirmResolve = resolve)
-
         },
 
         acceptConfirmDialog() {
-
             this.confirmResolve(true)
-
-            // Close dialog
-            this.confirmDialog = false
-
-            // Check Click
-            this.userClickedCreationBtn = true
-
         },
 
         closeConfirmDialog() {
-
             this.confirmResolve(false)
-
-            // Close dialog
-            this.confirmDialog = false
-
-
-            // Reset Click BTN
-            setTimeout(() => {
-                this.createActionFailed = false
-                this.createActionSucced = false
-                this.userClickedCreationBtn = false
-            }, 500);
-
-
-
         },
 
         openMessageDialog(text) {
@@ -1230,7 +1194,7 @@ app = createApp({
         async create() {
             this.scrollToTop();
 
-            let accept = await this.openConfirmDialog(this.lang('Create Machine'), this.lang('Are you sure about this?'))
+            let accept = await this.openConfirmDialog('create')
 
             if (accept) {
                 let formData = new FormData();
@@ -1346,6 +1310,13 @@ app = createApp({
             return ConfigPrice
         },
 
+
+
+
+
+
+
+        // View Machine
         async LoadOrderViews() {
                 let machineID = this.machineID;
                 if (machineID != null) {
@@ -1367,6 +1338,7 @@ app = createApp({
                         this.viewsAreLoaded = true;
                         this.views = response?.data?.data
                         this.findValidViews()
+                        this.LoadActionsHistory()
                     }
                 }
         },
@@ -1394,52 +1366,53 @@ app = createApp({
             }
         },
 
-        findTheActionIsDoin(button_id){
-            if (button_id != null && this.ValidControllerItems != null){
-                for(let Controller of this.ValidControllerItems){
-                    if(Controller.id == button_id){
-                        this.theAction = Controller.name
-                        return this.theAction
-                    }
-                }
-            }
-
-            return null;
-        },
-        
-        async PushButtonController(button_id) {
+        async LoadActionsHistory() {
+            
             let machineID = this.machineID;
 
-            if (machineID != null && button_id != null) {
+            if (machineID != null) {
                 let formData = new FormData();
                 formData.append('machineID', machineID);
-                formData.append('button_id', button_id);
-                this.anActionIsDoing = true
-                this.theAction = this.findTheActionIsDoin(button_id)
-
-                RequestLink = this.CreateRequestLink(action = 'CaasifyOrderDoAction');
+                RequestLink = this.CreateRequestLink(action = 'CaasifyActionsHistory');
                 let response = await axios.post(RequestLink, formData);
 
+                this.ActionHistory = response.data;
+
+                console.log(response);
                 if (response?.data?.message) {
-                    this.anActionIsDoing = false;
-                    this.anActionIsDone = true;
-                    this.alert = response?.data?.message
-                    console.error('can not send action');
+                    console.error('can not reguest Action History');
                 }
 
                 if (response?.data?.data) {
-                    this.anActionIsDoing = false;
-                    this.anActionIsDone = true;
-                    this.alert = this.theAction + ' Successfully'
-                    this.findValidViews()
+                    this.ActionHistory = response?.data?.data
                 }
+            }
+            
+        },
+        
+        async PushButtonController(button_id, button_name) {
+            let accept = await this.openConfirmDialog(button_name)
 
-                setTimeout(() => {
-                    this.anActionIsDoing = null
-                    this.anActionIsDone = null
-                    this.theAction = null
-                    this.alert = null
-                }, 5000);
+            if (accept) {
+                let machineID = this.machineID;
+                if (machineID != null && button_id != null) {
+                    let formData = new FormData();
+                    formData.append('machineID', machineID);
+                    formData.append('button_id', button_id);
+
+                    RequestLink = this.CreateRequestLink(action = 'CaasifyOrderDoAction');
+                    let response = await axios.post(RequestLink, formData);
+
+                    if (response?.data?.message) {
+                        this.ActionAlert = response?.data?.message
+                        console.error('can not send action');
+                    }
+
+                    if (response?.data?.data) {
+                        this.ActionAlert = button_name + ' has send Successfully'
+                        this.findValidViews()
+                    }
+                }
             }
         },
 

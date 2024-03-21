@@ -8,7 +8,12 @@
     <div class="">
         <div v-if="!ControllersAreLoading">
             <div v-if="NoValidControllerItems != true" class="d-flex flex-row flex-wrap gap-4 justify-content-between">
-                <a v-for="button in ValidControllerItems" class="btn btn-primary px-3 px-lg-5" style="width: 140px;" @click="PushButtonController(button.id)">
+                <a 
+                    data-bs-toggle="modal" data-bs-target="#actionsModal"
+                    v-for="button in ValidControllerItems" class="btn btn-primary px-3 px-lg-5" 
+                    style="width: 140px;" 
+                    @click="PushButtonController(button.id, button.name)"
+                >
                     {{ button.name }}
                 </a>
             </div>
@@ -21,10 +26,10 @@
 
 
 
-<div class="col-12" v-if="alert">
+<div class="col-12" v-if="ActionAlert">
     <div class="px-4">
         <p class="alert alert-danger">
-            {{ alert }}
+            {{ ActionAlert }}
         </p>
     </div>
 </div>

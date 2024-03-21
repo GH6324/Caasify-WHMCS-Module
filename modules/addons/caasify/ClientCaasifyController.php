@@ -341,7 +341,7 @@ class ClientCaasifyController
 
         $machineID = caasify_get_post('machineID');
 
-        if($UserToken){
+        if($UserToken && $machineID){
             $response = $this->sendNewViewRequest($UserToken, $machineID);
         }
 
@@ -360,6 +360,39 @@ class ClientCaasifyController
         
         $address = [
             $BackendUrl, 'api', 'orders', $machineID, 'view'
+        ];
+
+        return Request::instance()->setAddress($address)->setHeaders($headers)->getResponse()->asObject();
+    }
+
+
+
+    public function CaasifyActionsHistory()
+    {
+        $UserToken = $this->getUserTokenFromDB();
+        $response = null;
+
+        $machineID = caasify_get_post('machineID');
+
+        if($UserToke && $machineID){
+            $response = $this->sendActionsHistory($UserToken, $machineID);
+        }
+
+        $this->response($response);
+    }
+
+    public function sendActionsHistory($UserToken, $machineID)
+    {
+
+        $headers = [
+            'Accept' => 'application/json',
+            'Authorization' => 'Bearer ' . $UserToken
+        ];
+        
+        $BackendUrl = $this->BackendUrl;
+        
+        $address = [
+            $BackendUrl, 'api', 'orders', $machineID, 'show'
         ];
 
         return Request::instance()->setAddress($address)->setHeaders($headers)->getResponse()->asObject();
