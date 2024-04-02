@@ -23,8 +23,8 @@
                 <p class="h6 ms-3">
                     NAME : {{ SelectedPlan.title }}
                 </p>
-                <p class="h6 ms-3">
-                    PRICE: {{ showMachinePriceInWhmcsUnit(ConverFromCaasifyToWhmcs(SelectedPlan.price)) }} {{ userCurrencySymbolFromWhmcs }}
+                <p class="h6 ms-3" v-if="SelectedPlan?.price">
+                    PRICE: {{ showMachinePriceInWhmcsUnit(ConvertFromCaasifyToWhmcs(SelectedPlan.price)) }} {{ userCurrencySymbolFromWhmcs }}
                 </p>
             </div>
             <div v-if="PlanConfigSelectedOptions" class="mt-5">
@@ -42,7 +42,7 @@
                             free
                         </span>
                         <span v-else>
-                            {{ showMachinePriceInWhmcsUnit(ConverFromCaasifyToWhmcs(value?.price)) }} {{ userCurrencySymbolFromWhmcs }}
+                            {{ showMachinePriceInWhmcsUnit(ConvertFromCaasifyToWhmcs(value?.price)) }} {{ userCurrencySymbolFromWhmcs }}
                         </span>
                     </div>
                 </div>
@@ -58,7 +58,7 @@
                         {{ lang('totalcost') }} = 
                     </span>
                     <span>
-                        {{ showMachinePriceInWhmcsUnit(ConverFromCaasifyToWhmcs(NewMachinePrice)) }} {{ userCurrencySymbolFromWhmcs }}
+                        {{ showMachinePriceInWhmcsUnit(ConvertFromCaasifyToWhmcs(NewMachinePrice)) }} {{ userCurrencySymbolFromWhmcs }}
                     </span>
                 </p>
             </div>

@@ -8,8 +8,9 @@ app = createApp({
             
 
             // views
-            machineID: null,
-            thisProduct:null,            
+            orderID: null,
+            thisProduct:null,
+            OrderHasFinded: null,
 
             views: null,
             viewsAreLoading: null,
@@ -153,7 +154,7 @@ app = createApp({
                     this.readLanguageFirstTime();
 
                 } else if (newFielName == "view.php") {
-                    this.machineId();
+                    this.orderId();
                     this.LoadUserOrders();
                     this.readLanguageFirstTime();
                     this.LoadCaasifyUser();
@@ -163,8 +164,8 @@ app = createApp({
             }
         },
 
-        machineID(newmachineID) {
-            if (newmachineID != '') {
+        orderID(neworderID) {
+            if (neworderID != '') {
                 this.LoadRequestNewView();
                 this.LoadActionsHistory();
             }
@@ -190,10 +191,11 @@ app = createApp({
     computed: {
 
         thisOrder(){ 
-            if(this.machineID != null && this.UserOrders != null){
+            if(this.orderID != null && this.UserOrders != null){
                 for (var i = 0; i < this.UserOrders.length; i++) {
                     let order = this.UserOrders[i];
-                    if(order.id == this.machineID){
+                    if(order.id == this.orderID){
+                        this.OrderHasFinded = true;
                         return order
                     }
                 }
@@ -263,7 +265,7 @@ app = createApp({
 
         chargeAmountInCaasifyCurrency() {
             if (this.chargeAmountinWhmcs != null && this.CurrenciesRatioWhmcsToCloud != null) {
-                let value = this.ConverFromWhmcsToCloud(this.chargeAmountinWhmcs)
+                let value = this.convertFromWhmcsToCloud(this.chargeAmountinWhmcs)
                 return value
             } else {
                 return null
@@ -272,7 +274,7 @@ app = createApp({
 
         UserCreditInCaasifyCurrency() {
             if (this.userCreditinWhmcs != null && this.CurrenciesRatioWhmcsToCloud != null) {
-                let value = this.ConverFromWhmcsToCloud(this.userCreditinWhmcs)
+                let value = this.convertFromWhmcsToCloud(this.userCreditinWhmcs)
                 return value
             } else {
                 return null
@@ -571,7 +573,7 @@ app = createApp({
             }
         },
 
-        ConverFromWhmcsToCloud(value) {
+        convertFromWhmcsToCloud(value) {
             if (this.CurrenciesRatioWhmcsToCloud) {
                 let ratio = this.CurrenciesRatioWhmcsToCloud
                 return value * ratio
@@ -580,7 +582,7 @@ app = createApp({
             }
         },
 
-        ConverFromCaasifyToWhmcs(value) {
+        ConvertFromCaasifyToWhmcs(value) {
             if (this.CurrenciesRatioCloudToWhmcs) {
                 let ratio = this.CurrenciesRatioCloudToWhmcs
                 return value * ratio
@@ -834,7 +836,7 @@ app = createApp({
 
         async chargeCaasify() {
             const id = this.ConstUserId.value;
-            const chargeamountInAutovm = this.ConverFromWhmcsToCloud(this.ConstChargeamountInWhmcs.value);
+            const chargeamountInAutovm = this.convertFromWhmcsToCloud(this.ConstChargeamountInWhmcs.value);
             const invoiceid = this.ConstantInvoiceId.value
 
             this.theChargingSteps = 2;
@@ -1212,11 +1214,12 @@ app = createApp({
 
                 RequestLink = this.CreateRequestLink(action = 'CaasifyCreateOrder');
                 let response = await axios.post(RequestLink, formData);
-                console.log(response);
 
+                
                 response = response.data
 
                 if (response?.data) {
+                    this.userClickedCreationBtn = true
                     this.createActionSucced = true
                 } else if (response?.message) {
                     this.CreateMSG = response?.message
@@ -1229,9 +1232,9 @@ app = createApp({
         },
 
         // view
-        machineId() {
+        orderId() {
             let params = new URLSearchParams(window.location.search)
-            this.machineID = params.get('id')
+            this.orderID = params.get('id')
             return params.get('id')
         },
 
@@ -1318,10 +1321,10 @@ app = createApp({
 
         // View Machine
         async LoadOrderViews() {
-                let machineID = this.machineID;
-                if (machineID != null) {
+                let orderID = this.orderID;
+                if (orderID != null) {
                     let formData = new FormData();
-                    formData.append('machineID', machineID);
+                    formData.append('orderID', orderID);
                     this.viewsAreLoading = true
 
                     RequestLink = this.CreateRequestLink(action = 'CaasifyGetOrderViews');
@@ -1346,10 +1349,10 @@ app = createApp({
         async LoadRequestNewView() {
             this.NewViewStatus = null;
 
-            let machineID = this.machineID;
-            if (machineID != null) {
+            let orderID = this.orderID;
+            if (orderID != null) {
                 let formData = new FormData();
-                formData.append('machineID', machineID);
+                formData.append('orderID', orderID);
 
                 RequestLink = this.CreateRequestLink(action = 'CaasifyRequestNewView');
                 let response = await axios.post(RequestLink, formData);
@@ -1368,17 +1371,20 @@ app = createApp({
 
         async LoadActionsHistory() {
             
-            let machineID = this.machineID;
+            let orderID = this.orderID;
 
-            if (machineID != null) {
+            if (orderID != null) {
                 let formData = new FormData();
-                formData.append('machineID', machineID);
+                formData.append('orderID', orderID);
                 RequestLink = this.CreateRequestLink(action = 'CaasifyActionsHistory');
                 let response = await axios.post(RequestLink, formData);
 
+                
+                console.log(response.data);
+
+
                 this.ActionHistory = response.data;
 
-                console.log(response);
                 if (response?.data?.message) {
                     console.error('can not reguest Action History');
                 }
@@ -1394,10 +1400,10 @@ app = createApp({
             let accept = await this.openConfirmDialog(button_name)
 
             if (accept) {
-                let machineID = this.machineID;
-                if (machineID != null && button_id != null) {
+                let orderID = this.orderID;
+                if (orderID != null && button_id != null) {
                     let formData = new FormData();
-                    formData.append('machineID', machineID);
+                    formData.append('orderID', orderID);
                     formData.append('button_id', button_id);
 
                     RequestLink = this.CreateRequestLink(action = 'CaasifyOrderDoAction');
@@ -1414,6 +1420,28 @@ app = createApp({
                     }
                 }
             }
+        },
+
+
+        MachineSpendTime(timeVariable) {
+            const creationDate = new Date(timeVariable);
+            const currentDate = new Date();
+            const timeDifference = currentDate - creationDate;
+            const totalMinutes = Math.floor(timeDifference / (1000 * 60));
+            const hours = Math.floor(totalMinutes / 60);
+            const minutes = totalMinutes % 60;
+
+            let duration = '1min';
+
+            if (hours > 0 && minutes > 0) {
+                duration = `${hours}hr ${minutes}min`;
+            } else if (hours > 0) {
+                duration = `${hours}hr`;
+            } else {
+                duration = `${minutes}min`;
+            }
+              
+            return duration
         },
 
     }

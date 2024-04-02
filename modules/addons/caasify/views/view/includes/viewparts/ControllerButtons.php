@@ -1,13 +1,13 @@
-<div class="py-5 px-4 px-lg-5">
+<div class="m-0 p-0">
     <div v-if="ControllersAreLoading" class="d-flex flex-row mt-5 text-primary">
         <p class="h5 me-4 ">{{ lang('Controllers Are Loading') }}</p>
         <span>
             <?php include('./includes/baselayout/threespinner.php'); ?>
         </span>
     </div>
-    <div class="">
-        <div v-if="!ControllersAreLoading">
-            <div v-if="NoValidControllerItems != true" class="d-flex flex-row flex-wrap gap-4 justify-content-between">
+    <div class="row m-0 p-0">
+        <div v-if="!ControllersAreLoading" class="m-0 p-0">
+            <div v-if="NoValidControllerItems != true" class="d-flex flex-row flex-wrap gap-3 justify-content-start">
                 <a 
                     data-bs-toggle="modal" data-bs-target="#actionsModal"
                     v-for="button in ValidControllerItems" class="btn btn-primary px-3 px-lg-5" 

@@ -31,7 +31,7 @@
                                 free
                             </p>
                             <p v-else class="text-primary h5">
-                                {{ showMachinePriceInWhmcsUnit(ConverFromCaasifyToWhmcs(PlanConfigSelectedOptions[field.name].price)) }} {{ userCurrencySymbolFromWhmcs }}
+                                {{ showMachinePriceInWhmcsUnit(ConvertFromCaasifyToWhmcs(PlanConfigSelectedOptions[field.name].price)) }} {{ userCurrencySymbolFromWhmcs }}
                             </p>
                         </div>
                     </div>

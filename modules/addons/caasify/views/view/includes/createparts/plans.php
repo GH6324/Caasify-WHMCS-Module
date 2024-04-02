@@ -68,7 +68,7 @@
                                     {{ lang('price') }}
                                     </span>
                                     <span class="fs-6 fw-medium">
-                                        {{ formatCostMonthly(ConverFromCaasifyToWhmcs(plan.price)) }} {{ userCurrencySymbolFromWhmcs }}
+                                        {{ formatCostMonthly(ConvertFromCaasifyToWhmcs(plan.price)) }} {{ userCurrencySymbolFromWhmcs }}
                                     </span>
                                 </div>
                             </div><!-- End MemDescriptionory -->

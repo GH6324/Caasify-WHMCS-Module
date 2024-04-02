@@ -270,16 +270,16 @@ class ClientCaasifyController
         $UserToken = $this->getUserTokenFromDB();
         $response = null;
 
-        $machineID = caasify_get_post('machineID');
+        $orderID = caasify_get_post('orderID');
 
         if($UserToken){
-            $response = $this->sendOrderViewsRequest($UserToken, $machineID);
+            $response = $this->sendOrderViewsRequest($UserToken, $orderID);
         }
 
         $this->response($response);
     }
 
-    public function sendOrderViewsRequest($UserToken, $machineID)
+    public function sendOrderViewsRequest($UserToken, $orderID)
     {
         
         $headers = [
@@ -290,7 +290,7 @@ class ClientCaasifyController
         $BackendUrl = $this->BackendUrl;
         
         $address = [
-            $BackendUrl, 'api', 'orders', $machineID, 'views'
+            $BackendUrl, 'api', 'orders', $orderID, 'views'
         ];
 
         return Request::instance()->setAddress($address)->setHeaders($headers)->getResponse()->asObject();
@@ -302,17 +302,17 @@ class ClientCaasifyController
         $UserToken = $this->getUserTokenFromDB();
         $response = null;
 
-        $machineID = caasify_get_post('machineID');
+        $orderID = caasify_get_post('orderID');
         $button_id = caasify_get_post('button_id');
 
         if($UserToken){
-            $response = $this->sendOrderAction($UserToken, $machineID, $button_id);
+            $response = $this->sendOrderAction($UserToken, $orderID, $button_id);
         }
 
         $this->response($response);
     }
 
-    public function sendOrderAction($UserToken, $machineID, $button_id)
+    public function sendOrderAction($UserToken, $orderID, $button_id)
     {
         
         $headers = [
@@ -327,7 +327,7 @@ class ClientCaasifyController
         $BackendUrl = $this->BackendUrl;
         
         $address = [
-            $BackendUrl, 'api', 'orders', $machineID, 'action'
+            $BackendUrl, 'api', 'orders', $orderID, 'action'
         ];
 
         return Request::instance()->setAddress($address)->setHeaders($headers)->setParams($params)->getResponse()->asObject();
@@ -339,16 +339,16 @@ class ClientCaasifyController
         $UserToken = $this->getUserTokenFromDB();
         $response = null;
 
-        $machineID = caasify_get_post('machineID');
+        $orderID = caasify_get_post('orderID');
 
-        if($UserToken && $machineID){
-            $response = $this->sendNewViewRequest($UserToken, $machineID);
+        if($UserToken && $orderID){
+            $response = $this->sendNewViewRequest($UserToken, $orderID);
         }
 
         $this->response($response);
     }
 
-    public function sendNewViewRequest($UserToken, $machineID)
+    public function sendNewViewRequest($UserToken, $orderID)
     {
         
         $headers = [
@@ -359,7 +359,7 @@ class ClientCaasifyController
         $BackendUrl = $this->BackendUrl;
         
         $address = [
-            $BackendUrl, 'api', 'orders', $machineID, 'view'
+            $BackendUrl, 'api', 'orders', $orderID, 'view'
         ];
 
         return Request::instance()->setAddress($address)->setHeaders($headers)->getResponse()->asObject();
@@ -372,16 +372,16 @@ class ClientCaasifyController
         $UserToken = $this->getUserTokenFromDB();
         $response = null;
 
-        $machineID = caasify_get_post('machineID');
+        $orderID = caasify_get_post('orderID');
 
-        if($UserToke && $machineID){
-            $response = $this->sendActionsHistory($UserToken, $machineID);
+        if($UserToke && $orderID){
+            $response = $this->sendActionsHistory($UserToken, $orderID);
         }
 
         $this->response($response);
     }
 
-    public function sendActionsHistory($UserToken, $machineID)
+    public function sendActionsHistory($UserToken, $orderID)
     {
 
         $headers = [
@@ -392,10 +392,14 @@ class ClientCaasifyController
         $BackendUrl = $this->BackendUrl;
         
         $address = [
-            $BackendUrl, 'api', 'orders', $machineID, 'show'
+            $BackendUrl, 'api', 'orders', $orderID, 'actions'
         ];
 
-        return Request::instance()->setAddress($address)->setHeaders($headers)->getResponse()->asObject();
+        
+        $x = Request::instance()->setAddress($address)->setHeaders($headers)->getResponse();
+        exit($x);
+
+        // return 
     }
 
 

@@ -108,7 +108,7 @@
                                     <!-- Total Price -->
                                     <div v-if="NewMachinePrice" class="float-end text-primary fw-medium">
                                         <p>
-                                            Total Price : {{ showMachinePriceInWhmcsUnit(ConverFromCaasifyToWhmcs(NewMachinePrice)) }} {{ userCurrencySymbolFromWhmcs }}
+                                            Total Price : {{ showMachinePriceInWhmcsUnit(ConvertFromCaasifyToWhmcs(NewMachinePrice)) }} {{ userCurrencySymbolFromWhmcs }}
                                         </p>
                                     </div>
                                 </div>
@@ -185,7 +185,7 @@
                     <span class="text-dark fw-medium me-2">{{ lang('balance') }} : </span>
                     <span v-if="user.balance" class="text-primary fw-medium">
                         <span v-if="CurrenciesRatioCloudToWhmcs != null">
-                            {{ showBalanceWhmcsUnit(ConverFromCaasifyToWhmcs(user.balance)) }} {{ userCurrencySymbolFromWhmcs }}
+                            {{ showBalanceWhmcsUnit(ConvertFromCaasifyToWhmcs(user.balance)) }} {{ userCurrencySymbolFromWhmcs }}
                         </span>
                         <span v-else>
                             <?php include('./includes/baselayout/threespinner.php'); ?>
