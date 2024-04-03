@@ -12,24 +12,27 @@
     </div>
     <div class="d-flex flex-row justify-content-between align-items-end">
         <div class="me-2">
-            <a class="btn btn-outline-primary px-3 py-2" href="<?php echo($systemUrl); ?>index.php?m=caasify&action=pageCreate" target='_top'>
+            <a class="btn btn-outline-primary px-3 py-2" @click="openCreatePage" target='_top'>
                 {{ lang('createorder') }}
             </a>
         </div>
-        <?php if($ChargeModuleEnable): ?> 
-            <div class="me-2">
-                <h2 class="accordion-header">
-                    <button class="btn btn-outline-primary collapsed py-2" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
-                    <i class="bi bi-coin pe-2"></i> 
+        <?php if($ChargeModuleEnable): ?>
+        <div class="me-2">
+            <h2 class="accordion-header">
+                <button class="btn btn-outline-primary collapsed py-2" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                    <i class="bi bi-coin pe-2"></i>
                     <span>{{ lang('finance') }}</span>
-                    </button>
-                </h2>
-            </div>
+                </button>
+            </h2>
+        </div>
         <?php endif ?>
-        <?php if(!$ChargeModuleEnable): ?> 
-            <a class="btn btn-outline-primary collapsed py-2 me-2" target="_top" type="button" href="<?php echo($CloudTopupLink); ?>">{{ lang('topup') }}</a>
+        <?php if(!$ChargeModuleEnable): ?>
+        <a class="btn btn-outline-primary collapsed py-2 me-2" target="_top" type="button"
+            href="<?php echo($CloudTopupLink); ?>">{{ lang('topup') }}</a>
         <?php endif ?>
-        <div class="btn bg-primary text-dark d-flex flex-row justify-content-center align-items-center p-0" style="--bs-bg-opacity: 0.2">
+        <div class="btn bg-primary text-dark d-flex flex-row justify-content-center align-items-center p-0"
+            style="--bs-bg-opacity: 0.2">
             <?php include('./includes/baselayout/langbtn.php'); ?>
         </div>
     </div>
@@ -40,23 +43,25 @@
             <div class="accordion-item">
                 <div id="flush-collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
                     <div class="row accordion-body justify-content-center">
-                        <div class="row align-items-center justify-content-start m-0 p-0 py-4 px-0 px-md-3">  
+                        <div class="row align-items-center justify-content-start m-0 p-0 py-4 px-0 px-md-3">
                             <!-- Account Balance -->
                             <div class="col-12 col-md-7 col-lg-6 m-0 p-0 mb-2">
                                 <?php include('balanceview.php'); ?>
                             </div>
-                            <?php if($ChargeModuleEnable): ?> 
-                                <!-- Credit -->                        
-                                <div class="col-12 col-md-5 col-lg-6 m-0 p-0 mb-2">
-                                    <div class="d-flex flex-row align-items-center justify-content-between border border-2 rounded-4 bg-body-secondary py-4 px-3 px-lg-4 px-xl-5 ms-0 ms-md-2">
-                                        <?php include('showcredit.php'); ?>
-                                        <div class="m-0 p-0">
-                                            <a class="btn btn-primary" target="_top" type="button" href="<?php echo($CloudTopupLink); ?>">
-                                                {{ lang('topup') }}
-                                            </a>
-                                        </div>
+                            <?php if($ChargeModuleEnable): ?>
+                            <!-- Credit -->
+                            <div class="col-12 col-md-5 col-lg-6 m-0 p-0 mb-2">
+                                <div
+                                    class="d-flex flex-row align-items-center justify-content-between border border-2 rounded-4 bg-body-secondary py-4 px-3 px-lg-4 px-xl-5 ms-0 ms-md-2">
+                                    <?php include('showcredit.php'); ?>
+                                    <div class="m-0 p-0">
+                                        <a class="btn btn-primary" target="_top" type="button"
+                                            href="<?php echo($CloudTopupLink); ?>">
+                                            {{ lang('topup') }}
+                                        </a>
                                     </div>
                                 </div>
+                            </div>
                             <?php endif ?>
                         </div>
                     </div>
@@ -65,7 +70,3 @@
         </div>
     </div>
 </div>
-
-
-
-

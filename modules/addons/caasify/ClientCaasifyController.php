@@ -75,15 +75,16 @@ class ClientCaasifyController
     {
         $UserToken = $this->getUserTokenFromDB();
         $response = null;
-
+        $page = caasify_get_post('page');
+        
         if($UserToken){
-            $response = $this->sendUserOrdersRequest($UserToken);
+            $response = $this->sendUserOrdersRequest($UserToken, $page);
         }
         
         $this->response($response);
     }
 
-    public function sendUserOrdersRequest($UserToken)
+    public function sendUserOrdersRequest($UserToken, $page)
     {
 
         $headers = [
@@ -94,7 +95,7 @@ class ClientCaasifyController
         $BackendUrl = $this->BackendUrl;
 
         $address = [
-            $BackendUrl, 'api', 'orders'
+            $BackendUrl, 'api', 'orders', '?page=' . $page
         ];
         
         return Request::instance()->setAddress($address)->setHeaders($headers)->getResponse()->asObject();
@@ -241,6 +242,7 @@ class ClientCaasifyController
         return Request::instance()->setAddress($address)->setHeaders($headers)->setParams($params)->getResponse()->asObject();
     }
 
+    
 //
 
 
@@ -265,6 +267,38 @@ class ClientCaasifyController
 
 
 // New for view page
+
+    public function LoadOrder()
+    {
+        $UserToken = $this->getUserTokenFromDB();
+        $response = null;
+
+        $orderID = caasify_get_post('orderID');
+        
+        if($UserToken && $orderID){
+            $response = $this->sendLoadOrderRequest($UserToken, $orderID);
+        }
+        
+        $this->response($response);
+    }
+
+    public function sendLoadOrderRequest($UserToken, $orderID)
+    {
+
+        $headers = [
+            'Accept' => 'application/json',
+            'Authorization' => 'Bearer ' . $UserToken
+        ];
+        
+        $BackendUrl = $this->BackendUrl;
+
+        $address = [
+            $BackendUrl, 'api', 'orders', $orderID, 'show'
+        ];
+        
+        return Request::instance()->setAddress($address)->setHeaders($headers)->getResponse()->asObject();
+    }
+    
     public function CaasifyGetOrderViews()
     {
         $UserToken = $this->getUserTokenFromDB();
@@ -374,7 +408,7 @@ class ClientCaasifyController
 
         $orderID = caasify_get_post('orderID');
 
-        if($UserToke && $orderID){
+        if($UserToken && $orderID){
             $response = $this->sendActionsHistory($UserToken, $orderID);
         }
 
@@ -396,10 +430,8 @@ class ClientCaasifyController
         ];
 
         
-        $x = Request::instance()->setAddress($address)->setHeaders($headers)->getResponse();
-        exit($x);
-
-        // return 
+        
+        return Request::instance()->setAddress($address)->setHeaders($headers)->getResponse()->asObject();
     }
 
 

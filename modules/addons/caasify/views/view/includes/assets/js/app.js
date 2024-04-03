@@ -10,7 +10,8 @@ app = createApp({
             // views
             orderID: null,
             thisProduct:null,
-            OrderHasFinded: null,
+            thisOrder: null,
+            ordeIsLoaded: null,
 
             views: null,
             viewsAreLoading: null,
@@ -27,7 +28,10 @@ app = createApp({
             
             actionWouldBeHappened:null,
             ActionAlert: null,
+            ActionAlertStatus: null,
             ActionHistory: null,
+            reversedActionHistory: null,
+            ActionHistoryIsLoaded: null,
             
 
 
@@ -51,8 +55,8 @@ app = createApp({
             machinsLoaded: false,
 
             user: {},
-            UserOrders: null,
-            userHasNoorder: false,
+            UserOrders: [],
+            userHasNoOrder: false,
             ConstUserId: null,
 
 
@@ -155,11 +159,13 @@ app = createApp({
 
                 } else if (newFielName == "view.php") {
                     this.orderId();
-                    this.LoadUserOrders();
+                    this.LoadTheOrder();
                     this.readLanguageFirstTime();
                     this.LoadCaasifyUser();
                     this.LoadWhmcsUser();
                     this.LoadWhmcsCurrencies();
+                    
+                    this.loadPollingViewMachine()
                 }
             }
         },
@@ -189,19 +195,6 @@ app = createApp({
     },
 
     computed: {
-
-        thisOrder(){ 
-            if(this.orderID != null && this.UserOrders != null){
-                for (var i = 0; i < this.UserOrders.length; i++) {
-                    let order = this.UserOrders[i];
-                    if(order.id == this.orderID){
-                        this.OrderHasFinded = true;
-                        return order
-                    }
-                }
-            }
-            return false
-        },
 
         config() {
             return {
@@ -423,7 +416,12 @@ app = createApp({
                 .then(response => response.json())
                 .then(data => {
                     this.CaasifyConfigs = data.configs;
+                    
                     this.systemUrl = data.configs.systemUrl;
+                    if (this.systemUrl.endsWith('/')) {
+                        this.systemUrl = this.systemUrl.slice(0, -1);
+                    }
+
                     this.BackendUrl = data.configs.BackendUrl;
                     if (this.systemUrl == '') {
                         console.error('systemUrl is empty');
@@ -476,23 +474,29 @@ app = createApp({
             let RequestLink = systemUrl + '/index.php?m=caasify&action=' + action;
             return RequestLink;
         },
-
+ 
         async LoadUserOrders() {
-            RequestLink = this.CreateRequestLink(action = 'UserOrders');
-            let response = await axios.get(RequestLink);
-
-            if (response.data?.data != null) {
-                this.UserOrders = response.data.data
-                this.machinsLoaded = true
-
-            } else if (response.data?.message) {
-                this.machinsLoaded = true
-                if (response?.data.message == "There is nothing.") {
-                    this.userHasNoorder = true;
-                } else {
-                    console.error('UserOrders: ' + response.data.message);
+            let page = 1;
+            let reachEndPage = false
+            this.UserOrders = []
+            
+            while (!reachEndPage) {
+                let formData = new FormData();
+                formData.append('page', page);    
+                let RequestLink = this.CreateRequestLink(action = 'UserOrders');
+                let response = await axios.post(RequestLink, formData);
+                
+                if (response.data?.data != null) {
+                    this.UserOrders = this.UserOrders.concat(response.data.data);
+                    this.machinsLoaded = true;
+                } else if (response.data?.message) {
+                    reachEndPage = true;
+                    this.machinsLoaded = true;
                 }
+                
+                page += 1;
             }
+
         },
 
         async LoadCaasifyUser() {
@@ -564,6 +568,19 @@ app = createApp({
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
         // index
         isIntOrFloat(value) {
             if (typeof value === 'number' && !Number.isNaN(value)) {
@@ -573,7 +590,7 @@ app = createApp({
             }
         },
 
-        convertFromWhmcsToCloud(value) {
+        ConvertFromWhmcsToCloud(value) {
             if (this.CurrenciesRatioWhmcsToCloud) {
                 let ratio = this.CurrenciesRatioWhmcsToCloud
                 return value * ratio
@@ -702,6 +719,7 @@ app = createApp({
             setInterval(this.loadWhCurrencies, 50000)
 
         },
+        
 
         isEmpty(value) {
 
@@ -752,11 +770,24 @@ app = createApp({
         },
 
         open(order) {
-            let address = '/modules/addons/caasify/views/view/view.php'
+            let base = ''
+            if(this.systemUrl != null){
+                base = this.systemUrl
+            }
+            let address = base + '/modules/addons/caasify/views/view/view.php'
             let params = new URLSearchParams({
                 'id': order.id
             }).toString()
             window.open([address, params].join('?'), "_top")
+        },
+        
+        openCreatePage() {
+            let base = ''
+            if(this.systemUrl != null){
+                base = this.systemUrl
+            }
+            let address = base + '/modules/addons/caasify/views/view/create.php'
+            window.open([address], "_top")
         },
 
         address(order) {
@@ -1320,6 +1351,30 @@ app = createApp({
 
 
         // View Machine
+        async LoadTheOrder() {
+            let orderID = this.orderID;
+            if (orderID != null) {
+                let formData = new FormData();
+                formData.append('orderID', orderID);
+                        
+                RequestLink = this.CreateRequestLink(action = 'LoadOrder');
+                let response = await axios.post(RequestLink, formData);
+
+                if (response.data?.data != null) {
+                    this.thisOrder = response.data.data
+                    this.ordeIsLoaded = true
+
+                } else if (response.data?.message) {
+                    this.ordeIsLoaded = true
+                    if (response?.data.message == "There is nothing.") {
+                        this.userHasNoOrder = true;
+                    } else {
+                        console.error('UserOrders: ' + response.data.message);
+                    }
+                }
+            }
+        },
+
         async LoadOrderViews() {
                 let orderID = this.orderID;
                 if (orderID != null) {
@@ -1370,8 +1425,8 @@ app = createApp({
         },
 
         async LoadActionsHistory() {
-            
             let orderID = this.orderID;
+            this.ActionHistoryIsLoaded = null
 
             if (orderID != null) {
                 let formData = new FormData();
@@ -1379,24 +1434,25 @@ app = createApp({
                 RequestLink = this.CreateRequestLink(action = 'CaasifyActionsHistory');
                 let response = await axios.post(RequestLink, formData);
 
-                
-                console.log(response.data);
-
-
-                this.ActionHistory = response.data;
-
                 if (response?.data?.message) {
+                    this.ActionHistoryIsLoaded = true
                     console.error('can not reguest Action History');
                 }
 
                 if (response?.data?.data) {
                     this.ActionHistory = response?.data?.data
+                    this.reversedActionHistory = this.ActionHistory.slice().reverse();
+
+                    this.ActionHistoryIsLoaded = true
                 }
             }
             
         },
         
         async PushButtonController(button_id, button_name) {
+            this.ActionAlertStatus = null
+            this.ActionAlert = null
+
             let accept = await this.openConfirmDialog(button_name)
 
             if (accept) {
@@ -1410,18 +1466,32 @@ app = createApp({
                     let response = await axios.post(RequestLink, formData);
 
                     if (response?.data?.message) {
+                        this.LoadActionsHistory()
+                        this.ActionAlertStatus = 'failed'
                         this.ActionAlert = response?.data?.message
                         console.error('can not send action');
                     }
 
                     if (response?.data?.data) {
+                        this.LoadActionsHistory()
+                        this.ActionAlertStatus = 'success'
                         this.ActionAlert = button_name + ' has send Successfully'
                         this.findValidViews()
                     }
                 }
+
+                setTimeout(() => {
+                    this.ActionAlertStatus = null
+                    this.ActionAlert = null
+                    this.LoadActionsHistory()
+                }, 4000);
+
             }
         },
 
+        loadPollingViewMachine() {
+            setInterval(this.LoadRequestNewView, 22230000)
+        },
 
         MachineSpendTime(timeVariable) {
             const creationDate = new Date(timeVariable);
@@ -1444,6 +1514,23 @@ app = createApp({
             return duration
         },
 
+        convertTime(time) {
+            const formatDate = (dateString) => {
+              const date = new Date(dateString);
+              const months = [
+                "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+                "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+              ];
+              const day = date.getDate();
+              const month = months[date.getMonth()];
+              const hours = String(date.getHours()).padStart(2, "0");
+              const minutes = String(date.getMinutes()).padStart(2, "0");
+              
+              return `${day} ${month} at ${hours}:${minutes}`;
+            };
+            
+            return formatDate(time);
+        },
     }
 });
 
