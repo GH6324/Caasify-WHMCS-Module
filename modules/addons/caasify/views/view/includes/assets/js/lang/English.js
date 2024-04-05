@@ -322,6 +322,10 @@ let common = {
     "ipvversion6" : "",
     "IPV6" : "IPV6",
     "Create Machine" : "Create Machine",
+    "machinecreatesuccessfully" : "Machine Create Successfully",
+    "machinelink" : "Machine Link",
+    "createmachinefailed" : "Create Machine Failed",
+    "createanothermachine" : "Create Another Machine",
 
 
 // create order page

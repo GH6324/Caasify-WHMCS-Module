@@ -48,9 +48,6 @@
                         <div>
                             Traffic 1 TB
                         </div>
-                        <div>
-                            Traffic 1 TB
-                        </div>
                     </div>
                     <div v-if="plan.price" class="fw-medium px-4 btn bg-body-secondary ms-3 py-3" style="width: 130px;" :class="{ 
                             'text-dark border-2 border-secondary': isPlan(plan), 
