@@ -21,7 +21,7 @@
                 :class="{ 'border border-2 border-dark': isRegion(region) }" 
                 @click="selectRegion(region)">
                     <div class="px-3">
-                        <img :src="showImage(region?.image)" class="m-0 p-0" style="width: 55px; height: 50px">
+                        <img :src="showImage(region?.image)" class="m-0 p-0 rounded-3" style="width: 55px; height: 40px">
                     </div>
                     <div class="text-center pe-5">
                         <span class="h4 text-dark m-0 p-0">

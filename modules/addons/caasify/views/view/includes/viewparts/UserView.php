@@ -116,7 +116,7 @@
             <?php include('./includes/viewparts/buttons.php');   ?>
         </div>
         <div class="border border-2 rounded-4 bg-white m-0 p-0 py-4 px-4 mx-0 ms-xl-1 pb-5 h-100"
-            style="min-height: 280px;">
+            style="min-height: 320px;">
             <div class="m-0 p-0">
                 <div class="d-flex flex-row justify-content-start align-items-center m-0 p-0 flex-wrap">
                     <table class="table">
@@ -128,13 +128,18 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-if="reversedActionHistory"
-                                v-for="(action, index) in reversedActionHistory.slice(0, 5)" :key="index">
+                            <tr v-if="ActionHistory"
+                                v-for="(action, index) in ActionHistory.slice(0, 5)" :key="index">
                                 <td>{{ action.button.name.toUpperCase() }}</td>
                                 <td>
-                                    <span :class="{ 'alert alert-danger py-1 text-danger small': action.status == 'failed',
-                                        'alert alert-primary py-1 text-primary small': action.status == 'success'}">
+                                    <span style="--bs-bg-opacity: 0.2; width:120px;"
+                                        :class="{ 
+                                            'btn btn-sm bg-danger py-1 text-danger small': action.status == 'failed',
+                                            'btn btn-sm bg-primary py-1 text-primary small': action.status == 'pending',
+                                            'btn btn-sm bg-success py-1 text-success small': action.status == 'delivered'
+                                        }">
                                         {{ action.status.toUpperCase() }}
+                                        <span v-if="action.status == 'pending'" class="spinner-grow my-auto mb-0 ms-1 align-middle" style="--bs-spinner-width: 5px; --bs-spinner-height: 5px; --bs-spinner-animation-speed: 1s;"></span>
                                     </span>
                                 </td>
                                 <td> {{ convertTime(action.created_at) }} </td>

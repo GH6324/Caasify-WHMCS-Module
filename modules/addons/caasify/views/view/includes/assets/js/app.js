@@ -30,7 +30,6 @@ app = createApp({
             ActionAlert: null,
             ActionAlertStatus: null,
             ActionHistory: null,
-            reversedActionHistory: null,
             ActionHistoryIsLoaded: null,
             
 
@@ -150,7 +149,7 @@ app = createApp({
                     // this.loadPolling()
 
                 } else if (newFielName == "create.php") {
-
+                    this.CreateRandomHostName()
                     this.LoadCaasifyUser();
                     this.LoadWhmcsUser();
                     this.LoadWhmcsCurrencies();
@@ -1441,8 +1440,6 @@ app = createApp({
 
                 if (response?.data?.data) {
                     this.ActionHistory = response?.data?.data
-                    this.reversedActionHistory = this.ActionHistory.slice().reverse();
-
                     this.ActionHistoryIsLoaded = true
                 }
             }
@@ -1530,6 +1527,16 @@ app = createApp({
             };
             
             return formatDate(time);
+        },
+
+        CreateRandomHostName(){
+            const length = 7;
+            const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            let result = '';
+            for (let i = 0; i < length; i++) {
+                result += letters.charAt(Math.floor(Math.random() * letters.length));
+            }
+            this.themachinename = result;
         },
     }
 });

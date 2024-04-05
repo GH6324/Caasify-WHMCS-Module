@@ -34,7 +34,7 @@
             </div>
             <div v-if="plans.length > 0" v-for="plan in plans" class="col-12 m-0 p-0 py-2">
                 <div class="d-flex flex-row justify-content-between align-items-center">
-                    <div class="d-flex flex-row justify-content-between align-items-center border rounded-3 bg-white text-secondary shadow-sm py-3 px-4 flex-grow-1"
+                    <div class="d-flex flex-row justify-content-between align-items-center border rounded-3 bg-white text-dark shadow-sm py-3 px-4 flex-grow-1 bg-body-secondary" style="--bs-bg-opacity: 0.1;"
                         :class="{ 'border-secondary border-2 text-dark': isPlan(plan) }" @click="selectPlan(plan)">
                         <div>
                             CPU 1 Core
@@ -52,8 +52,8 @@
                             Traffic 1 TB
                         </div>
                     </div>
-                    <div v-if="plan.price" class="ps-5 fw-medium text-end" style="width: 130px;" :class="{ 
-                            'text-primary': isPlan(plan), 
+                    <div v-if="plan.price" class="fw-medium px-4 btn bg-body-secondary ms-3 py-3" style="width: 130px;" :class="{ 
+                            'text-dark border-2 border-secondary': isPlan(plan), 
                             'text-secondary': !isPlan(plan) }">
                         {{ formatCostMonthly(ConvertFromCaasifyToWhmcs(plan.price)) }} {{userCurrencySymbolFromWhmcs}}
                     </div>

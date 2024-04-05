@@ -1,7 +1,7 @@
 <?php  include('./config.php'); ?>
 <?php  include('./includes/baselayout/header.php');   ?>
 
-<body class="container-fluid p-1 p-md-3" style="background-color: #ff000000 !important;">
+<body class="container-fluid p-1 p-md-3 bg-body-secondary">
     <div id="app" class="row py-5 mx-auto px-0 px-md-2 px-lg-4" style="max-width: 1200px;">
         <div class="" v-cloak>
             <?php  include('./includes/baselayout/backflash.php');     ?>

@@ -321,6 +321,7 @@ let common = {
     "ipvversion4" : "",
     "ipvversion6" : "",
     "IPV6" : "IPV6",
+    "Create Machine" : "Create Machine",
     // End create order page
 
 

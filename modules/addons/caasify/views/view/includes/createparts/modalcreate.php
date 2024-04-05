@@ -185,9 +185,9 @@
                     <div v-if="!userClickedCreationBtn" class="row m-0 p-0 pt-5 mb-2">
                         <div
                             class="form-check form-switch d-flex flex-row justify-content-start align-items-center px-3">
-                            <input v-model="checkboxconfirmation" class="form-check-input ms-0" type="checkbox"
+                            <input v-model="checkboxconfirmation" class="form-check-input ms-2 fs-5" type="checkbox"
                                 role="switch" id="checkboxconfirmation">
-                            <label class="form-check-label ms-3" :class="checkboxconfirmation ? '' : 'text-secondary'"
+                            <label class="form-check-label ms-3 text-dark" :class="checkboxconfirmation ? '' : 'text-secondary'"
                                 for="checkboxconfirmation">
                                 {{ lang('confirmationtext') }}
                             </label>

@@ -1,11 +1,11 @@
 <!-- Operation System -->
-<div v-if="PlanSections != null" class="row m-0 p-0 py-5 px-4 mt-5">
-    <div class="col-12">
+<div v-if="PlanSections != null" class="row m-0 p-0 py-5 px-4 mt-5 bg-secondary rounded-4 text-dark" style="--bs-bg-opacity: 0.2;">
+    <div class="col-12 mt-5">
         <div class="row mb-5">
             <h3>Configuration *</h3>
         </div>
     </div>
-    <div v-for="PlanSection in PlanSections" class="d-flex flex-row justify-content-start align-items-start"
+    <div v-for="PlanSection in PlanSections" class="d-flex flex-row justify-content-start align-items-start mb-5"
         style="--bs-bg-opacity: 0.1;">
         <div v-if="PlanSection?.fields != null" v-for="(field, index) in PlanSection?.fields" class="m-0 p-0 pe-4">
             <div class="d-flex flex-column justify-content-center align-items-start flex-wrap">
@@ -18,7 +18,7 @@
 
                 <!-- Type: DropDown -->
                 <div v-if="field.type == 'dropdown'" class="d-flex flex-column justify-content-start align-items-start">
-                    <div style="min-width:200px">
+                    <div style="min-width:250px">
                         <select :name="field.name" class="form-select" :aria-label="field.name" :key="index"
                             v-model="PlanConfigSelectedOptions[field.name]">
                             <option value="field.options[0]" selected disabled>Please select</option>

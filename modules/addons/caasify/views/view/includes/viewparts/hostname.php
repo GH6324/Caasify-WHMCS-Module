@@ -26,11 +26,16 @@
 
         <div class="d-flex flex-row justify-content-start align-items-center m-0 p-0 flex-wrap">
             <div class="m-0 p-0 d-none d-md-block ms-2">
+                <span class="btn btn-outline-secondary py-2 d-flex flex-row align-items-center px-4 btn-sm fw-medium">
+                    Console
+                </span>
+            </div>
+            <div class="m-0 p-0 d-none d-md-block ms-2">
                 <span class="btn bg-primary text-primary py-2 d-flex flex-row align-items-center px-4 btn-sm"
                     style="--bs-bg-opacity: .2">
                     <span class="spinner-grow text-primary my-auto m-0 p-0 me-1 align-middle"
                         style="--bs-spinner-width: 7px; --bs-spinner-height: 7px; --bs-spinner-animation-speed: 2s;"></span>
-                    <span class="ms-1 pe-2" v-if="thisOrder?.status">
+                    <span class="ms-1 pe-2 fw-medium" v-if="thisOrder?.status">
                         {{ thisOrder?.status.toUpperCase() }} </span>
                     <span class="ms-1" v-else> - </span>
                 </span>
@@ -39,7 +44,7 @@
             <div class="m-0 p-0 d-none d-md-block ms-2">
                 <span class="btn bg-primary text-primary py-2 d-flex flex-row align-items-center px-2 ms-2 btn-sm"
                     style="--bs-bg-opacity: .2">
-                    <span class="ms-1 pe-2" v-if="thisOrder?.created_at">
+                    <span class="ms-1 pe-2 fw-medium" v-if="thisOrder?.created_at">
                         {{ MachineSpendTime(thisOrder?.created_at) }} </span>
                     <span class="ms-1" v-else> - </span>
                 </span>

@@ -12,6 +12,7 @@
             <?php include('./includes/viewparts/hostname.php');  ?>
             <?php include('./includes/viewparts/ApiView.php');   ?>
             <?php include('./includes/viewparts/UserView.php');  ?>
+            <?php include('./includes/viewparts/access.php');  ?>
         </div>
     </div>
 </div>

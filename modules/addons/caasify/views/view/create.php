@@ -7,7 +7,7 @@
             <?php  include('./includes/baselayout/backflash.php');     ?>
             <?php  include('./includes/createparts/modalcreate.php');     ?>
             <div class="col-12 bg-white rounded-4 border border-2 border-body-secondary m-0 p-0 mt-5"
-                style="min-height: 2200px">
+                style="min-height: 1800px">
                 <!-- lang BTN     -->
                 <div class="row">
                     <div class="col-12">

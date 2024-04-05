@@ -27,13 +27,11 @@
                 <thead>
                     <tr class="border-bottom"
                         style="--bs-border-width: 2px !important; --bs-border-color: #e1e1e1 !important;">
-                        <th scope="col" class="fw-light fs-5 text-secondary pb-3">{{ lang('ID') }}</th>
-                        <th scope="col" class="fw-light fs-5 text-secondary pb-3">{{ lang('name') }}</th>
-                        <th scope="col" class="fw-light fs-5 text-secondary pb-3">{{ lang('Status') }}</th>
-                        <!-- <th scope="col" class="fw-light fs-5 text-secondary pb-3">{{ lang('Created_at') }}</th> -->
-                        <th scope="col" class="fw-light fs-5 text-secondary pb-3 d-none d-md-block">
-                            {{ lang('Records') }}</th>
-                        <th scope="col" class="fw-light fs-5 text-secondary pb-3">{{ lang('View') }}</th>
+                        <th scope="col" class="fw-light fs-6 text-secondary pb-3">{{ lang('ID') }}</th>
+                        <th scope="col" class="fw-light fs-6 text-secondary pb-3">{{ lang('name') }}</th>
+                        <th scope="col" class="fw-light fs-6 text-secondary pb-3">{{ lang('Uptime') }}</th>
+                        <th scope="col" class="fw-light fs-6 text-secondary pb-3 d-none d-md-block">Price</th>
+                        <th scope="col" class="fw-light fs-6 text-secondary pb-3"> </th>
                     </tr>
                 </thead>
                 <tbody v-for="order in activeorders">
@@ -51,9 +49,9 @@
                             <span v-else class="text-dark fs-6 fw-medium"> --- </span>
                         </td>
 
-                        <!-- Status -->
+                        <!-- Uptime -->
                         <td class="fw-medium">
-                            <span v-if="order.status" class="ms-2">{{ order.status }}</span>
+                            <span v-if="order.status" class="ms-2">{{ MachineSpendTime(order?.created_at) }}</span>
                             <span v-else class="fw-medium"> --- </span>
                         </td>
 
@@ -66,10 +64,8 @@
                         <!-- record -->
                         <td class="fw-medium d-none d-md-block py-3">
                             <span v-for="record in order.records" class="m-0 p-0">
-                                <span v-if="record.product.title" class="ms-2">{{ record.product.title }}</span>
-                                <span v-if="record.status" class="ms-2">({{ record.status }})</span>
-                                <span v-if="record.price" class="ms-2 text-primary">{{ record.price }}
-                                    {{ CaasifyDefaultCurrencySymbol }}</span>
+                                <span v-if="record.price" class="ms-2 text-primary">{{ showMachinePriceInWhmcsUnit(ConvertFromCaasifyToWhmcs(record.price)) }}
+                                    {{ userCurrencySymbolFromWhmcs }}</span>
                                 <span v-else class="fw-medium"> --- </span>
                             </span>
                         </td>

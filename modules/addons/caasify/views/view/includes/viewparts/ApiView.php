@@ -7,7 +7,7 @@
                 :key="index">
             </div>
         </div>
-        <div v-if="NoValidViewItems === true" class="alert alert-primary my-5">
+        <div v-if="NoValidViewItems === true" class="alert alert-primary">
             No valid View Founded
         </div>
     </div>

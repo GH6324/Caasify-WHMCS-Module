@@ -29,7 +29,7 @@ let common = {
         "disk" : "DISK",
         "cpu" : "CPU",
         "template" : "TEMPLATE",
-        "uptime" : "UPTIME",
+        "uptime" : "Uptime",
         "and" : " and ",
         "days" : "Day",
         "hours" : "Hour",
@@ -165,8 +165,8 @@ let common = {
         "typehere" : "Type Here the word:",
         "failedmessage" : "There is a problem with fetching the backend data, the action status is failed yet !",
         "error" : "Error",
-        "trafficprice" : "Price: ",
-        "costperhour" : "Cost Per Hour : ",
+        "trafficprice" : "Price",
+        "costperhour" : "Cost Per Hour",
         "cent" : "¢",
         "$" : "$",
         "setupaction": "Setup OS",
@@ -321,6 +321,9 @@ let common = {
     "ipvversion4" : "",
     "ipvversion6" : "",
     "IPV6" : "IPV6",
+    "Create Machine" : "Create Machine",
+
+
 // create order page
 
 // admin panel

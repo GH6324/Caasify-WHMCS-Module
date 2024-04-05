@@ -10,7 +10,7 @@
             <div v-if="NoValidControllerItems != true"
                 class="d-flex flex-row flex-wrap gap-1 justify-content-start ms-1">
                 <a data-bs-toggle="modal" data-bs-target="#actionsModal" v-for="(button, index) in ValidControllerItems"
-                    class="btn btn-outline-secondary px-4 py-4 fw-medium border-2 border-secondary"
+                    class="btn btn-light px-4 py-4 fw-medium border-2 border-secondary"
                     style="width: 140px; --bs-border-opacity: 0.3;"
                     @click="PushButtonController(button.id, button.name)" :key="index">
                     {{ button.name }}
@@ -24,14 +24,3 @@
 </div>
 
 
-
-<div class="col-12 mt-3" v-if="ActionAlert">
-    <div class="">
-        <p class="alert alert-primary small m-0 p-0 py-2 px-3" v-if="ActionAlertStatus == 'success'">
-            {{ ActionAlert }}
-        </p>
-        <p class="alert alert-danger small m-0 p-0 py-2 px-3" v-if="ActionAlertStatus == 'failed'">
-            {{ ActionAlert }}
-        </p>
-    </div>
-</div>

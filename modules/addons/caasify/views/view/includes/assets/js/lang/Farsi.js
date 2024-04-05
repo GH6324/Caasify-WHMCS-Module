@@ -322,6 +322,7 @@ let common = {
     "ipvversion4" : "نسخه چهار",
     "ipvversion6" : "نسخه شش",
     "IPV6" : "آی‌پی نسخه ۶ : ",
+    "Create Machine" : "ساخت ماشین",
 // create order page
 
 

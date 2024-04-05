@@ -16,7 +16,7 @@
                 :class="{ 'shadow-lg border border-2 border-secondary': isDataCenter(DataCenter) }" 
                 @click="selectDataCenter(DataCenter)">
                     <div v-if="CaasifyConfigs != null" class="m-0 p-0" style="width: 80px;">
-                        <img class="img-fluid rounded-start-4 border" :src="showImage(DataCenter?.image)">
+                        <img class="img-fluid rounded-start-4 " :src="showImage(DataCenter?.image)">
                     </div>
                     <div class="text-start ps-3 pt-2">
                         <p v-if="DataCenter.name" class="h3 text-dark m-0 p-0">
