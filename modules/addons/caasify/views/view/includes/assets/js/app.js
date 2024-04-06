@@ -1546,182 +1546,185 @@ app = createApp({
 
         createCPULinearChart() {
 
-            var options = {
-                chart: {
-                  height: 350,
-                  type: "line",
-                  stacked: false
-                },
-                dataLabels: {
-                  enabled: false
-                },
-                colors: ["#FF1654", "#247BA0"],
-                series: [
-                  {
-                    name: "Series B",
-                    data: [20, 29, 37, 36, 44, 45, 50, 58]
-                  }
-                ],
-                stroke: {
-                  width: [4, 4]
-                },
-                plotOptions: {
-                  bar: {
-                    columnWidth: "20%"
-                  }
-                },
-                xaxis: {
-                  categories: [13, 14, 15, 16, 17, 18, 19, 20]
-                },
-                yaxis: [
-                  {
-                    axisTicks: {
-                      show: true
-                    },
-                    axisBorder: {
-                      show: true,
-                      color: "#FF1654"
-                    },
-                    labels: {
-                      style: {
-                        colors: "#FF1654"
-                      }
-                    },
-                    title: {
-                      text: "Series A",
-                      style: {
-                        color: "#FF1654"
-                      }
-                    }
-                  },
-                  {
-                    opposite: true,
-                    axisTicks: {
-                      show: true
-                    },
-                    axisBorder: {
-                      show: true,
-                      color: "#247BA0"
-                    },
-                    labels: {
-                      style: {
-                        colors: "#247BA0"
-                      }
-                    },
-                    title: {
-                      text: "Series B",
-                      style: {
-                        color: "#247BA0"
-                      }
-                    }
-                  }
-                ],
-                tooltip: {
-                  shared: false,
-                  intersect: true,
-                  x: {
-                    show: false
-                  }
-                },
-                legend: {
-                  horizontalAlign: "left",
-                  offsetX: 40
-                }
-              };
+            let options = this.createoption(
+                chartname = ["Ram Usage"],
+                data = [28, 21, 31, 89, 61, 46, 33, 18],
+                colors = ['#7F56D9'],
+                text = 'Ram Usage',
+            )
 
-              let element = document.querySelector('.CPULinear')
-              var chart = new ApexCharts(element, options);
-              chart.render();
+            let element = document.querySelector('.CPULinear')
+            var chart = new ApexCharts(element, options);
+            chart.render();
         },
 
         createRAMLinearChart() {
 
-            var options = {
-                chart: {
-                  height: 350,
-                  type: "line",
-                  stacked: false
-                },
-                dataLabels: {
-                  enabled: false
-                },
-                colors: ["#FF1654", "#247BA0"],
-                series: [
-                  {
-                    name: "Series A",
-                    data: [1.4, 2, 2.5, 1.5, 2.5, 2.8, 3.8, 4.6]
-                  }                  
-                ],
-                stroke: {
-                  width: [4, 4]
-                },
-                plotOptions: {
-                  bar: {
-                    columnWidth: "20%"
-                  }
-                },
-                xaxis: {
-                  categories: [8, 9, 10, 11, 12, 13, 14, 15]
-                },
-                yaxis: [
-                  {
-                    axisTicks: {
-                      show: true
-                    },
-                    axisBorder: {
-                      show: true,
-                      color: "#FF1654"
-                    },
-                    labels: {
-                      style: {
-                        colors: "#FF1654"
-                      }
-                    },
-                    title: {
-                      text: "Series A",
-                      style: {
-                        color: "#FF1654"
-                      }
-                    }
-                  },
-                  {
-                    opposite: true,
-                    axisTicks: {
-                      show: true
-                    },
-                    axisBorder: {
-                      show: true,
-                      color: "#247BA0"
-                    },
-                    labels: {
-                      style: {
-                        colors: "#247BA0"
-                      }
-                    },
-                    title: {
-                      text: "Series B",
-                      style: {
-                        color: "#247BA0"
-                      }
-                    }
-                  }
-                ],
-                tooltip: {
-                  shared: false,
-                  intersect: true,
-                  x: {
-                    show: false
-                  }
-                },
-                legend: {
-                  horizontalAlign: "left",
-                  offsetX: 40
-                }
-              };
+            let options = this.createoption(
+                chartname = ["CPU Usage"],
+                data = [23, 22, 37, 81, 63, 41, 37, 12],
+                colors = ['#2A4DD1'],
+                text = 'CPU Usage',
+            )
+
+           
 
               let element = document.querySelector('.RAMLinear')
               var chart = new ApexCharts(element, options);
               chart.render();
+        },
+
+
+        createoption(chartname, data, colors, text) {
+            let options = {
+                "series": [
+                    {
+                        "name": chartname,
+                        "data": data
+                    }
+                ],
+                "chart": {
+                    "animations": {
+                        "enabled": false,
+                        "easing": "swing"
+                    },
+                    "background": "#fff",
+                    "dropShadow": {
+                        "blur": 3
+                    },
+                    "foreColor": "#373D3F",
+                    "fontFamily": "Barlow",
+                    "height": 370,
+                    "id": "o4Rem",
+                    "toolbar": {
+                        "show": false,
+                        "tools": {
+                            "selection": true,
+                            "zoom": true,
+                            "zoomin": true,
+                            "zoomout": true,
+                            "pan": true,
+                            "reset": true
+                        }
+                    },
+                    "fontUrl": null
+                },
+                "colors": colors,
+                "plotOptions": {
+                    "bar": {
+                        "borderRadius": 10
+                    },
+                    "radialBar": {
+                        "hollow": {
+                            "background": "#fff"
+                        },
+                        "dataLabels": {
+                            "name": {},
+                            "value": {},
+                            "total": {}
+                        }
+                    },
+                    "pie": {
+                        "donut": {
+                            "labels": {
+                                "name": {},
+                                "value": {},
+                                "total": {}
+                            }
+                        }
+                    }
+                },
+                "dataLabels": {
+                    "enabled": true,
+                    "offsetY": 6,
+                    "style": {
+                        "fontWeight": 300
+                    },
+                    "background": {
+                        "borderRadius": 5,
+                        "borderWidth": 1
+                    }
+                },
+                "fill": {
+                    "opacity": 1
+                },
+                "grid": {
+                    "xaxis": {
+                        "lines": {
+                            "show": true
+                        }
+                    },
+                    "column": {},
+                    "padding": {
+                        "right": 20,
+                        "bottom": 6,
+                        "left": 16
+                    }
+                },
+                "legend": {
+                    "showForSingleSeries": true,
+                    "position": "top",
+                    "horizontalAlign": "left",
+                    "fontSize": 14,
+                    "offsetX": 9,
+                    "offsetY": 7,
+                    "markers": {
+                        "width": 30,
+                        "height": 16,
+                        "strokeWidth": 8,
+                        "radius": 13,
+                        "offsetY": 3,
+                    },
+                    "itemMargin": {
+                        "horizontal": 10
+                    }
+                },
+
+
+                "tooltip": {},
+                "xaxis": {
+                    "offsetY": -2,
+                    "labels": {
+                        "rotate": -45,
+                        "trim": true,
+                        "style": {
+                            "fontSize": 12,
+                            "fontWeight": 300
+                        }
+                    },
+                    "axisBorder": {
+                        "show": false
+                    },
+                    "tickAmount": 4,
+                    "title": {
+                        "text": "",
+                        "style": {
+                            "fontSize": 12,
+                            "fontWeight": 300
+                        }
+                    }
+                },
+                "yaxis": {
+                    "tickAmount": 6,
+                    "min": 0,
+                    "labels": {
+                        "style": {
+                            "fontSize": 12
+                        },
+                        offsetX: -12,
+                        offsetY: 5,
+                    },
+                    "title": {
+                        "text": "",
+                        "style": {
+                            "fontSize": 12,
+                            "fontWeight": 300
+                        }
+                    }
+                }
+
+            };
+            return options
         },
     }
 });
