@@ -191,6 +191,7 @@ app = createApp({
     mounted() {
         this.scrollToTop();
         this.fetchModuleConfig();
+        
     },
 
     computed: {
@@ -1289,12 +1290,12 @@ app = createApp({
 
             if(this.thisOrder?.records){
                 let records = this.thisOrder.records;
-                for(var i = 0; i < records?.length; i++){
+                for(var i = 0; i < 1; i++){
                     let record = records[i];
                     if(this.ValidControllerItems === null){
                         this.thisProduct = record.product
                         let groups = record.product.groups
-                        for(var j = 0; j < groups.length; j++){
+                        for(var j = 0; j < 1; j++){
                             let group = groups[j]
                             if (group?.buttons) {
                                 if (this.ValidControllerItems === null) {
@@ -1387,12 +1388,15 @@ app = createApp({
                     if (response?.data?.message) {
                         this.viewsAreLoading = false;
                         this.viewsAreLoaded = true;
+                        
                         console.error('can not find any views');
                     }
 
                     if (response?.data?.data) {
                         this.viewsAreLoading = false;
                         this.viewsAreLoaded = true;
+                        this.createCPULinearChart();
+                        this.createRAMLinearChart();
                         this.views = response?.data?.data
                         this.findValidViews()
                         this.LoadActionsHistory()
@@ -1537,6 +1541,187 @@ app = createApp({
                 result += letters.charAt(Math.floor(Math.random() * letters.length));
             }
             this.themachinename = result;
+        },
+
+
+        createCPULinearChart() {
+
+            var options = {
+                chart: {
+                  height: 350,
+                  type: "line",
+                  stacked: false
+                },
+                dataLabels: {
+                  enabled: false
+                },
+                colors: ["#FF1654", "#247BA0"],
+                series: [
+                  {
+                    name: "Series B",
+                    data: [20, 29, 37, 36, 44, 45, 50, 58]
+                  }
+                ],
+                stroke: {
+                  width: [4, 4]
+                },
+                plotOptions: {
+                  bar: {
+                    columnWidth: "20%"
+                  }
+                },
+                xaxis: {
+                  categories: [13, 14, 15, 16, 17, 18, 19, 20]
+                },
+                yaxis: [
+                  {
+                    axisTicks: {
+                      show: true
+                    },
+                    axisBorder: {
+                      show: true,
+                      color: "#FF1654"
+                    },
+                    labels: {
+                      style: {
+                        colors: "#FF1654"
+                      }
+                    },
+                    title: {
+                      text: "Series A",
+                      style: {
+                        color: "#FF1654"
+                      }
+                    }
+                  },
+                  {
+                    opposite: true,
+                    axisTicks: {
+                      show: true
+                    },
+                    axisBorder: {
+                      show: true,
+                      color: "#247BA0"
+                    },
+                    labels: {
+                      style: {
+                        colors: "#247BA0"
+                      }
+                    },
+                    title: {
+                      text: "Series B",
+                      style: {
+                        color: "#247BA0"
+                      }
+                    }
+                  }
+                ],
+                tooltip: {
+                  shared: false,
+                  intersect: true,
+                  x: {
+                    show: false
+                  }
+                },
+                legend: {
+                  horizontalAlign: "left",
+                  offsetX: 40
+                }
+              };
+
+              let element = document.querySelector('.CPULinear')
+              var chart = new ApexCharts(element, options);
+              chart.render();
+        },
+
+        createRAMLinearChart() {
+
+            var options = {
+                chart: {
+                  height: 350,
+                  type: "line",
+                  stacked: false
+                },
+                dataLabels: {
+                  enabled: false
+                },
+                colors: ["#FF1654", "#247BA0"],
+                series: [
+                  {
+                    name: "Series A",
+                    data: [1.4, 2, 2.5, 1.5, 2.5, 2.8, 3.8, 4.6]
+                  }                  
+                ],
+                stroke: {
+                  width: [4, 4]
+                },
+                plotOptions: {
+                  bar: {
+                    columnWidth: "20%"
+                  }
+                },
+                xaxis: {
+                  categories: [8, 9, 10, 11, 12, 13, 14, 15]
+                },
+                yaxis: [
+                  {
+                    axisTicks: {
+                      show: true
+                    },
+                    axisBorder: {
+                      show: true,
+                      color: "#FF1654"
+                    },
+                    labels: {
+                      style: {
+                        colors: "#FF1654"
+                      }
+                    },
+                    title: {
+                      text: "Series A",
+                      style: {
+                        color: "#FF1654"
+                      }
+                    }
+                  },
+                  {
+                    opposite: true,
+                    axisTicks: {
+                      show: true
+                    },
+                    axisBorder: {
+                      show: true,
+                      color: "#247BA0"
+                    },
+                    labels: {
+                      style: {
+                        colors: "#247BA0"
+                      }
+                    },
+                    title: {
+                      text: "Series B",
+                      style: {
+                        color: "#247BA0"
+                      }
+                    }
+                  }
+                ],
+                tooltip: {
+                  shared: false,
+                  intersect: true,
+                  x: {
+                    show: false
+                  }
+                },
+                legend: {
+                  horizontalAlign: "left",
+                  offsetX: 40
+                }
+              };
+
+              let element = document.querySelector('.RAMLinear')
+              var chart = new ApexCharts(element, options);
+              chart.render();
         },
     }
 });
