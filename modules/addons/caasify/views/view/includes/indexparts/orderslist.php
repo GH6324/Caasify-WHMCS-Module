@@ -25,17 +25,17 @@
             <table v-if="!isEmpty(activeorders)" class="table table-borderless pb-5 mb-5"
                 style="--bs-table-bg: #ff000000;">
                 <thead>
-                    <tr class="border-bottom"
+                    <tr class="border-bottom text-center"
                         style="--bs-border-width: 2px !important; --bs-border-color: #e1e1e1 !important;">
                         <th scope="col" class="fw-light fs-6 text-secondary pb-3">{{ lang('ID') }}</th>
                         <th scope="col" class="fw-light fs-6 text-secondary pb-3">{{ lang('name') }}</th>
-                        <th scope="col" class="fw-light fs-6 text-secondary pb-3">{{ lang('Uptime') }}</th>
+                        <th scope="col" class="fw-light fs-6 text-secondary pb-3">{{ lang('Alive') }}</th>
                         <th scope="col" class="fw-light fs-6 text-secondary pb-3 d-none d-md-block">Price</th>
-                        <th scope="col" class="fw-light fs-6 text-secondary pb-3"> </th>
+                        <th scope="col" class="fw-light fs-6 text-secondary pb-3">{{ lang('Views') }}</th>
                     </tr>
                 </thead>
                 <tbody v-for="order in activeorders">
-                    <tr class="border-bottom align-middle"
+                    <tr class="border-bottom align-middle text-center"
                         style="--bs-border-width: 1px !important; --bs-border-color: #e1e1e1 !important;">
                         <!-- ID -->
                         <td class="fw-medium">

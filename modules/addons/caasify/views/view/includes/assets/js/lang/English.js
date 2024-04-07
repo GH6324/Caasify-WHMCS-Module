@@ -326,6 +326,7 @@ let common = {
     "machinelink" : "Machine Link",
     "createmachinefailed" : "Create Machine Failed",
     "createanothermachine" : "Create Another Machine",
+    "Machine View" : "Machine View",
 
 
 // create order page

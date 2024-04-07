@@ -133,6 +133,11 @@ function get_config_array_temp(){
         'ChargeModule' => null,
         'ViewExchanges' => null,
         'CloudTopupLink' => null,
+        
+        'MinimumCharge' => null,
+        'MonthlyCostDecimal' => null,
+        'HourlyCostDecimal' => null,
+        'BalanceDecimal' => null,
     ];
     return $ModuleConfigArray;
 }

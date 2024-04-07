@@ -64,23 +64,7 @@
                                                 </td>
                                             </tr>
 
-                                            <!-- plan -->
-                                            <tr v-if="SelectedPlan">
-                                                <td class="m-0 p-0">
-                                                    <i v-if="SelectedPlan.title"
-                                                        class="bi bi-check-circle-fill me-1"></i>
-                                                    <i v-if="!SelectedPlan.title" class="bi bi-circle me-1"></i>
-                                                    {{ lang('product') }}
-                                                </td>
-                                                <td class="text-primary fw-medium m-0 p-0">
-                                                    <span v-if="SelectedPlan.title"
-                                                        class="m-0 p-0">{{ SelectedPlan.title }}</span>
-                                                    <span v-else-if="!SelectedPlan.title">
-                                                        <?php  include('./includes/baselayout/threespinner.php');      ?>
-                                                    </span>
-                                                </td>
-                                            </tr>
-
+                                            
                                             <!-- Section Configs -->
                                             <tr v-if="PlanConfigSelectedOptions"
                                                 v-for="(value, key) in PlanConfigSelectedOptions">
@@ -164,7 +148,7 @@
                                     <div class="row d-flex flex-row justify-content-end p-0 m-0">
                                         <a class="col-auto btn btn-primary px-4 py-2"
                                             href="<?php echo($PersonalRootDirectoryURL); ?>/index.php?m=caasify&action=pageIndex"
-                                            target='_top'>{{ lang('machinelink') }}</a>
+                                            target='_top'>{{ lang('Machine View') }}</a>
                                     </div>
                                 </div>
 

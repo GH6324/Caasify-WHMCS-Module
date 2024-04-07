@@ -48,11 +48,19 @@ function caasify_config(){
         'Italian' => 'Italian',
     );
 
-    $YesNoOption = array (
+    $YesNoOptions = array (
         'on' => 'on',
         'off' => 'off',
     );
 
+    $DecimalOptions = array (
+        '0' => '0',
+        '1' => '1',
+        '2' => '2',
+        '3' => '3',
+        '4' => '4',
+        '5' => '5',
+    );
     
     // Labels
     $DefaultBackendUrl = 'https://test.caasify.com';
@@ -64,6 +72,13 @@ function caasify_config(){
     $ChargeModuleLabel = 'Switch on if wish to use Charging Module';
     $ViewExchangesLabel = 'Switch on if wish to see exchange in caasify currency';
     $CloudTopupLinkLabel = 'Insert relative TopUp Link, as an Example "/clientarea.php?action=addfunds"';
+
+    // Configs Label
+    $MinimumChargeLabel = 'in EURO , insert minimum amount users are allowed to charge their Balance';
+    $MonthlyCostDecimalLabel = 'default decimal for Monthly cost of services';
+    $HourlyCostDecimalLabel = 'default decimal for Hourly cost of services';
+    $BalanceDecimalLabel = 'default decimal for users Balance and Credit';
+
 
     $configarray = array(
         "name" => "Caasify",
@@ -77,10 +92,15 @@ function caasify_config(){
             "CaasifyCurrency" => array ("FriendlyName" => "Caasify Currency", "Type" => "dropdown", "Options" => $CurrencyOptions, "Description" => $CaasifyCurrency, "Default" => 'USD'),
             
             "CloudTopupLink" => array ("FriendlyName" => "Topup Link", "Type" => "text", "Size" => "51", "Description" => $CloudTopupLinkLabel, "Default" => "/clientarea.php?action=addfunds"),
-            "DevelopeMode" => array ("FriendlyName" => "Develope Mode", "Type" => "dropdown", "Options" => $YesNoOption, "Description" => $DevelopeModeLabel, "Default" => 'off'),
-            "ChargeModule" => array ("FriendlyName" => "Chargeing Module", "Type" => "dropdown", "Options" => $YesNoOption, "Description" => $ChargeModuleLabel, "Default" => 'on'),
-            "ViewExchanges" => array ("FriendlyName" => "View Exchange", "Type" => "dropdown", "Options" => $YesNoOption, "Description" => $ViewExchangesLabel, "Default" => 'off'),
+            "DevelopeMode" => array ("FriendlyName" => "Develope Mode", "Type" => "dropdown", "Options" => $YesNoOptions, "Description" => $DevelopeModeLabel, "Default" => 'off'),
+            "ChargeModule" => array ("FriendlyName" => "Chargeing Module", "Type" => "dropdown", "Options" => $YesNoOptions, "Description" => $ChargeModuleLabel, "Default" => 'on'),
+            "ViewExchanges" => array ("FriendlyName" => "View Exchange", "Type" => "dropdown", "Options" => $YesNoOptions, "Description" => $ViewExchangesLabel, "Default" => 'off'),
             
+
+            "MinimumCharge" => array ("FriendlyName" => "Minimum Charge", "Type" => "text", "Size" => "10", "Description" => $MinimumChargeLabel, "Default" => 2),
+            "MonthlyCostDecimal" => array ("FriendlyName" => "Monthly Cost Decimal", "Type" => "dropdown", "Options" => $DecimalOptions, "Description" => $MonthlyCostDecimalLabel, "Default" => '0'),
+            "HourlyCostDecimal" => array ("FriendlyName" => "Hourly Cost Decimal", "Type" => "dropdown", "Options" => $DecimalOptions, "Description" => $HourlyCostDecimalLabel, "Default" => '0'),
+            "BalanceDecimal" => array ("FriendlyName" => "Balance Decimal", "Type" => "dropdown", "Options" => $DecimalOptions, "Description" => $BalanceDecimalLabel, "Default" => '0'),
         ));
 
     return $configarray;

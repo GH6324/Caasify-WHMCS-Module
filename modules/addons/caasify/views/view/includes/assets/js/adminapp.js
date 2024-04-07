@@ -329,7 +329,7 @@ app = createApp({
             } 
         },
 
-        ConvertFromWhmcsToCloud(value){
+        convertFromWhmcsToCloud(value){
             if(this.CurrenciesRatioWhmcsToCloud != null){
                 let ratio = this.CurrenciesRatioWhmcsToCloud
                 return Math.round(value*ratio)

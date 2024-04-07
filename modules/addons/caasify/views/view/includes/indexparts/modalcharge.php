@@ -23,7 +23,7 @@
                 <button v-if="!ConstChargeamountInWhmcs" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>    
             <!-- No credit -->
-            <div v-if="userCreditinWhmcs < ConvertFromCaasifyToWhmcs(config.minimumChargeInCaasifyCurrency)" class="modal-body mt-4 px-3 px-md-4" style="height:210px">
+            <div v-if="userCreditinWhmcs < ConvertFromCaasifyToWhmcs(config.MinimumCharge)" class="modal-body mt-4 px-3 px-md-4" style="height:210px">
                 <p class="alert alert-warning text-dark">
                     <span>
                         {{ lang('yourcredit') }}
@@ -37,7 +37,7 @@
                         {{ lang('minimumis') }}
                     </span>
                     <span class="text-primary px-1">
-                        ({{ showMinimumeWhmcsUnit(ConvertFromCaasifyToWhmcs(config.minimumChargeInCaasifyCurrency)) }} {{ userCurrencySymbolFromWhmcs }}) 
+                        ({{ showMinimumeWhmcsUnit(ConvertFromCaasifyToWhmcs(config.MinimumCharge)) }} {{ userCurrencySymbolFromWhmcs }}) 
                     </span>
                     <span>.</span>
                 </p>
@@ -90,7 +90,10 @@
                                                 <span class="input-group-text bg-body-secondary border-secondary" id="chargecredit" style="width: 140px !important;">
                                                     {{ lang('amounttocharge') }}
                                                 </span>
-                                                <input type="number" class="form-control bg-body-secondary border-secondary" :placeholder="showCreditWhmcsUnit(userCreditinWhmcs)" aria-label="chargecredit" aria-describedby="chargecredit" step="1" :min="showMinimumeWhmcsUnit(ConvertFromCaasifyToWhmcs(config.minimumChargeInCaasifyCurrency))" :max="userCreditinWhmcs" v-model="chargeAmountinWhmcs" :disabled="theChargingSteps > 0 ? true : false" style="max-width: 140px !important;">
+                                                <input type="number" class="form-control bg-body-secondary border-secondary" 
+                                                :placeholder="showCreditWhmcsUnit(userCreditinWhmcs)" aria-label="chargecredit" aria-describedby="chargecredit" step="1" 
+                                                :min="showMinimumeWhmcsUnit(ConvertFromCaasifyToWhmcs(config.MinimumCharge))" :max="userCreditinWhmcs" 
+                                                v-model="chargeAmountinWhmcs" :disabled="theChargingSteps > 0 ? true : false" style="max-width: 140px !important;">
                                                 <span class="input-group-text border-secondary" id="chargecredit" style="min-width: 50px;">
                                                     {{ userCurrencySymbolFromWhmcs }}
                                                 </span>
@@ -104,7 +107,8 @@
                                                     <div class="row m-0 p-0">
                                                         <div class="col-12 m-0 p-0 input-group">
                                                             <span class="input-group-text" id="chargecredit" disabled>≈</span>
-                                                            <input type="number" class="form-control"  aria-label="qualchargecredite" aria-describedby="qualchargecredit" :value="showChargeAmountCloudUnit(chargeAmountInCaasifyCurrency)" disabled style="max-width: 130px;">
+                                                            <input type="number" class="form-control"  aria-label="qualchargecredite" aria-describedby="qualchargecredit" 
+                                                            :value="showChargeAmountCloudUnit(chargeAmountInCaasifyCurrency)" disabled style="max-width: 130px;">
                                                             <span class="input-group-text" id="chargecredit" style="min-width: 50px;">
                                                                 {{ CaasifyDefaultCurrencySymbol }}
                                                             </span>
@@ -141,7 +145,7 @@
                                             {{ lang('islessthanminimum') }}
                                         </span>    
                                     <span class="px-1">
-                                        ({{ showMinimumeWhmcsUnit(ConvertFromCaasifyToWhmcs(config.minimumChargeInCaasifyCurrency))}})
+                                        ({{ showMinimumeWhmcsUnit(ConvertFromCaasifyToWhmcs(config.MinimumCharge))}})
                                     </span>
                                     <span v-if="userCurrencySymbolFromWhmcs">
                                         {{ userCurrencySymbolFromWhmcs }}
@@ -156,7 +160,7 @@
                                             {{ lang('lessthanalowedminimum') }}
                                         </span>
                                         <span class="px-1">
-                                            ({{ showMinimumeWhmcsUnit(ConvertFromCaasifyToWhmcs(config.minimumChargeInCaasifyCurrency))}})
+                                            ({{ showMinimumeWhmcsUnit(ConvertFromCaasifyToWhmcs(config.MinimumCharge))}})
                                         </span>
                                         <span v-if="userCurrencySymbolFromWhmcs">
                                             {{ userCurrencySymbolFromWhmcs }}

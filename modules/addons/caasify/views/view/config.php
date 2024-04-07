@@ -32,7 +32,7 @@ if(empty($templatelang)){
 // Get Config to send to ConfigApi.php
 $configs = caasify_get_config();
 
-$systemUrl = $configs['systemUrl'];
+$systemUrl = rtrim($configs['systemUrl'], '/');
 $BackendUrl = $configs['BackendUrl'];
 
 // DevelopeMode
@@ -63,8 +63,6 @@ $CloudTopupLink = $configs['CloudTopupLink'];
 if(!isset($CloudTopupLink)){
     $CloudTopupLink = '/clientarea.php?action=addfunds';
 }
-
-
 
 
 

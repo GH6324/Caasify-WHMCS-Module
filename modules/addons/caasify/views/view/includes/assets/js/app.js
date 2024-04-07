@@ -5,7 +5,12 @@ app = createApp({
     data() {
         return {
 
-            
+            config : {
+                MinimumCharge: null,
+                MonthlyCostDecimal: null,
+                HourlyCostDecimal: null,
+                BalanceDecimal: null,
+            },            
 
             // views
             orderID: null,
@@ -31,6 +36,9 @@ app = createApp({
             ActionAlertStatus: null,
             ActionHistory: null,
             ActionHistoryIsLoaded: null,
+            
+            
+            PassVisible: false,
             
 
 
@@ -169,6 +177,13 @@ app = createApp({
             }
         },
 
+        CaasifyConfigs(NewCaasifyConfigs){
+            this.config.MinimumCharge = NewCaasifyConfigs.MinimumCharge
+            this.config.MonthlyCostDecimal = NewCaasifyConfigs.MonthlyCostDecimal
+            this.config.HourlyCostDecimal = NewCaasifyConfigs.HourlyCostDecimal
+            this.config.BalanceDecimal = NewCaasifyConfigs.BalanceDecimal
+        },
+
         orderID(neworderID) {
             if (neworderID != '') {
                 this.LoadRequestNewView();
@@ -195,26 +210,6 @@ app = createApp({
     },
 
     computed: {
-
-        config() {
-            return {
-                // index & create
-                minimumChargeInCaasifyCurrency: 2,
-                DefaultMonthlyDecimal: 0,
-                DefaultHourlyDecimal: 2,
-                DefaultBalanceDecimalWhmcs: 0,
-                DefaultBalanceDecimalCloud: 2,
-                DefaultChargeAmountDecimalWhmcs: 0,
-                DefaultChargeAmountDecimalCloud: 2,
-                DefaultCreditDecimalWhmcs: 0,
-                DefaultCreditDecimalCloud: 2,
-                DefaultMinimumDecimalWhmcs: 0,
-                DefaultMinimumDecimalCloud: 2,
-                DefaultRatioDecimal: 0,
-
-
-            }
-        },
 
         userCurrencySymbolFromWhmcs() {
             if (this.WhmcsCurrencies != null && this.userCurrencyIdFromWhmcs != null) {
@@ -278,7 +273,7 @@ app = createApp({
             if (this.CurrenciesRatioWhmcsToCloud != null) {
                 let usercredit = this.UserCreditInCaasifyCurrency;
                 let chargeAmount = this.chargeAmountInCaasifyCurrency;
-                let minimum = this.config.minimumChargeInCaasifyCurrency;
+                let minimum = this.config.MinimumCharge;
 
                 if (usercredit == null || chargeAmount == null) {
                     return null
@@ -381,7 +376,7 @@ app = createApp({
 
         NewMachinePrice() {
             let NewMachinePrice = null
-            let decimal = this.config.DefaultMonthlyDecimal
+            let decimal = this.config.MonthlyCostDecimal
 
             if(this.SelectedPlan?.price != null && this.SumConfigPrice() != null){
                 let planPrice = this.SelectedPlan.price
@@ -590,7 +585,7 @@ app = createApp({
             }
         },
 
-        ConvertFromWhmcsToCloud(value) {
+        convertFromWhmcsToCloud(value) {
             if (this.CurrenciesRatioWhmcsToCloud) {
                 let ratio = this.CurrenciesRatioWhmcsToCloud
                 return value * ratio
@@ -618,47 +613,47 @@ app = createApp({
         },
 
         showBalanceWhmcsUnit(value) {
-            decimal = this.config.DefaultBalanceDecimalWhmcs
+            decimal = this.config.BalanceDecimal
             return this.formatNumbers(value, decimal)
         },
 
         showBalanceCloudUnit(value) {
-            decimal = this.config.DefaultBalanceDecimalCloud
+            decimal = this.config.BalanceDecimal
             return this.formatNumbers(value, decimal)
         },
 
         showChargeAmountWhmcsUnit(value) {
-            decimal = this.config.DefaultChargeAmountDecimalWhmcs
+            decimal = this.config.BalanceDecimal
             return this.formatNumbers(value, decimal)
         },
 
         showChargeAmountCloudUnit(value) {
-            decimal = this.config.DefaultChargeAmountDecimalCloud
+            decimal = this.config.BalanceDecimal
             return this.formatNumbers(value, decimal)
         },
 
         showCreditWhmcsUnit(value) {
-            decimal = this.config.DefaultCreditDecimalWhmcs
+            decimal = this.config.BalanceDecimal
             return this.formatNumbers(value, decimal)
         },
 
         showCreditCloudUnit(value) {
-            decimal = this.config.DefaultCreditDecimalCloud
+            decimal = this.config.BalanceDecimal
             return this.formatNumbers(value, decimal)
         },
 
         showRatio(value) {
-            decimal = this.config.DefaultRatioDecimal
+            decimal = 2
             return this.formatNumbers(value, decimal)
         },
 
         showMinimumeWhmcsUnit(value) {
-            decimal = this.config.DefaultMinimumDecimalWhmcs
+            decimal = this.config.BalanceDecimal
             return this.formatNumbers(value, decimal)
         },
 
         showMinimumeCloudUnit(value) {
-            decimal = this.config.DefaultMinimumDecimalWhmcs
+            decimal = this.config.BalanceDecimal
             return this.formatNumbers(value, decimal)
         },
 
@@ -1038,7 +1033,7 @@ app = createApp({
         },
 
         showMachinePriceInWhmcsUnit(value) {
-            let decimal = this.config.DefaultMonthlyDecimal
+            let decimal = this.config.MonthlyCostDecimal
             return this.formatNumbers(value, decimal)
         },
 
@@ -1047,7 +1042,7 @@ app = createApp({
         },
 
         formatCostMonthly(value) {
-            let decimal = this.config.DefaultMonthlyDecimal
+            let decimal = this.config.MonthlyCostDecimal
             if (value < 99999999999999 && value != null) {
                 if (value > 1) {
                     return value.toLocaleString('en-US', { minimumFractionDigits: decimal, maximumFractionDigits: decimal })
@@ -1078,7 +1073,7 @@ app = createApp({
         },
 
         formatCostHourly(value) {
-            let decimal = this.config.DefaultHourlyDecimal
+            let decimal = this.config.HourlyCostDecimal
             if (value < 99999999999999 && value != null) {
                 value = value / (30 * 24)
                 if (value > 1) {
@@ -1494,6 +1489,10 @@ app = createApp({
             setInterval(this.LoadRequestNewView, 22230000)
         },
 
+        ShowHidePassword(){
+            this.PassVisible = !this.PassVisible
+        },
+
         MachineSpendTime(timeVariable) {
             const creationDate = new Date(timeVariable);
             const currentDate = new Date();
@@ -1513,6 +1512,17 @@ app = createApp({
             }
               
             return duration
+        },
+
+        Is40SecondPassed(timeVariable) {
+            const creationDate = new Date(timeVariable);
+            const currentDate = new Date();
+            const timeDifference = currentDate - creationDate;
+            if(timeDifference > 40 * 1000){
+                return true
+            } else {
+                return false
+            }
         },
 
         convertTime(time) {

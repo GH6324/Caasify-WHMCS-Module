@@ -10,11 +10,16 @@
                 </p>
                 <div class="input-group mt-5 mb-2">
                     <span class="input-group-text" id="basic-addon1">Username</span>
-                    <input type="text" class="form-control" value="root / administrator">
+                    <input type="text" class="form-control" value="root / administrator" disabled>
                 </div>
                 <div class="input-group mb-4">
                     <span class="input-group-text" id="basic-addon1">Password</span>
-                    <input type="text" class="form-control" :value="thisOrder?.secret">
+                    <input v-if="!PassVisible" type="text" class="form-control" value="*********" disabled>
+                    <input v-if="PassVisible" type="text" class="form-control" :value="thisOrder?.secret" disabled>
+                    <a class="input-group-text" id="basic-addon1" @click="ShowHidePassword">
+                        <i v-if="PassVisible" class="bi bi-eye-fill"></i>
+                        <i v-if="!PassVisible" class="bi bi-eye-slash-fill"></i>
+                    </a>
                 </div>
 
                 <div class="m-0 p-0 pb-4 my-3">
