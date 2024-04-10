@@ -89,3 +89,9 @@
 
   
   
+
+
+  
+  .equal-width-children > div {
+    flex: 1;
+  }

@@ -17,6 +17,16 @@ $AssetsPath = __DIR__;
             [v-cloak] { display: none; }
             .border {border-color: #ededed !important;}
             @media (min-width: 1400px) { .mycontainer{padding: 77px 51px !important;} }
+            
+            .plans-childs > div {
+                flex: 1;
+                text-align: start; /* Centering the content */
+            }
+
+            .plans-childs > div:first-child {
+                flex: 1.8;
+                text-align: start;
+            }
         </style>
 
         

@@ -5,9 +5,9 @@
             <h3>Configuration *</h3>
         </div>
     </div>
-    <div v-for="PlanSection in PlanSections" class="d-flex flex-row justify-content-start align-items-start mb-5"
+    <div v-for="PlanSection in PlanSections" class="d-flex flex-row justify-content-start align-items-start mb-5 flex-wrap"
         style="--bs-bg-opacity: 0.1;">
-        <div v-if="PlanSection?.fields != null" v-for="(field, index) in PlanSection?.fields" class="m-0 p-0 pe-4">
+        <div v-if="PlanSection?.fields != null" v-for="(field, index) in PlanSection?.fields" class="m-0 p-0 pe-4 my-4">
             <div class="d-flex flex-column justify-content-center align-items-start flex-wrap">
 
                 <div class="m-0 p-0" style="min-width: 100px;">

@@ -1,5 +1,5 @@
 <!-- Data Centers -->
-<div v-if="SelectedDataCenter != null" class="row m-0 p-0 mt-5 py-5 px-4 ">
+<div v-if="SelectedDataCenter != null" class="row m-0 p-0 mt-5 py-5 px-1 px-md-2 px-lg-4">
     <div class="col-12 m-0 p-0" style="--bs-bg-opacity: 0.1;">
         <div class="row">
             <div class="col-12 mb-5">
@@ -14,7 +14,7 @@
             </div>
         </div> 
         <div class="row">
-            <div v-for="region in regions" class="col-6 col-sm-4 col-md-3 p-2 m-0">
+            <div v-for="region in regions" class="col-12 col-md-6 col-lg-4 col-xl-3 p-2 m-0">
                 <div 
                 style="--bs-bg-opacity: 0.5 !important; height: 70px !important;"
                 class="d-flex flex-row align-items-center bg-light rounded-4 shadow-lg bg-white border"

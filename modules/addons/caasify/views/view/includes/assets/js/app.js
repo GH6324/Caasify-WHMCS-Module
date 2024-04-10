@@ -488,7 +488,11 @@ app = createApp({
                     reachEndPage = true;
                     this.machinsLoaded = true;
                 }
-                
+
+                if (response.data == null) {
+                    reachEndPage = true;
+                    this.machinsLoaded = true;
+                }
                 page += 1;
             }
 
@@ -1497,22 +1501,32 @@ app = createApp({
             const creationDate = new Date(timeVariable);
             const currentDate = new Date();
             const timeDifference = currentDate - creationDate;
-            const totalMinutes = Math.floor(timeDifference / (1000 * 60));
-            const hours = Math.floor(totalMinutes / 60);
+            const totalSeconds = Math.floor(timeDifference / 1000);
+            const totalMinutes = Math.floor(totalSeconds / 60);
+            const totalHours = Math.floor(totalMinutes / 60);
+            const totalDays = Math.floor(totalHours / 24);
+            const totalMonths = Math.floor(totalDays / 30);
+        
+            const days = totalDays % 30;
+            const hours = totalHours % 24;
             const minutes = totalMinutes % 60;
-
+        
             let duration = '1min';
-
-            if (hours > 0 && minutes > 0) {
-                duration = `${hours}hr ${minutes}min`;
-            } else if (hours > 0) {
-                duration = `${hours}hr`;
+        
+            if (totalMonths > 0) {
+                duration = `${totalDays} day${totalDays > 1 ? 's' : ''} ${hours} hour${hours > 1 ? 's' : ''}`;
+            } else if (totalDays > 0) {
+                duration = `${totalDays} day${totalDays > 1 ? 's' : ''} ${hours} hour${hours > 1 ? 's' : ''}`;
+            } else if (totalHours > 0) {
+                duration = `${totalHours} hour${totalHours > 1 ? 's' : ''} ${minutes} minute${minutes > 1 ? 's' : ''}`;
             } else {
-                duration = `${minutes}min`;
+                duration = `${totalMinutes} minute${totalMinutes > 1 ? 's' : ''}`;
             }
-              
-            return duration
+        
+            return duration;        
         },
+        
+        
 
         Is40SecondPassed(timeVariable) {
             const creationDate = new Date(timeVariable);
