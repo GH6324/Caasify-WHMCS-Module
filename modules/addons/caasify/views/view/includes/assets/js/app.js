@@ -1420,8 +1420,7 @@ app = createApp({
 
                 if (response?.data?.data) {
                     this.NewViewStatus = response?.data?.data?.status
-                    this.LoadOrderViews();
-                    console.log('reguest new view done');
+                    this.LoadOrderViews();                    
                 }
             }
         },
@@ -1484,7 +1483,15 @@ app = createApp({
                     this.ActionAlertStatus = null
                     this.ActionAlert = null
                     this.LoadActionsHistory()
-                }, 4000);
+                    
+                    setTimeout(() => {
+                        if(this.ActionHistory[0].status == 'pending'){
+                            this.ActionAlertStatus = null
+                            this.ActionAlert = null
+                            this.LoadActionsHistory()     
+                        }  
+                    }, 10000);
+                }, 6000);
 
             }
         },

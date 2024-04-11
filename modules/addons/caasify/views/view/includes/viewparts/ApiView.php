@@ -7,7 +7,7 @@
                 :key="index">
             </div>
         </div>
-        <div v-if="!Is40SecondPassed(thisOrder?.created_at)" class="alert alert-primary">
+        <div v-if="!Is40SecondPassed(thisOrder?.created_at) && ValidViewItems == null" class="alert alert-primary">
             Loading Machine View
             <?php  include('./includes/baselayout/threespinner.php');      ?>
         </div>

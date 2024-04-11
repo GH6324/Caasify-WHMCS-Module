@@ -1,5 +1,5 @@
 <!-- OrderViewfromOrder -->
-<div class="row">
+<div class="row"> 
     <div class="col-12 m-0 p-0">
         <div v-if="ordeIsLoaded != true"
             class="d-flex flex-row justify-content-start align-items-center mt-5 text-primary">
@@ -9,10 +9,17 @@
             </span>
         </div>
         <div v-if="ordeIsLoaded == true">
-            <?php include('./includes/viewparts/hostname.php');  ?>
-            <?php include('./includes/viewparts/ApiView.php');   ?>
-            <?php include('./includes/viewparts/UserView.php');  ?>
-            <?php include('./includes/viewparts/access.php');  ?>
+            <div v-if="thisOrder?.status == 'passive'">
+                <p class="h4">
+                    This Order has been deleted
+                </p>
+            </div>
+            <div v-else>
+                <?php include('./includes/viewparts/hostname.php');  ?>
+                <?php include('./includes/viewparts/ApiView.php');   ?>
+                <?php include('./includes/viewparts/UserView.php');  ?>
+                <?php include('./includes/viewparts/access.php');  ?>
+            </div>
         </div>
     </div>
 </div>
