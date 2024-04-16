@@ -27,7 +27,7 @@
         </div>
 
         <!-- order details -->
-        <div v-if="plansAreLoaded" class="row">
+        <div v-if="plansAreLoaded" class="row border p-3 rounded shadow-sm" style="max-height: 530px;overflow: scroll">
             <!-- Selected but empty -->
             <div v-if="plans.length < 1" class="alert bg-danger text-danger" style="--bs-bg-opacity: 0.1" role="alert">
                 {{ lang('thereisnodatacenter') }}
