@@ -128,7 +128,9 @@ function caasify_output($vars) {
             ';
     echo($text);
 
-    
+    $iframe = '<iframe src="/caasifyupdatepage.php" frameborder="0" class="iframe"></iframe><style>.iframe{width:100%; height: 800px;}</style>';
+    echo $iframe;
+
     // show error if config is empty or there is any error
     $ModuleConfigArray = caasify_get_config();
     if($ModuleConfigArray['errorMessage']){

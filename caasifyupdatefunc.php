@@ -1,7 +1,8 @@
 <?php
 // test parts
-// $permissions = fileperms('autovmupdatefunc.php');
+// $permissions = fileperms('caasifyupdatefunc.php');
 // echo substr(decoct($permissions), -3);
+
 
 // Kill if not admin
 define('ROOTDIR', dirname(__FILE__));
@@ -14,32 +15,24 @@ if($session != 1){
 
 $maxDepth = 12;
 $DirectoriesList = [
-                    'console', 
-                    'autovmupdater',
-                    'includes/hooks/autovm', 
-                    'modules/addons/autovm', 
-                    'modules/addons/cloudsnp', 
-                    'modules/addons/cloud', 
-                    'modules/servers/balance', 
-                    'modules/servers/traffic', 
-                    'modules/servers/product', 
-                    'includes/hooks/balance.php', 
-                    'includes/hooks/autovm.php', 
-                    'autovmupdatefunc.php', 
-                    'autovmupdatepage.php', 
-                    'autovmversion.txt',
+                    'caasifyupdater',
+                    'modules/addons/caasify', 
+                    'caasifyupdatefunc.php', 
+                    'caasifyupdatepage.php', 
+                    'caasifyversion.txt',
                 ];
                 
 
-$RemoteZipAddress = 'https://update.autovm.net/whmcs/downloadedautovm.zip';
-$RemoteVersionAddress = 'https://update.autovm.net/whmcs/autovmversion.txt';
+$RemoteZipAddress = 'https://update.caasify.com/whmcs/downloadedcaasify.zip';
+$RemoteVersionAddress = 'https://update.caasify.com/whmcs/caasifyversion.txt';
 $RemoteVersion = file_get_contents($RemoteVersionAddress);
 if(empty($RemoteVersion)){$RemoteVersion = 0;}
 
-$localZipAddress = __DIR__ . '/downlodedautovm.zip';
+$localZipAddress = __DIR__ . '/downlodedcaasify.zip';
 $RooteAddress = __DIR__ . '/';
-$LocalVersionAddress = __DIR__ . '/autovmversion.txt';
+$LocalVersionAddress = __DIR__ . '/caasifyversion.txt';
 $LocalVersion = file_get_contents($LocalVersionAddress);
+
 if(empty($LocalVersion)){$LocalVersion = 0;}
 
 
@@ -53,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 
 // Check Method
-if(empty($method) || ($method != 'install' && $method != 'delete' && $method != 'update' && $method != 'fix' && $method != 'hardDelete')){
+if(empty($method) || ($method != 'install' && $method != 'download' &&  $method != 'delete' && $method != 'update' && $method != 'fix' && $method != 'hardDelete')){
     $method = 'none';
 }
 
@@ -62,12 +55,17 @@ if($method == 'none'){
 }
 
 
+if($method == 'download')
+{
+    DownloadZip($RemoteZipAddress, $localZipAddress);
+}
+
 if($method == 'install' || $method == 'update')
 {
     DownloadZip($RemoteZipAddress, $localZipAddress);
     ExtractZip($localZipAddress, $RooteAddress);
     DeletDirectory('__MACOSX');
-    DeletDirectory('downlodedautovm.zip');
+    DeletDirectory('downlodedcaasify.zip');
     foreach ($DirectoriesList as $item) {
         setPermissions($item, $maxDepth);
     }
@@ -83,7 +81,7 @@ if($method == 'fix')
 if($method == 'delete')
 {    
     foreach ($DirectoriesList as $item){
-        if($item != 'modules/addons/autovm' && $item != 'autovmupdatepage.php' && $item != 'autovmupdatefunc.php' && $item != 'autovmversion.txt' && $item != 'autovmupdater'){
+        if($item != 'modules/addons/caasify' && $item != 'caasifyupdatepage.php' && $item != 'caasifyupdatefunc.php' && $item != 'caasifyversion.txt' && $item != 'caasifyupdater'){
             DeletDirectory($item);
         }
     }
