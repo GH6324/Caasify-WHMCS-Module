@@ -6,61 +6,63 @@
     <?php   include('caasifyupdater/actionsmodal.php');     ?>
     <div class="row" v-cloak>
         <div class="col-12 col-md-6">
-            <div class="d-felx flex-row justify-content-center align-items-center">
+            <div class="d-flex flex-row justify-content-start align-items-center">
                 <span class="h3">
                     Caasify Module Updater
                 </span>
             </div>
-            <div class="d-felx flex-row justify-content-center align-items-center mt-4">
-                <p class="mt-3">
-                    Caasify Latest Version:
-                    <?php if($RemoteVersion == 0): ?>
-                        <span class="text-info small">
+            <div class="row mt-4">
+                <div class="col-12">
+                    <div class="d-flex flex-row justify-content-start align-items-center mt-3">
+                        <div style="width: 170px;">
+                            Caasify Latest Version:
+                        </div>
+                        <?php if($RemoteVersion == 0): ?>
+                        <div class="text-info small">
                             NAN
-                        </span>
-                    <?php else: ?>
-                        <span class="btn btn-info btn-sm ms-2 px-4 rounded-pill py-0">
+                        </div>
+                        <?php else: ?>
+                        <div class="btn btn-info btn-sm ms-2 px-3 py-0 rounded-3" style="width: 90px;">
                             <?php echo($RemoteVersion); ?>
-                        </span>
-                    <?php endif ?>
-                </p>
-                <p>
-                    Your Current Version: 
-                    <?php if($LocalVersion == 0): ?>
-                        <span class="text-info small">
-                            NAN
-                        </span>
-                    <?php else: ?>
-                        <span class="btn btn-info btn-sm ms-2 px-4 rounded-pill py-0">
-                            <?php echo($LocalVersion); ?>
-                        </span>
-                    <?php endif ?>                    
-                </p>
+                        </div>
+                        <?php endif ?>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="d-flex flex-row justify-content-start align-items-center mt-3">
+                        <div style="width: 170px;">
+                            Your Current Version: 
+                        </div>
+                        <?php if($LocalVersion == 0): ?>
+                            <div class="text-info small">
+                                NAN
+                            </div>
+                        <?php else: ?>
+                            <div class="btn btn-info btn-sm ms-2 px-3 py-0 rounded-3" style="width: 90px;">
+                                <?php echo($LocalVersion); ?>
+                            </div>
+                        <?php endif ?>                    
+                    </div>
+                </div>
             </div>
-            <div class="d-felx flex-row justify-content-center align-items-center mt-5 pt-5">
-                <p>
+            <div class="row mt-5 pt-5">
+                <p class="text-info fw-light">
                     <?php if($LocalVersion == 0 && $RemoteVersion != 0): ?>
-                        <span class="text-warning fw-light">
+                        <span>
                             Can not find your version, please Reinstall
                         <span>
                     <?php elseif($LocalVersion != 0 && $RemoteVersion == 0): ?>
-                        <span class="text-warning fw-light">
+                        <span>
                             Can not find the latest Versions, please refresh the page again
                         </span>
                     <?php elseif($LocalVersion != 0 && $RemoteVersion != 0): ?>
-                        <span class="text-info fw-light">
-                            Your Module Version is 
-                        </span>
-                        <span>
-                            <?php echo($LocalVersion); ?>
-                        </span>
                         <?php if($LocalVersion == $RemoteVersion): ?>
                             <span>
-                                and you Module is Update 
+                                Your module is updated to lates version
                             </span>
                         <?php else: ?>
                             <span>
-                                and you should update it 
+                                You should update the module
                             </span>
                         <?php endif ?>
                     <?php endif ?>

@@ -329,6 +329,47 @@ let common = {
 // admin panel
     "usertoken" : "User Token",
 
+
+    // new CAASIFY
+    "Locations" : "Konumlar",
+    "in" : "içinde",
+    "machinecreatesuccessfully" : "Makine Başarıyla Oluşturuldu",
+    "createanothermachine" : "Başka Bir Makine Oluştur",
+    "ID" : "Kimlik",
+    "Alive" : "Aktif",
+    "Price" : "Fiyat",
+    "Views" : "Görüntülemeler",
+    "Order is Loading" : "Sipariş Yükleniyor",
+    "This Order has been deleted" : "Bu Sipariş Silindi",
+    "Product Price" : "Ürün Fiyatı",
+    "Action" : "Eylem",
+    "Time" : "Zaman",
+    "Controllers Are Loading" : "Kontrolörler Yükleniyor",
+    "Views Are Loading" : "Görünümler Yükleniyor",
+    "No valid Controller Founded" : "Geçerli Bir Kontrolör Bulunamadı",
+    "Confirmation" : "Onaylama",
+    "You are going to" : "Şunu yapacaksınız ",
+    "your machine, are you sure ?" : " makinenizi, emin misiniz?",
+    "Something is in queue !" : "Sıraya bir şeyler eklendi!",
+
+    "Graphs" : "Grafikler",
+    "BackUp" : "Yedekleme",
+    "Volume" : "Hacim",
+    "Resize" : "Boyutlandırma",
+    "Setting" : "Ayarlar",
+    "History" : "Geçmiş",
+
+    "SETUP" : "KURULUM",
+    "START" : "BAŞLAT",
+    "STOP" : "DURDUR",
+    "REBOOT" : "YENİDEN",
+    "DELETE" : "SİL",
+    "SHOW" : "GÖSTER",
+
+    "DELIVERED" : "TESLİM EDİLDİ",
+    "FAILED" : "BAŞARISIZ",
+    "PENDING" : "BEKLEMEDE",
+
 }
 
 const words = {

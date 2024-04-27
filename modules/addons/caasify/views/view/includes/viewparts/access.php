@@ -1,4 +1,4 @@
-<div class="row d-flex flex-row align-items-stretch text-start m-0 p-0">
+<div class="d-none row d-flex flex-row align-items-stretch text-start m-0 p-0">
     <!-- OrderDetails -->
     <div class="col-12 col-xl-6 p-0 m-0 mb-2 flex-grow-1">
         <div class="border border-2 rounded-4 bg-white m-0 p-0 py-4 px-4 mx-0 pb-5 h-100">

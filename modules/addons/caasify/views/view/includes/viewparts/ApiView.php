@@ -8,7 +8,9 @@
             </div>
         </div>
         <div v-if="!Is40SecondPassed(thisOrder?.created_at) && ValidViewItems == null" class="alert alert-primary">
-            Loading Machine View
+            <span>
+                {{ lang('Views Are Loading') }}
+            </span>
             <?php  include('./includes/baselayout/threespinner.php');      ?>
         </div>
     </div>

@@ -5,7 +5,7 @@
         <div class="modal-content border-0">
             <!-- Modal Body -->
             <div class="m-0 p-0">
-                <div class="modal-body" style="min-height: 350px !important;" id="CreateModalTop">
+                <div class="modal-body px-0 px-md-3" style="min-height: 350px !important;" id="CreateModalTop">
                     <div class="row m-0 p-0 pt-5">
                         <div class="col-12 text-start lh-lg pb-3">
 
@@ -30,6 +30,7 @@
                                                     <i v-if="themachinename" class="bi bi-check-circle-fill me-1"></i>
                                                     <i v-if="!themachinename" class="bi bi-circle me-1"></i>
                                                     <span>{{ lang('name') }}</span>
+                                                    <span class="px-1">:</span>
                                                 </td>
                                                 <td class="text-primary fw-medium m-0 p-0">
                                                     <span v-if="themachinename"
@@ -102,7 +103,12 @@
                                     <!-- Total Price -->
                                     <div v-if="NewMachinePrice" class="float-end text-primary fw-medium">
                                         <p>
-                                            Total Price :
+                                            <span>
+                                                {{ lang('totalcost') }}
+                                            </span>
+                                            <span class="px-1">
+                                                :
+                                            </span>
                                             {{ showMachinePriceInWhmcsUnit(ConvertFromCaasifyToWhmcs(NewMachinePrice)) }}
                                             {{ userCurrencySymbolFromWhmcs }}
                                         </p>
@@ -166,15 +172,16 @@
                             </div>
                         </div>
                     </div>
-                    <div v-if="!userClickedCreationBtn" class="row m-0 p-0 pt-5 mb-2">
-                        <div
-                            class="form-check form-switch d-flex flex-row justify-content-start align-items-center px-3">
-                            <input v-model="checkboxconfirmation" class="form-check-input ms-2 fs-5" type="checkbox"
-                                role="switch" id="checkboxconfirmation">
-                            <label class="form-check-label ms-3 text-dark" :class="checkboxconfirmation ? '' : 'text-secondary'"
-                                for="checkboxconfirmation">
-                                {{ lang('confirmationtext') }}
-                            </label>
+                    <div v-if="!userClickedCreationBtn" class="row m-0 p-0 px-3 py-3">
+                        <div class="py-4 rounded-4 bg-primary" style="--bs-bg-opacity: 0.15;">
+                            <div class="form-check form-switch d-flex flex-row justify-content-start align-items-center px-0 px-md-3">
+                                <input v-model="checkboxconfirmation" class="form-check-input ms-2 fs-5" type="checkbox"
+                                    role="switch" id="checkboxconfirmation">
+                                <label class="form-check-label ms-3 text-dark" :class="checkboxconfirmation ? '' : 'text-secondary'"
+                                    for="checkboxconfirmation">
+                                    {{ lang('confirmationtext') }}
+                                </label>
+                            </div>
                         </div>
                     </div>
                 </div>

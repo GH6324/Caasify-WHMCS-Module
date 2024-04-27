@@ -4,11 +4,11 @@
 
 
 <div class="mt-5 px-3 px-md-4 mb-5">
-    <p class="m-0 p-0 h3 fw-bolder text-dark d-block d-md-none">{{ lang('cloudaccount') }}</p>
+    <p class="m-0 p-0 h3 fw-bolder text-dark d-block d-md-none">{{ lang('Marketplace') }}</p>
 </div>
 <div class="d-flex flex-row justify-content-between align-items-end px-3 px-md-4">
     <div class="">
-        <p class="m-0 p-0 h3 fw-bolder text-dark mt-5 d-none d-md-block">{{ lang('cloudaccount') }}</p>
+        <p class="m-0 p-0 h3 fw-bolder text-dark mt-5 d-none d-md-block">{{ lang('Marketplace') }}</p>
     </div>
     <div class="d-flex flex-row justify-content-between align-items-end">
         <div class="me-2">

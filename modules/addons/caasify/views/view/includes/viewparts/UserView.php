@@ -6,14 +6,18 @@
 
                 <p class="text-secondary fs-5">
                     <i class="bi bi-person-circle pe-1"></i>
-                    Login
+                    {{ lang('login') }}
                 </p>
                 <div class="input-group mt-5 mb-2">
-                    <span class="input-group-text" id="basic-addon1">Username</span>
+                    <span class="input-group-text" id="basic-addon1" style="width: 100px;">
+                        {{ lang('username') }}
+                    </span>
                     <input type="text" class="form-control" value="root / administrator" disabled>
                 </div>
                 <div class="input-group mb-4">
-                    <span class="input-group-text" id="basic-addon1">Password</span>
+                    <span class="input-group-text" id="basic-addon1" style="width: 100px;">
+                        {{ lang('password') }}
+                    </span>
                     <input v-if="!PassVisible" type="text" class="form-control" value="*********" disabled>
                     <input v-if="PassVisible" type="text" class="form-control" :value="thisOrder?.secret" disabled>
                     <a class="input-group-text" id="basic-addon1" @click="ShowHidePassword">
@@ -32,13 +36,16 @@
 
                         <p class="text-secondary mb-4 fs-5">
                             <i class="bi bi-currency-exchange pe-1"></i>
-                            Finance
+                            {{ lang('finance') }}
                         </p>
                         <!-- Price -->
                         <div class="row m-0 p-0">
                             <div class="col-auto m-0 p-0" style="min-width: 120px;">
                                 <span class="text-secondary align-middle m-0 p-0">
-                                    Product Price :
+                                    {{ lang('Product Price') }}
+                                    <span class="px-1">
+                                        :
+                                    </span>
                                 </span>
                             </div>
                             <div class="col-auto m-0 p-0">
@@ -51,9 +58,8 @@
                                         {{ userCurrencySymbolFromWhmcs }}
                                     </span>
                                 </span>
-                                <span v-if="userCurrencySymbolFromWhmcs"
-                                    class="text-secondary align-middle m-0 p-0 fw-light ps-3">
-                                    Pay as you go
+                                <span v-if="userCurrencySymbolFromWhmcs" class="text-secondary align-middle m-0 p-0 fw-light ps-3">
+                                    {{ lang('payasyougo') }}
                                 </span>
                                 <span class="text-secondary align-middle m-0 p-0 fw-medium" v-else>
                                     <span>
@@ -67,7 +73,10 @@
                         <div class="row m-0 p-0">
                             <div class="col-auto m-0 p-0" style="min-width: 120px;">
                                 <span class="text-secondary align-middle m-0 p-0">
-                                    Cloud Balance :
+                                    {{ lang('cloudbalance') }}
+                                    <span class="px-1">
+                                        :
+                                    </span>
                                 </span>
                             </div>
                             <div class="col-auto m-0 p-0">
@@ -91,7 +100,10 @@
                         <div class="row m-0 p-0">
                             <div class="col-auto m-0 p-0" style="min-width: 120px;">
                                 <span class="text-secondary align-middle m-0 p-0">
-                                    User Credit :
+                                    {{ lang('yourcredit') }}
+                                    <span class="px-1">
+                                        :
+                                    </span>
                                 </span>
                             </div>
                             <div class="col-auto m-0 p-0">
@@ -127,15 +139,23 @@
                     <table class="table">
                         <thead>
                             <tr>
-                                <th scope="col" class="text-secondary fw-light">Action</th>
-                                <th scope="col" class="text-secondary fw-light">Status</th>
-                                <th scope="col" class="text-secondary fw-light">Time</th>
+                                <th scope="col" class="text-secondary fw-light">
+                                    {{ lang('Action') }}
+                                </th>
+                                <th scope="col" class="text-secondary fw-light">
+                                    {{ lang('status') }}
+                                </th>
+                                <th scope="col" class="text-secondary fw-light">
+                                    {{ lang('Time') }}
+                                </th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr v-if="ActionHistory"
                                 v-for="(action, index) in ActionHistory.slice(0, 5)" :key="index">
-                                <td>{{ action.button.name.toUpperCase() }}</td>
+                                <td>
+                                    {{ lang(action.button.name.toUpperCase()) }}
+                                </td>
                                 <td>
                                     <span style="--bs-bg-opacity: 0.2; width:120px;"
                                         :class="{ 
@@ -143,7 +163,9 @@
                                             'btn btn-sm bg-primary py-1 text-primary small': action.status == 'pending',
                                             'btn btn-sm bg-success py-1 text-success small': action.status == 'delivered'
                                         }">
-                                        {{ action.status.toUpperCase() }}
+                                        <span>
+                                            {{ lang(action.status.toUpperCase()) }}
+                                        </span>
                                         <span v-if="action.status == 'pending'" class="spinner-grow my-auto mb-0 ms-1 align-middle" style="--bs-spinner-width: 5px; --bs-spinner-height: 5px; --bs-spinner-animation-speed: 1s;"></span>
                                     </span>
                                 </td>

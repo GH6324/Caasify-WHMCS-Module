@@ -18,7 +18,7 @@ let common = {
         "mb" : "MB",
         "gb" : "GB",
         "core" : "Core",
-        "hostname" : "Hostname : ",
+        "hostname" : "Hostname",
         "pending" : "Pending",
         "processing" : "Processing",
         "active" : "Active",
@@ -202,7 +202,7 @@ let common = {
     "cloudaccount" : "Global Cloud Account",    
     "movebalance" : "Move Balance",    
     "heretocharge" : "Here you can charge your Cloud Account",    
-    "yourcredit" : "Your credit",    
+    "yourcredit" : "User Credit",    
     "isnotenough" : "is not enough, please first go to your account and add some credit",    
     "minimumis" : "Minimum credit to charge your Cloud Account is",    
     "chargecloudaccount" : "Charge Cloud Account",    
@@ -282,7 +282,7 @@ let common = {
     "product" : "Product : ",
     "producttemplate" : "Template : ",
     "sshkeytitle" : "SSH Key : ",
-    "price" : "Price : ",
+    "price" : "Price",
     "monthly" : "Monthly",
     "youdidntchoose" : "You did not choose any config",
     "entersshkey" : "Enter your SSH key in here.",
@@ -322,10 +322,10 @@ let common = {
     "ipvversion6" : "",
     "IPV6" : "IPV6",
     "Create Machine" : "Create Machine",
-    "machinecreatesuccessfully" : "Machine Create Successfully",
+    
     "machinelink" : "Machine Link",
     "createmachinefailed" : "Create Machine Failed",
-    "createanothermachine" : "Create Another Machine",
+    
     "Machine View" : "Machine View",
 
 
@@ -334,6 +334,55 @@ let common = {
 // admin panel
     "usertoken" : "User Token",
 
+
+
+
+
+    // new CAASIFY
+    "Locations" : "Locations",
+    "in" : "in",
+    "machinecreatesuccessfully" : "Machine Create Successfully",
+    "createanothermachine" : "Create Another Machine",
+    "ID" : "ID",
+    "Alive" : "Create Another Machine",
+    "Price" : "Price",
+    "Views" : "Views",
+    "Order is Loading" : "Order is Loading",
+    "This Order has been deleted" : "This Order has been deleted",
+    "Product Price" : "Product Price",
+    "Action" : "Action",
+    "Time" : "Time",
+    "Controllers Are Loading" : "Controllers Are Loading",
+    "Views Are Loading" : "Views Are Loading",
+    "No valid Controller Founded" : "No valid Controller Founded",
+    "Confirmation" : "Confirmation",
+    "You are going to" : "You are going to ",
+    "your machine, are you sure ?" : " your machine, are you sure ?",
+    "Something is in queue !" : "Something is in queue !",
+
+
+    "Graphs" : "Graphs",
+    "BackUp" : "BackUp",
+    "Volume" : "Volume",
+    "Resize" : "Resize",
+    "Setting" : "Setting",
+    "History" : "History",
+    
+    "SETUP" : "SETUP",
+    "START" : "START",
+    "STOP" : "STOP",
+    "REBOOT" : "REBOOT",
+    "DELETE" : "DELETE",
+    "SHOW" : "SHOW",
+    
+    
+    "DELIVERED" : "DELIVERED",
+    "FAILED" : "FAILED",
+    "PENDING" : "PENDING",
+
+
+
+    
 }
 
 const words = {

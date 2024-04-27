@@ -14,6 +14,10 @@ $AssetsPath = __DIR__;
         
 
         <style>
+            .loading {
+                cursor: wait;
+            }
+
             [v-cloak] { display: none; }
             .border {border-color: #ededed !important;}
             @media (min-width: 1400px) { .mycontainer{padding: 77px 51px !important;} }

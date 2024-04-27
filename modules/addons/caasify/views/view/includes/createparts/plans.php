@@ -6,8 +6,8 @@
                 <span class="text-dark h3">
                     {{ lang('products') }}
                 </span>
-                <span class="text-dark h3">
-                    in
+                <span class="text-dark h3 px-1">
+                    {{ lang('in') }}
                 </span>
                 <span class="text-dark h3">
                     {{ SelectedRegion.name }} *

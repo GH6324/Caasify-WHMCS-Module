@@ -117,18 +117,25 @@ function caasify_output($vars) {
 
     $text = '
             <p style="padding: 50px 0px 0px 0px; !important">
-                <span style="font-weight: 800 !important;">Caasify</span> is an unique solution for Data Centers and Hosting companies.
+                <span style="font-weight: 800 !important;">Caasify</span> is an unique solution for Data Centers and Hosting companies to meet in unified hosting marketplace.
             </p>
         ';
     echo($text);
     
     $text = '
-            <p>You can always get the latest version from the <a href="https://github.com/" style="font-weight: 800 !important;" target="_blank">Caasify git repository</a></p>
-            <p>To learn how to use Caasify modules, please check out the <a href="https://caasify.com/docs/" style="font-weight: 800 !important;" target="_blank"> Caasify documentation page</a></p>
+            <p>You can always get the latest version from the <a href="https://github.com/caasify/Caasify-WHMCS-Module" style="font-weight: 800 !important;" target="_blank">Caasify git repository</a></p>
+            <p>To learn how to use Caasify modules, please check out the <a href="https://caasify.com/documentation?topic=3#topic" style="font-weight: 800 !important;" target="_blank"> Caasify documentation page</a></p>
             ';
     echo($text);
 
-    $iframe = '<iframe src="/caasifyupdatepage.php" frameborder="0" class="iframe"></iframe><style>.iframe{width:100%; height: 800px;}</style>';
+    
+    $configs = caasify_get_config();
+    $systemUrl = $configs['systemUrl'];
+    if(empty($systemUrl)){
+        $systemUrl = '/';
+    }
+
+    $iframe = '<iframe src="' . $systemUrl . 'caasifyupdatepage.php" frameborder="0" class="iframe"></iframe><style>.iframe{width:100%; height: 800px;}</style>';
     echo $iframe;
 
     // show error if config is empty or there is any error

@@ -2,7 +2,9 @@
 <div v-if="PlanSections != null" class="row m-0 p-0 py-5 px-4 mt-5 bg-secondary rounded-4 text-dark" style="--bs-bg-opacity: 0.2;">
     <div class="col-12 mt-5">
         <div class="row mb-5">
-            <h3>Configuration *</h3>
+            <h3>
+                {{ lang('Configuration') }} *
+            </h3>
         </div>
     </div>
     <div v-for="PlanSection in PlanSections" class="d-flex flex-row justify-content-start align-items-start mb-5 flex-wrap"

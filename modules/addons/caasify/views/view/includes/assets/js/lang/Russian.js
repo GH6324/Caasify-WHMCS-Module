@@ -327,6 +327,49 @@ let common = {
 // admin panel
     "usertoken" : "User Token",
 
+
+
+    // new CAASIFY
+    "Locations" : "Места",
+    "in" : "в",
+    "machinecreatesuccessfully" : "Машина успешно создана",
+    "createanothermachine" : "Создать другую машину",
+    "ID" : "ID",
+    "Alive" : "Активен",
+    "Price" : "Цена",
+    "Views" : "Просмотры",
+    "Order is Loading" : "Заказ загружается",
+    "This Order has been deleted" : "Этот заказ был удален",
+    "Product Price" : "Цена товара",
+    "Action" : "Действие",
+    "Time" : "Время",
+    "Controllers Are Loading" : "Контроллеры загружаются",
+    "Views Are Loading" : "Просмотры загружаются",
+    "No valid Controller Founded" : "Действующий контроллер не найден",
+    "Confirmation" : "Подтверждение",
+    "You are going to" : "Вы собираетесь ",
+    "your machine, are you sure ?" : " вашу машину, вы уверены?",
+    "Something is in queue !" : "Что-то в очереди!",
+
+    "Graphs" : "Графики",
+    "BackUp" : "Резервное копирование",
+    "Volume" : "Объем",
+    "Resize" : "Изменить размер",
+    "Setting" : "Настройка",
+    "History" : "История",
+
+    "SETUP" : "УСТАНОВКА",
+    "START" : "СТАРТ",
+    "STOP" : "СТОП",
+    "REBOOT" : "ПЕРЕЗАГРУЗКА",
+    "DELETE" : "УДАЛИТЬ",
+    "SHOW" : "ПОКАЗАТЬ",
+
+    "DELIVERED" : "ДОСТАВЛЕНО",
+    "FAILED" : "НЕУДАЧА",
+    "PENDING" : "В ОЖИДАНИИ",
+
+
 }
 
 const words = {

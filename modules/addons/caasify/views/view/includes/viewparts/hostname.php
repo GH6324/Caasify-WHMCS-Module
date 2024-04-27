@@ -6,7 +6,10 @@
                 <span class="">
                     <span class="m-0 p-0 h5">
                         <span class="text-secondary">
-                            Hostname :
+                            {{ lang('hostname') }}
+                        </span>
+                        <span class="px-1">
+                            :
                         </span>
                         <span v-if="thisOrder?.note" class="h4 text-primary">
                             {{ thisOrder?.note }}
@@ -19,7 +22,14 @@
             </div>
             <div class="spinner-border spinner-border-sm text-primary ms-4 border-2" role="status"
                 v-if="viewsAreLoading">
-                <span class="visually-hidden">Loading...</span>
+                <span class="visually-hidden">
+                    <span>
+                        {{ lang('loadingmsg') }}
+                    </span>
+                    <span>
+                        ...
+                    </span>
+                </span>
             </div>
         </div>
 
@@ -27,7 +37,7 @@
         <div class="d-flex flex-row justify-content-start align-items-center m-0 p-0 flex-wrap">
             <div class="m-0 p-0 d-none d-md-block ms-2">
                 <span class="btn btn-outline-secondary py-2 d-flex flex-row align-items-center px-4 btn-sm fw-medium">
-                    Console
+                    {{ lang('consoleaction') }}
                 </span>
             </div>
             <div class="m-0 p-0 d-none d-md-block ms-2">
@@ -36,7 +46,8 @@
                     <span class="spinner-grow text-primary my-auto m-0 p-0 me-1 align-middle"
                         style="--bs-spinner-width: 7px; --bs-spinner-height: 7px; --bs-spinner-animation-speed: 2s;"></span>
                     <span class="ms-1 pe-2 fw-medium" v-if="thisOrder?.status">
-                        {{ thisOrder?.status.toUpperCase() }} </span>
+                        {{ lang(thisOrder?.status) }}
+                    </span>
                     <span class="ms-1" v-else> - </span>
                 </span>
             </div>
@@ -49,6 +60,11 @@
                     <span class="ms-1" v-else> - </span>
                 </span>
             </div>
+
+            <!-- Language -->
+            <div class="m-0 p-0 ms-2">
+                    <?php  include('./includes/baselayout/langbtn.php'); ?>
+                </div>
         </div>
     </div>
 </div>

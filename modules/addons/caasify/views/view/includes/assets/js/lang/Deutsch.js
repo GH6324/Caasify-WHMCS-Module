@@ -328,6 +328,52 @@ let common = {
 // admin panel
     "usertoken" : "User Token",
 
+
+
+    // new CAASIFY
+    "Locations" : "Standorte",
+    "in" : "in",
+    "machinecreatesuccessfully" : "Maschine erfolgreich erstellt",
+    "createanothermachine" : "Eine weitere Maschine erstellen",
+    "ID" : "ID",
+    "Alive" : "Aktiv",
+    "Price" : "Preis",
+    "Views" : "Ansichten",
+    "Order is Loading" : "Bestellung wird geladen",
+    "This Order has been deleted" : "Diese Bestellung wurde gelöscht",
+    "Product Price" : "Produktpreis",
+    "Action" : "Aktion",
+    "Time" : "Zeit",
+    "Controllers Are Loading" : "Controller werden geladen",
+    "Views Are Loading" : "Ansichten werden geladen",
+    "No valid Controller Founded" : "Kein gültiger Controller gefunden",
+    "Confirmation" : "Bestätigung",
+    "You are going to" : "Sie werden ",
+    "your machine, are you sure ?" : " Ihre Maschine, sind Sie sicher?",
+    "Something is in queue !" : "Etwas steht in der Warteschlange!",
+
+    "Graphs" : "Grafiken",
+    "BackUp" : "Backup",
+    "Volume" : "Volumen",
+    "Resize" : "Größe ändern",
+    "Setting" : "Einstellung",
+    "History" : "Geschichte",
+
+    "SETUP" : "EINRICHTEN",
+    "START" : "STARTEN",
+    "STOP" : "STOPPEN",
+    "REBOOT" : "NEUSTARTEN",
+    "DELETE" : "LÖSCHEN",
+    "SHOW" : "ANZEIGEN",
+
+    "DELIVERED" : "GELIEFERT",
+    "FAILED" : "FEHLGESCHLAGEN",
+    "PENDING" : "AUSSTEHEND",
+
+    
+
+
+
 }
 
 const words = {

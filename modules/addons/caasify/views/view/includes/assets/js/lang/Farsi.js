@@ -18,7 +18,7 @@ let common = {
         "mb" : "مگابایت",
         "gb" : "گیگابایت",
         "core" : "هسته",
-        "hostname" : "نام سرور : ",
+        "hostname" : "نام سرور",
         "pending" : "در انتظار",
         "processing" : "در حال پردازش",
         "active" : "فعال",
@@ -202,7 +202,7 @@ let common = {
     "cloudaccount" : "شبکه جهانی ابری",
     "movebalance" : "انتقال موجودی",
     "heretocharge" : "در اینجا می‌توانید موجودی ابری خود را شارژ کنید",
-    "yourcredit" : "اعتبار شما",
+    "yourcredit" : "اعتبار کاربر",
     "isnotenough" : "اعتبار شما کافی نیست، لطفاً ابتدا به حساب خود بروید و کمی اعتبار اضافه کنید",
     "minimumis" : "حداقل اعتبار برای شارژ حساب ابری شما",
     "chargecloudaccount" : "شارژ حساب ابری",
@@ -278,7 +278,7 @@ let common = {
     "productmissed" : "محصول مشخصی انتخاب نشده است",
     "templatemissed" : "قالب ماشین انتخاب نشده است",
     "allinfoprovided" : "تمامی اطلاعات فراهم شده است",
-    "name" : "نام: ",
+    "name" : "نام",
     "datacenter" : "مرکز داده: ",
     "product" : "محصول: ",
     "producttemplate" : "قالب",
@@ -330,7 +330,49 @@ let common = {
 // admin panel
     "usertoken" : "توکن کاربر",
 
+
+
+    // new CAASIFY
+    "Locations" : "موقعیت جغرافیایی",
+    "in" : " ",
+    "machinecreatesuccessfully" : "ماشین با موفقیت ساخته شد",
+    "createanothermachine" : "ساخت یک ماشین",
+    "ID" : "شناسه",
+    "Alive" : "کارکرد",
+    "Price" : "قیمت",
+    "Views" : "مشاهده",
+    "Order is Loading" : "جزییات سفارش در حال پردازش است",
+    "This Order has been deleted" : "این سفارش حذف شده است",
+    "Product Price" : "هزینه سرویس",
+    "Action" : "رویداد",
+    "Time" : "زمان رویداد",
+    "Controllers Are Loading" : "کنترلرها در حال بارگذاری",
+    "Views Are Loading" : "ویوها در حال بارگذاری",
+    "No valid Controller Founded" : "هیچ کنترلری پیدا نشد",
+    "Confirmation" : "تاییدیه",
+    "You are going to" : "شما در حال ",
+    "your machine, are you sure ?" : " کردن ماشین هستید، آیا مطمئن هستید؟",
+    "Something is in queue !" : "عملیات دیگری در حال انجام است. لطفا صبر کنید",
     
+
+
+    "Graphs" : "نمودارها",
+    "BackUp" : "پشتیبان گیری",
+    "Volume" : "حجم",
+    "Resize" : "تغییر پلن",
+    "Setting" : "تنظیمات",
+    "History" : "تاریخچه",
+
+    "SETUP" : "نصب سیستم",
+    "START" : "روشن",
+    "STOP" : "خاموش",
+    "REBOOT" : "ریبوت",
+    "DELETE" : "حذف",
+    "SHOW" : "نمایش",
+    
+    "DELIVERED" : "ارسال موفق",
+    "FAILED" : "خطای ارسال",
+    "PENDING" : "در حال پردازش",
 }
 
 const words = {

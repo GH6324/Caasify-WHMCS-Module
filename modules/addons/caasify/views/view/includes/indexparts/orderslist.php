@@ -30,7 +30,7 @@
                         <th scope="col" class="fw-light fs-6 text-secondary pb-3">{{ lang('ID') }}</th>
                         <th scope="col" class="fw-light fs-6 text-secondary pb-3">{{ lang('name') }}</th>
                         <th scope="col" class="fw-light fs-6 text-secondary pb-3">{{ lang('Alive') }}</th>
-                        <th scope="col" class="fw-light fs-6 text-secondary pb-3 d-none d-md-block">Price</th>
+                        <th scope="col" class="fw-light fs-6 text-secondary pb-3 d-none d-md-block">{{ lang('Price') }}</th>
                         <th scope="col" class="fw-light fs-6 text-secondary pb-3">{{ lang('Views') }}</th>
                     </tr>
                 </thead>
@@ -75,7 +75,7 @@
                         <td class="fw-medium">
                             <span v-if="order.id" class="ms-2">
                                 <a class="btn btn-outline-primary px-3 px-md-5 py-2" @click="open(order)">
-                                    View
+                                    {{ lang('viewontable') }}
                                 </a>
                             </span>
                         </td>

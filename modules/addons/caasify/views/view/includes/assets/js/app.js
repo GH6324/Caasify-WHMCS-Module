@@ -135,12 +135,27 @@ app = createApp({
             createActionFailed: false,
             createActionSucced: false,
             userClickedCreationBtn: false,
+            isLoading: false,
+            showAlertModal: false,
 
 
         }
     },
 
     watch: {
+
+        showAlertModal(newValue) {
+            if (newValue == true) {
+                $('#alertModal').modal('show');
+            } else {
+                $('#alertModal').modal('hide');
+            }
+
+            setTimeout(() => {
+                this.showAlertModal = false
+            }, 4000);
+        },
+
 
         thisOrder(){
             this.findValidControllers();
@@ -1225,10 +1240,11 @@ app = createApp({
 
         async create() {
             this.scrollToTop();
-
+            
             let accept = await this.openConfirmDialog('create')
 
             if (accept) {
+                this.isLoading = true;
                 let formData = new FormData();
                 formData.append('note', this.themachinename);
                 formData.append('product_id', this.SelectedPlan.id);
@@ -1249,14 +1265,17 @@ app = createApp({
                 response = response.data
 
                 if (response?.data) {
+                    this.isLoading = false;
                     this.userClickedCreationBtn = true
                     this.createActionSucced = true
                 } else if (response?.message) {
+                    this.isLoading = false;
                     this.CreateMSG = response?.message
                     this.openMessageDialog(this.lang(response?.message))
                     this.createActionFailed = true
                 } else {
                     this.createActionFailed = true
+                    this.isLoading = false;
                 }
             }
         },
@@ -1465,6 +1484,7 @@ app = createApp({
                     let response = await axios.post(RequestLink, formData);
 
                     if (response?.data?.message) {
+                        this.showAlertModal = true;
                         this.LoadActionsHistory()
                         this.ActionAlertStatus = 'failed'
                         this.ActionAlert = response?.data?.message
@@ -1518,16 +1538,16 @@ app = createApp({
             const hours = totalHours % 24;
             const minutes = totalMinutes % 60;
         
-            let duration = '1min';
+            let duration = '1' + this.lang('minutes');
         
             if (totalMonths > 0) {
-                duration = `${totalDays} day${totalDays > 1 ? 's' : ''} ${hours} hour${hours > 1 ? 's' : ''}`;
+                duration = `${totalDays} ${this.lang('days')}${totalDays > 1 ? 's' : ''} ${hours} ${this.lang('hours')}${hours > 1 ? 's' : ''}`;
             } else if (totalDays > 0) {
-                duration = `${totalDays} day${totalDays > 1 ? 's' : ''} ${hours} hour${hours > 1 ? 's' : ''}`;
+                duration = `${totalDays} ${this.lang('days')}${totalDays > 1 ? 's' : ''} ${hours} ${this.lang('hours')}${hours > 1 ? 's' : ''}`;
             } else if (totalHours > 0) {
-                duration = `${totalHours} hour${totalHours > 1 ? 's' : ''} ${minutes} minute${minutes > 1 ? 's' : ''}`;
+                duration = `${totalHours} ${this.lang('hours')}${totalHours > 1 ? 's' : ''} ${minutes} ${this.lang('minutes')}`;
             } else {
-                duration = `${totalMinutes} minute${totalMinutes > 1 ? 's' : ''}`;
+                duration = `${totalMinutes} ${this.lang('minutes')}`;
             }
         
             return duration;        

@@ -329,6 +329,50 @@ let common = {
 
 // admin panel
         "usertoken" : "User Token",
+
+
+    // new CAASIFY
+    "Locations" : "Localizações",
+    "in" : "em",
+    "machinecreatesuccessfully" : "Máquina criada com sucesso",
+    "createanothermachine" : "Criar outra máquina",
+    "ID" : "ID",
+    "Alive" : "Ativo",
+    "Price" : "Preço",
+    "Views" : "Visualizações",
+    "Order is Loading" : "Pedido está carregando",
+    "This Order has been deleted" : "Este pedido foi deletado",
+    "Product Price" : "Preço do Produto",
+    "Action" : "Ação",
+    "Time" : "Tempo",
+    "Controllers Are Loading" : "Controladores estão carregando",
+    "Views Are Loading" : "Visualizações estão carregando",
+    "No valid Controller Founded" : "Nenhum controlador válido encontrado",
+    "Confirmation" : "Confirmação",
+    "You are going to" : "Você vai ",
+    "your machine, are you sure ?" : " sua máquina, tem certeza?",
+    "Something is in queue !" : "Algo está na fila!",
+
+    "Graphs" : "Gráficos",
+    "BackUp" : "Backup",
+    "Volume" : "Volume",
+    "Resize" : "Redimensionar",
+    "Setting" : "Configuração",
+    "History" : "Histórico",
+
+    "SETUP" : "CONFIGURAR",
+    "START" : "INICIAR",
+    "STOP" : "PARAR",
+    "REBOOT" : "REINICIAR",
+    "DELETE" : "DELETAR",
+    "SHOW" : "MOSTRAR",
+
+    "DELIVERED" : "ENTREGUE",
+    "FAILED" : "FALHOU",
+    "PENDING" : "PENDENTE",
+
+
+
 }
 
 const words = {

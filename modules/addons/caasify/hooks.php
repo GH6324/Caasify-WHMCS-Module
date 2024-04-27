@@ -12,8 +12,8 @@ add_hook('ClientAreaPrimaryNavbar', 1, function($primaryNavbar) {
     $newMenu = $primaryNavbar->addChild(
         'uniqueMenuItemName',
         array(
-            'name' => 'Caasify',
-            'label' => 'Caasify',
+            'name' => 'Marketplace',
+            'label' => 'Marketplace',
             'uri' => '/index.php?m=caasify&action=pageIndex',
             'order' => 99,
             'icon' => '',
