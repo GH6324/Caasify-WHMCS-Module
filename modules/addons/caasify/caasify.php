@@ -63,7 +63,7 @@ function caasify_config(){
     );
     
     // Labels
-    $DefaultBackendUrl = 'https://test.caasify.com';
+    $DefaultBackendUrl = 'https://api.caasify.com';
     $BackendUrlLabel = 'Default is " ' . $DefaultBackendUrl . ' "';
     $ResellerTokenLabel = 'Insert your Reseller Token here, as an Example " de8fs953k49ho3ellg9x "';
     $DefLangLabel = '';

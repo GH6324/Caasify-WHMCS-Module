@@ -5,6 +5,12 @@ app = createApp({
     data() {
         return {
 
+            
+            CaasifyUserIsNull: null,
+            WhmcsUserIsNull: null,
+            DataCenterIsNull: null,
+
+
             config : {
                 MinimumCharge: null,
                 MonthlyCostDecimal: null,
@@ -169,8 +175,9 @@ app = createApp({
                     this.LoadCaasifyUser();
                     this.LoadWhmcsUser();
                     this.LoadWhmcsCurrencies();
-                    // this.loadPolling()
 
+                    this.loadPollingIndex()
+                    
                 } else if (newFielName == "create.php") {
                     this.CreateRandomHostName()
                     this.LoadCaasifyUser();
@@ -178,16 +185,30 @@ app = createApp({
                     this.LoadWhmcsCurrencies();
                     this.loadDataCenters();
                     this.readLanguageFirstTime();
+                    
+                    this.loadPollingCreate()
 
                 } else if (newFielName == "view.php") {
-                    this.orderId();
-                    this.LoadTheOrder();
                     this.readLanguageFirstTime();
-                    this.LoadCaasifyUser();
                     this.LoadWhmcsUser();
                     this.LoadWhmcsCurrencies();
+                    this.orderId();
                     
-                    this.loadPollingViewMachine()
+                    this.LoadCaasifyUser();
+                    this.LoadTheOrder();
+
+                    setTimeout(() => {
+                        this.LoadOrderViews();
+                    }, 6 * 1000);
+                    
+                    setTimeout(() => {
+                        this.LoadActionsHistory();    
+                    }, 8 * 1000);
+                    
+                    setTimeout(() => {
+                        this.loadPollingViewMachine()
+                    }, 5 * 1000);
+
                 }
             }
         },
@@ -200,10 +221,9 @@ app = createApp({
         },
 
         orderID(neworderID) {
-            if (neworderID != '') {
+            setTimeout(() => {
                 this.LoadRequestNewView();
-                this.LoadActionsHistory();
-            }
+            }, 15 * 1000);
         },
 
         systemUrl(newsystemUrl) {
@@ -412,6 +432,28 @@ app = createApp({
 
     methods: {
 
+        CheckData(){
+
+            if(this.WhmcsUserIsNull == true){
+                this.LoadWhmcsUser();
+            }
+            
+            
+            if(this.CaasifyUserIsNull == true){
+                this.LoadCaasifyUser();
+            }
+            
+            if(this.WhmcsCurrencies == null){
+                this.LoadWhmcsCurrencies();
+            }
+        },
+        
+        CheckDataCenterLoaded(){
+            if(this.DataCenterIsNull == true){
+                this.loadDataCenters();
+            }
+        },
+
         // Commons
         loadUrl() {
             let url = window.location.href;
@@ -516,6 +558,14 @@ app = createApp({
         async LoadCaasifyUser() {
             RequestLink = this.CreateRequestLink(action = 'CaasifyUserInfo');
             let response = await axios.get(RequestLink);
+
+            if(response?.data == null){
+                console.error('Caasify User Is Null');
+                this.CaasifyUserIsNull = true
+            } else {
+                this.CaasifyUserIsNull = false
+            }
+
             if (response?.data?.data) {
                 this.CaasifyUserInfo = response.data.data
 
@@ -529,6 +579,14 @@ app = createApp({
         async LoadWhmcsUser() {
             RequestLink = this.CreateRequestLink(action = 'WhmcsUserInfo');
             let response = await axios.get(RequestLink);
+
+            if(response?.data == null){
+                console.error('WHMCS User Is Null');
+                this.WhmcsUserIsNull = true
+            } else {
+                this.WhmcsUserIsNull = false
+            }
+
             if (response?.data) {
                 this.WhmcsUserInfo = response.data
 
@@ -717,23 +775,6 @@ app = createApp({
         reloadpage() {
             location.reload()
         },
-
-        loadPolling() {
-
-            // Load order
-            setInterval(this.loadorder, 30000)
-
-            // Load User
-            setInterval(this.loadUser, 30000)
-
-            // Load Credit
-            setInterval(this.loadCredit, 15000)
-
-            // Load Currencies
-            setInterval(this.loadWhCurrencies, 50000)
-
-        },
-        
 
         isEmpty(value) {
 
@@ -1128,10 +1169,18 @@ app = createApp({
 
             RequestLink = this.CreateRequestLink(action = 'CaasifyGetDataCenters');
             let response = await axios.get(RequestLink);
+
+            if(response?.data == null){
+                console.error('DataCenters Is Null');
+                this.DataCenterIsNull = true
+            } else {
+                this.DataCenterIsNull = false
+            }
+
             if (response?.data?.message) {
                 this.DataCentersAreLoaded = true
                 this.plansAreLoaded = false
-                console.error('can not find DataCenters');
+                console.error('DataCenters Error: ' + response?.data?.message);
             }
             if (response?.data?.data) {
                 this.DataCentersLength = response?.data?.data.length;
@@ -1227,7 +1276,7 @@ app = createApp({
                 if (response?.data?.message) {
                     this.plansAreLoading = false;
                     this.plansAreLoaded = true;
-                    console.error('can not find any plans in this regin');
+                    console.error('Plans Error: ' + response?.data?.message);
                 }
 
                 if (response?.data?.data) {
@@ -1417,7 +1466,6 @@ app = createApp({
                         this.createRAMLinearChart();
                         this.views = response?.data?.data
                         this.findValidViews()
-                        this.LoadActionsHistory()
                     }
                 }
         },
@@ -1434,12 +1482,11 @@ app = createApp({
                 let response = await axios.post(RequestLink, formData);
 
                 if (response?.data?.message) {
-                    console.error('can not reguest new view');
+                    console.error('New View API Error: ' + response?.data?.message);
                 }
 
                 if (response?.data?.data) {
-                    this.NewViewStatus = response?.data?.data?.status
-                    this.LoadOrderViews();                    
+                    this.NewViewStatus = response?.data?.data?.status      
                 }
             }
         },
@@ -1456,7 +1503,7 @@ app = createApp({
 
                 if (response?.data?.message) {
                     this.ActionHistoryIsLoaded = true
-                    console.error('can not reguest Action History');
+                    console.error('Action History Erro: ' + response?.data?.message);
                 }
 
                 if (response?.data?.data) {
@@ -1488,7 +1535,7 @@ app = createApp({
                         this.LoadActionsHistory()
                         this.ActionAlertStatus = 'failed'
                         this.ActionAlert = response?.data?.message
-                        console.error('can not send action');
+                        console.error('Action Error: ' + response?.data?.message);
                     }
 
                     if (response?.data?.data) {
@@ -1496,6 +1543,12 @@ app = createApp({
                         this.ActionAlertStatus = 'success'
                         this.ActionAlert = button_name + ' has send Successfully'
                         this.findValidViews()
+                            
+                        if(button_name == 'DELETE'){
+                            setTimeout(() => {
+                                window.location.reload();
+                            }, 6*1000);
+                        }
                     }
                 }
 
@@ -1510,14 +1563,29 @@ app = createApp({
                             this.ActionAlert = null
                             this.LoadActionsHistory()     
                         }  
-                    }, 10000);
-                }, 6000);
+                    }, 15 * 1000);
+                }, 15 * 1000);
 
             }
         },
 
         loadPollingViewMachine() {
-            setInterval(this.LoadRequestNewView, 22230000)
+            setInterval(this.LoadTheOrder, 30*1000)
+            setInterval(this.LoadRequestNewView, 40*1000)
+            setInterval(this.LoadOrderViews, 35*1000)
+            setInterval(this.LoadActionsHistory, 50*1000)
+            
+            setInterval(this.CheckData, 20*1000)     
+        },
+
+        loadPollingIndex() {
+            setInterval(this.LoadUserOrders, 50*1000)
+            setInterval(this.CheckData, 20*1000)     
+        },
+        
+        loadPollingCreate() {
+            setInterval(this.CheckData, 20*1000)     
+            setInterval(this.CheckDataCenterLoaded, 10*1000)     
         },
 
         ShowHidePassword(){
