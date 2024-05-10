@@ -189,20 +189,20 @@ app = createApp({
 
                 } else if (newFielName == "view.php") {
                     this.readLanguageFirstTime();
-                    this.LoadWhmcsUser();
-                    this.LoadWhmcsCurrencies();
+                    // this.LoadWhmcsUser();
+                    // this.LoadWhmcsCurrencies();
                     this.orderId();
-                    this.LoadCaasifyUser();
+                    // this.LoadCaasifyUser();
                     
                     this.LoadTheOrder();
                     
                     setTimeout(() => {
-                        this.LoadOrderViews();
-                        this.LoadActionsHistory();
+                        // this.LoadOrderViews();
+                        // this.LoadActionsHistory();
                     }, 3 * 1000);
 
                     setTimeout(() => {
-                        this.loadPollingViewMachine()
+                        // this.loadPollingViewMachine()
                     }, 5 * 1000);
 
                 }

@@ -123,7 +123,7 @@ let common = {
         "russian" : "Russian", 
         
         "setlanguage" : "Set Language",
-        "traffics" : "Traffics info",
+        "traffics" : "Traffics",
         "buytraffics" : "Purchase",
         "tabeltraffic" : "Traffic: ",
         "traffictype" : "Type: ",

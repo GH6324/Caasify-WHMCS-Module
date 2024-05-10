@@ -194,7 +194,7 @@ function caasify_get_reseller_token(){
     }
 
     if(empty($ResellerToken)){
-        echo "token is emprty";
+        echo "token is empty";
         return false;
     }
 
@@ -222,7 +222,7 @@ function caasify_get_Demo_Mode(){
     }
 
     if(empty($DemoMode)){
-        echo "token is emprty";
+        echo "DemoMode is empty";
         return false;
     }
 

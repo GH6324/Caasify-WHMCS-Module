@@ -19,7 +19,11 @@
                         {{ lang('password') }}
                     </span>
                     <input v-if="!PassVisible" type="text" class="form-control" value="*********" disabled>
-                    <input v-if="PassVisible" type="text" class="form-control" :value="thisOrder?.secret" disabled>
+                    <?php if(isset($DemoMode) && $DemoMode == 'off' ): ?>
+                        <input v-if="PassVisible" type="text" class="form-control" :value="thisOrder?.secret" disabled>
+                    <?php else: ?>
+                        <input v-if="PassVisible" type="text" class="form-control" value="Demo Value" disabled>
+                    <?php endif ?>
                     <a class="input-group-text" id="basic-addon1" @click="ShowHidePassword">
                         <i v-if="PassVisible" class="bi bi-eye-fill"></i>
                         <i v-if="!PassVisible" class="bi bi-eye-slash-fill"></i>
@@ -123,16 +127,62 @@
                     </div>
                 </div><!-- end bottom -->
 
+                
             </div>
         </div>
     </div>
 
     <!-- Actions -->
     <div class="d-flex flex-column col-12 col-xl-6 p-0 m-0 mb-2 flex-grow-1">
-        <div class="mx-0 h-100 mb-2">
-            <?php include('./includes/viewparts/buttons.php');   ?>
+        <div class="row m-0 p-0">
+            <div class="col-12 col-md-6 m-0 p-0 mb-2">
+                <div class="row m-0 p-0 h-100">
+                    <div class="col-12 border border-2 rounded-4 bg-white m-0 p-0 py-4 px-4 mx-0">
+                        <div class="row">
+                            <p class="text-secondary p-0 m-0 mb-2 ms-3" style="font-size: 1.25rem !important;">
+                                <i class="bi bi-arrow-down-up pe-1"></i>
+                                {{ lang('traffics') }}
+                            </p>
+                        </div>
+                        <div class="m-0 p-0 pb-2">
+                            <hr class="text-secondary border-2 border-secondary m-0 p-0">
+                        </div>
+                        <div class="row fw-medium py-1">
+                            <span>
+                                <span class="text-secondary">
+                                    <i class="bi bi-cloud-arrow-up-fill"></i>
+                                </span>
+                                <span class="ps-1 text-secondary">
+                                    Inbound
+                                </span>
+                                <span class="px-1 text-secondary">:</span>
+                                <span class="text-primary">
+                                    103 GB
+                                </span>
+                            </span>
+                        </div>
+                        <div class="row fw-medium py-1">
+                            <span>
+                                <span class="text-secondary">
+                                    <i class="bi bi-cloud-arrow-down "></i>
+                                </span>
+                                <span class="ps-1 text-secondary">
+                                    Outbound
+                                </span>
+                                <span class="px-1 text-secondary">:</span>
+                                <span class="text-primary">
+                                    103 GB
+                                </span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-6 m-0 p-0 mb-2">
+                <?php include('./includes/viewparts/buttons.php');   ?>
+            </div>
         </div>
-        <div class="border border-2 rounded-4 bg-white m-0 p-0 py-4 px-4 mx-0 ms-xl-1 pb-5 h-100"
+        <div class="border border-2 rounded-4 bg-white m-0 p-0 py-4 px-4 mx-0 pb-5 h-100"
             style="min-height: 320px;">
             <div class="m-0 p-0">
                 <div class="d-flex flex-row justify-content-start align-items-center m-0 p-0 flex-wrap">

@@ -1,4 +1,4 @@
-<div class="m-0 p-0">
+<div class="row m-0 p-0">
     <div v-if="ControllersAreLoading" class="d-flex flex-row mt-5 text-primary">
         <p class="h5 me-4 ">
             {{ lang('Controllers Are Loading') }}
@@ -8,28 +8,32 @@
         </span>
     </div>
     <div class="row m-0 p-0">
-        <div v-if="!ControllersAreLoading" class="m-0 p-0">
-            <div v-if="NoValidControllerItems != true" class="d-flex flex-row flex-wrap gap-1 justify-content-start ms-1">
+        <div v-if="!ControllersAreLoading" class="row m-0 p-0">
+            <div v-if="NoValidControllerItems != true" class="row m-0 p-0 ms-md-1">
                 <?php if(isset($DemoMode) && $DemoMode == 'on' ): ?>
-                    <button data-bs-toggle="modal" data-bs-target="#actionsModal" v-for="(button, index) in ValidControllerItems"
-                        class="btn btn-light px-4 py-4 fw-medium border-2 border-secondary"
-                        style="width: 140px; --bs-border-opacity: 0.3;"
-                        @click="PushButtonController(button.id, button.name)" :key="index"
-                        :disabled="button.name.toLowerCase() === 'delete'"
-                        >
-                        <span>
-                            {{ lang(button.name.toUpperCase()) }}
-                        </span>
-                    </button>
+                    <div class="col-6 m-0 p-0 d-grid" v-for="(button, index) in ValidControllerItems">
+                        <button data-bs-toggle="modal" data-bs-target="#actionsModal"
+                            class="btn btn-light px-4 py-4 fw-medium border-2 border-secondary mx-1 my-1 rounded-4"
+                            style="--bs-border-opacity: 0.3;"
+                            @click="PushButtonController(button.id, button.name)" :key="index"
+                            :disabled="button.name.toLowerCase() === 'delete'"
+                            >
+                            <span>
+                                {{ lang(button.name.toUpperCase()) }}
+                            </span>
+                        </button>
+                    </div>
                 <?php else: ?>
-                    <button data-bs-toggle="modal" data-bs-target="#actionsModal" v-for="(button, index) in ValidControllerItems"
-                        class="btn btn-light px-4 py-4 fw-medium border-2 border-secondary"
-                        style="width: 140px; --bs-border-opacity: 0.3;"
-                        @click="PushButtonController(button.id, button.name)" :key="index">
-                        <span>
-                            {{ lang(button.name.toUpperCase()) }}
-                        </span>
-                    </button>
+                    <div class="col-6 m-0 p-0 d-grid" v-for="(button, index) in ValidControllerItems">
+                        <button data-bs-toggle="modal" data-bs-target="#actionsModal"
+                            class="btn btn-light px-4 py-4 fw-medium border-2 border-secondary mx-1 my-1 rounded-4"
+                            style="--bs-border-opacity: 0.3;"
+                            @click="PushButtonController(button.id, button.name)" :key="index">
+                            <span>
+                                {{ lang(button.name.toUpperCase()) }}
+                            </span>
+                        </button>
+                    </div>
                 <?php endif ?>
             </div>
             <div v-if="NoValidControllerItems === true" class="alert alert-primary">
