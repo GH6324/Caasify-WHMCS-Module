@@ -192,17 +192,14 @@ app = createApp({
                     this.LoadWhmcsUser();
                     this.LoadWhmcsCurrencies();
                     this.orderId();
-
                     this.LoadCaasifyUser();
+                    
                     this.LoadTheOrder();
-
+                    
                     setTimeout(() => {
                         this.LoadOrderViews();
-                    }, 6 * 1000);
-
-                    setTimeout(() => {
                         this.LoadActionsHistory();
-                    }, 8 * 1000);
+                    }, 3 * 1000);
 
                     setTimeout(() => {
                         this.loadPollingViewMachine()
@@ -924,7 +921,7 @@ app = createApp({
                     setTimeout(() => {
                         this.theStepStatus = 12;
                         this.chargeCaasify();
-                    }, 6000);
+                    }, 5000);
                 } else {
                     this.GlobalError = 1
                     setTimeout(() => {
@@ -962,7 +959,7 @@ app = createApp({
                     setTimeout(() => {
                         this.theStepStatus = 22;
                         this.applyTheCredit();
-                    }, 6000);
+                    }, 1000);
                 } else {
                     
                     if (response?.data?.message){
