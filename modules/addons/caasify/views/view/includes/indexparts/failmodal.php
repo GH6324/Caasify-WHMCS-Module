@@ -7,12 +7,12 @@
                     <span>{{ lang('failed') }}</span>
                     <span class="px-1">!</span>
                 </p>
-                <div class="px-5 mt-4 pt-4">
+                <div class="px-2 px-md-4 px-lg-5 mt-4 pt-4">
                     <p class="h5">
                         {{ lang('actiondidnotsucceed') }}
                     </p>
                 </div>
-                <div class="px-5 mt-3 mb-5">
+                <div class="px-2 px-md-4 px-lg-5 mt-3 mb-5">
                     <p v-if="GlobalError != null" class="h6 text-danger">
                         <span>{{ lang('error') }}</span>
                         <span v-if="GlobalError == 1">
@@ -29,7 +29,11 @@
                         </span>
                     </p>
                 </div>
-                <div style="height:100px">
+                <div style="height:50px"></div>
+                <div class="px-2 px-md-4 px-lg-5 mt-3 mb-5 text-end" v-if="ChargeMSG != null && ChargeMSG != ''">
+                    <p class="alert alert-danger" style="direction:ltr">
+                        Error 1360
+                    </p>
                 </div>
             </div>
             <div class="modal-footer">

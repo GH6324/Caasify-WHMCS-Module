@@ -63,22 +63,26 @@ function caasify_config(){
     );
     
     // Labels
-    $DefaultBackendUrl = 'https://api.caasify.com';
-    $BackendUrlLabel = 'Default is " ' . $DefaultBackendUrl . ' "';
-    $ResellerTokenLabel = 'Insert your Reseller Token here, as an Example " de8fs953k49ho3ellg9x "';
-    $DefLangLabel = '';
-    $CaasifyCurrency = '';
-    $DevelopeModeLabel = 'Switch on Developing Mode for debuging, Otherwise do not turn this on';
-    $ChargeModuleLabel = 'Switch on if wish to use Charging Module';
-    $ViewExchangesLabel = 'Switch on if wish to see exchange in caasify currency';
+    $BackendUrlLabel = "Default is (https://api.caasify.com)";
+    $ResellerTokenLabel = 'Insert your Reseller Token here, get it by registering on my.caasify.com';
+    $DefLangLabel = 'This is Defaul Language for clients panel on first visit, they can chagne it by their preference';
+    $CaasifyCurrencyLabel = 'It must be <strong>EURO</strong> (Caasify Currency). If you dont have EURO, you must create one in System Setting/currency and then select it here';
+    
+    $ChargeModuleLabel = 'Switch on if wish to use Charging Module that allows users to transfer their Credit too their Caasify Balance';
+    $ViewExchangesLabel = 'Switch on if wish to see exchange in both Caasify and user profile currency';
     $CloudTopupLinkLabel = 'Insert relative TopUp Link, as an Example "/clientarea.php?action=addfunds"';
 
     // Configs Label
-    $MinimumChargeLabel = 'in EURO , insert minimum amount users are allowed to charge their Balance';
+    $MinimumChargeLabel = 'in EURO , insert MIN amount users are allowed to charge their Balance';
+    $MaxChargeLabel = 'in EURO , insert MAX amount users are allowed to charge their Balance';
+    $MinimumBalanceLabel = 'in EURO , insert lowest user Balance allowed to create an order';
+
     $MonthlyCostDecimalLabel = 'default decimal for Monthly cost of services';
     $HourlyCostDecimalLabel = 'default decimal for Hourly cost of services';
     $BalanceDecimalLabel = 'default decimal for users Balance and Credit';
 
+    $DevelopeModeLabel = '<strong>Do Not Turn this ON, </strong> Switch on Developing Mode only for debuging, after debuging turn it off';
+    $DemoModeLabel = '<strong>Do Not Turn this ON, </strong> Switch on DEMO Mode only for user TEST, so for normal usage turn it off';
 
     $configarray = array(
         "name" => "Caasify",
@@ -86,21 +90,21 @@ function caasify_config(){
         "version" => "1.0.1",
         "author" => "Caasify",
         "fields" => array(
-            "BackendUrl" => array ("FriendlyName" => "Backend URL", "Type" => "text", "Size" => "31", "Description" => $BackendUrlLabel, "Default" => $DefaultBackendUrl),
+            "BackendUrl" => array ("FriendlyName" => "Backend URL", "Type" => "text", "Size" => "31", "Description" => $BackendUrlLabel, "Default" => "https://api.caasify.com"),
             "ResellerToken" => array ("FriendlyName" => "Reseller Token", "Type" => "text", "Size" => "31", "Description" => $ResellerTokenLabel, "Default" => ""),
             "DefLang" => array ("FriendlyName" => "Panel Language", "Type" => "dropdown", "Options" => $LanguageOptions, "Description" => $DefLangLabel, "Default" => "English"),
-            "CaasifyCurrency" => array ("FriendlyName" => "Caasify Currency", "Type" => "dropdown", "Options" => $CurrencyOptions, "Description" => $CaasifyCurrency, "Default" => 'USD'),
-            
-            "CloudTopupLink" => array ("FriendlyName" => "Topup Link", "Type" => "text", "Size" => "51", "Description" => $CloudTopupLinkLabel, "Default" => "/clientarea.php?action=addfunds"),
-            "DevelopeMode" => array ("FriendlyName" => "Develope Mode", "Type" => "dropdown", "Options" => $YesNoOptions, "Description" => $DevelopeModeLabel, "Default" => 'off'),
+            "CaasifyCurrency" => array ("FriendlyName" => "<strong>Caasify Currency</strong>", "Type" => "dropdown", "Options" => $CurrencyOptions, "Description" => $CaasifyCurrencyLabel, "Default" => 'USD'),
+            "CloudTopupLink" => array ("FriendlyName" => "Topup Link", "Type" => "text", "Size" => "31", "Description" => $CloudTopupLinkLabel, "Default" => "/clientarea.php?action=addfunds"),
             "ChargeModule" => array ("FriendlyName" => "Chargeing Module", "Type" => "dropdown", "Options" => $YesNoOptions, "Description" => $ChargeModuleLabel, "Default" => 'on'),
             "ViewExchanges" => array ("FriendlyName" => "View Exchange", "Type" => "dropdown", "Options" => $YesNoOptions, "Description" => $ViewExchangesLabel, "Default" => 'off'),
-            
-
-            "MinimumCharge" => array ("FriendlyName" => "Minimum Charge", "Type" => "text", "Size" => "10", "Description" => $MinimumChargeLabel, "Default" => 2),
+            "MinimumCharge" => array ("FriendlyName" => "Minimum TopUp", "Type" => "text", "Size" => "10", "Description" => $MinimumChargeLabel, "Default" => 2),
+            "MaximumCharge" => array ("FriendlyName" => "Maximum TopUp", "Type" => "text", "Size" => "10", "Description" => $MaxChargeLabel, "Default" => 100),
+            "MinBalanceAllowToCreate" => array ("FriendlyName" => "Minimum Balance to order", "Type" => "text", "Size" => "10", "Description" => $MinimumBalanceLabel, "Default" => 2),
             "MonthlyCostDecimal" => array ("FriendlyName" => "Monthly Cost Decimal", "Type" => "dropdown", "Options" => $DecimalOptions, "Description" => $MonthlyCostDecimalLabel, "Default" => '0'),
             "HourlyCostDecimal" => array ("FriendlyName" => "Hourly Cost Decimal", "Type" => "dropdown", "Options" => $DecimalOptions, "Description" => $HourlyCostDecimalLabel, "Default" => '0'),
             "BalanceDecimal" => array ("FriendlyName" => "Balance Decimal", "Type" => "dropdown", "Options" => $DecimalOptions, "Description" => $BalanceDecimalLabel, "Default" => '0'),
+            "DevelopeMode" => array ("FriendlyName" => "<strong>Develope Mode</strong>", "Type" => "dropdown", "Options" => $YesNoOptions, "Description" => $DevelopeModeLabel, "Default" => 'off'),
+            "DemoMode" => array ("FriendlyName" => "<strong>DEMO Mode</strong>", "Type" => "dropdown", "Options" => $YesNoOptions, "Description" => $DemoModeLabel, "Default" => 'off'),
         ));
 
     return $configarray;
@@ -149,7 +153,7 @@ function caasify_output($vars) {
 
 // Create Client Panel Controller
 function caasify_clientarea($vars){   
-
+    $DemoMode = caasify_get_Demo_Mode();
     $action = caasify_get_query('action');
     $clientId = caasify_get_session('uid');
     
@@ -175,7 +179,7 @@ function caasify_clientarea($vars){
 
     if(!empty($action) && !empty($clientId) && !empty($ResellerToken) && !empty($BackendUrl)){
         try {
-            $controller = new ClientCaasifyController($BackendUrl, $ResellerToken, $clientId);
+            $controller = new ClientCaasifyController($BackendUrl, $ResellerToken, $clientId, $DemoMode);
             return $controller->handle($action);
         } catch (Exception $e) {
             return "Error";

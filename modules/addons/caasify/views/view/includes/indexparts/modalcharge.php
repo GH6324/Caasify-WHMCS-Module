@@ -1,5 +1,5 @@
 <!-- create order modal -->
-<div class="modal fade modal-lg" id="chargeModal"  data-bs-keyboard="false" data-bs-backdrop="static" tabindex="-1" aria-labelledby="chargeModalLabel" aria-hidden="false">
+<div class="modal fade modal-lg" id="chargeModal"  data-bs-keyboard="false" data-bs-backdrop="static" tabindex="-1" aria-labelledby="chargeModalLabel" aria-hidden="false" style="--bs-modal-width: 720px;">
     <div class="modal-dialog">
         <!-- usercredit or balance is null -->
         <div v-if="userCreditinWhmcs == null || balance == null" class="modal-content">
@@ -53,36 +53,23 @@
                     <div class="col-12 m-0 p-0">
                         <!-- Table balance and credit -->    
                         <div class="row m-0 p-0">
-                            <div class="col-12 col-lg-8 m-0 p-0">
+                            <div class="col-12 m-0 p-0">
                                 <p class="h6 lh-lg mt-2">
                                     {{ lang('youcantransfercredit') }}
                                 </p>
-                            </div>
-                            <div class="col-12 col-lg-4 m-0 p-0">
-                                <div class="row justify-content-end">
-                                    <div class="col-auto">
-                                        <table class="table table-borderless">
-                                            <tr>
-                                                <td class="bg-body-secondary rounded-3 px-3 py-3 px-4 text-center fs-6">
-                                                    <?php include('showcredit.php'); ?> 
-                                                </td>
-                                            </tr>
-                                        </table>
-                                    </div>
-                                </div>
                             </div>
                         </div>
 
                         <!-- form input -->
                         <div class="row m-0 p-0 mt-4">            
                             <div class="col-12 m-0 p-0">
-                                <div class="row m-0 p-0 mb-2">
+                                <!-- <div class="row m-0 p-0 mb-2">
                                     <div class="col-12 m-0 p-0">
                                         <p class="h6 lh-lg my-0 py-0">
                                             {{ lang('pleaseinputamountmoney') }}
                                         </p>    
                                     </div>
-                                </div>
+                                </div> -->
                                 <div class="row m-0 p-0">
                                     <div class="col-12 col-md-7 m-0 p-0">
                                         <div class="row m-0 p-0 pe-md-2">
@@ -90,7 +77,7 @@
                                                 <span class="input-group-text bg-body-secondary border-secondary" id="chargecredit" style="width: 140px !important;">
                                                     {{ lang('amounttocharge') }}
                                                 </span>
-                                                <input type="number" class="form-control bg-body-secondary border-secondary" 
+                                                <input type="text" class="form-control bg-body-secondary border-secondary" 
                                                 :placeholder="showCreditWhmcsUnit(userCreditinWhmcs)" aria-label="chargecredit" aria-describedby="chargecredit" step="1" 
                                                 :min="showMinimumeWhmcsUnit(ConvertFromCaasifyToWhmcs(config.MinimumCharge))" :max="userCreditinWhmcs" 
                                                 v-model="chargeAmountinWhmcs" :disabled="theChargingSteps > 0 ? true : false" style="max-width: 140px !important;">
@@ -101,13 +88,13 @@
                                         </div>
                                     </div>
                                     <?php if($ChargeModuleDetailsViews): ?>
-                                        <div v-if="config.CaasifyDefaultCurrencyID != userCurrencyIdFromWhmcs" class="col-12 col-md-5 m-0 p-0 d-none d-md-block">
+                                        <div v-if="CaasifyDefaultCurrencyID != userCurrencyIdFromWhmcs" class="col-12 col-md-5 m-0 p-0 d-none d-md-block">
                                             <div class="row m-0 p-0 ps-md-1 pt-4 pt-md-0 float-end">            
                                                 <div class="col-12 m-0 p-0">
                                                     <div class="row m-0 p-0">
                                                         <div class="col-12 m-0 p-0 input-group">
                                                             <span class="input-group-text" id="chargecredit" disabled>≈</span>
-                                                            <input type="number" class="form-control"  aria-label="qualchargecredite" aria-describedby="qualchargecredit" 
+                                                            <input type="text" class="form-control"  aria-label="qualchargecredite" aria-describedby="qualchargecredit" 
                                                             :value="showChargeAmountCloudUnit(chargeAmountInCaasifyCurrency)" disabled style="max-width: 130px;">
                                                             <span class="input-group-text" id="chargecredit" style="min-width: 50px;">
                                                                 {{ CaasifyDefaultCurrencySymbol }}
@@ -123,16 +110,18 @@
                         </div>
                         
 
-                        <?php if($ChargeModuleDetailsViews): ?>
-                            <?php include('showratio.php'); ?> 
-                        <?php endif ?>
+                        <div class="d-none d-md-block mb-5">
+                            <?php if($ChargeModuleDetailsViews): ?>
+                                <?php include('showratio.php'); ?> 
+                            <?php endif ?>
+                        </div>
 
 
                         <!-- Messages -->
-                        <div class="row m-0 p-0 mt-3" v-if="chargeAmountinWhmcs && chargingValidity">
+                        <div class="row m-0 p-0 mt-5" v-if="chargeAmountinWhmcs && chargingValidity">
                             <div class="col-12 m-0 p-0">
                                 <div class="m-0 p-0" v-if="chargingValidity == 'nocredit'">
-                                    <p class="text-danger h6">
+                                    <p class="alert alert-danger">
                                         <span>
                                             {{ lang('donthaveenoughcredit') }}
                                         </span>
@@ -140,7 +129,7 @@
                                 </div>
                                                         
                                 <div class="m-0 p-0" v-if="chargingValidity == 'noenoughcredit'">
-                                    <p class="text-danger h6">
+                                    <p class="alert alert-danger">
                                         <span>
                                             {{ lang('islessthanminimum') }}
                                         </span>    
@@ -155,7 +144,7 @@
                                 </div>
 
                                 <div class="m-0 p-0" v-if="chargingValidity == 'noenoughchargeamount'">
-                                    <p class="text-danger h6">
+                                    <p class="alert alert-danger">
                                         <span>
                                             {{ lang('lessthanalowedminimum') }}
                                         </span>
@@ -170,30 +159,25 @@
                                 </div>
                                 
                                 <div class="m-0 p-0" v-if="chargingValidity == 'notinteger'">
-                                    <p class="text-danger h6">
+                                    <p class="alert alert-danger">
                                         <span>{{ lang('notvaliddecimal') }}</span>
                                     </p>
                                 </div>
                                 
                                 <div class="m-0 p-0" v-if="chargingValidity == 'overcredit'">
-                                    <p class="text-danger h6">
+                                    <p class="alert alert-danger">
                                         <span>{{ lang('thisismorethancredit') }}</span>
+                                    </p>
+                                </div>
+                                
+                                <div class="m-0 p-0" v-if="chargingValidity == 'MoreThanMax'">
+                                    <p class="alert alert-danger">
+                                        <span>{{ lang('MoreThanMax') }}</span>
                                     </p>
                                 </div>
 
                             </div>
                         </div>
-
-                        <!-- BTN -->
-                        <div class="row m-0 p-0 text-end mt-5 pt-5" v-if="chargeAmountinWhmcs && chargingValidity == 'fine' && theChargingSteps == 0">
-                            <div class="col-12 m-0 p-0 pt-5">
-                                <button class="btn btn-primary col-auto px-5"  @click="CreateUnpaidInvoice">
-                                    <span>{{ lang('starttransferring') }}</span>
-                                    <span class="px-1">({{ showChargeAmountWhmcsUnit(chargeAmountinWhmcs) }} {{ userCurrencySymbolFromWhmcs }})</span>
-                                </button>
-                            </div>
-                        </div>
-
                         <!-- Steps -->
                         <div class="row m-0 p-0 mt-5" v-if="chargeAmountinWhmcs && chargingValidity == 'fine' && theChargingSteps > 0">
                             <div class="col-12 m-0 p-0 rounded border bg-body-secondary p-3">
@@ -270,6 +254,36 @@
 
                             </div>                    
                         </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer d-flex flex-row justify-content-between">
+                <div class="m-0 p-0">
+                    <span class="text-dark fw-medium">
+                        <span>{{ lang('accountcredit') }}</span>
+                        <span class="px-1">:</span>
+                    </span>
+                    <span v-if="userCreditinWhmcs" class="text-primary fw-medium">
+                        <span class="px-1">
+                            {{ showCreditWhmcsUnit(userCreditinWhmcs) }}
+                        </span>
+                        <span v-if="userCurrencySymbolFromWhmcs">
+                            {{userCurrencySymbolFromWhmcs}}
+                        </span>
+                    </span>    
+                    
+                    <span v-else class="text-primary fw-medium">
+                        --- 
+                    </span>
+                </div>
+                <div class="d-flex flex-row justify-content-between">
+                    <button type="button" class="btn btn-secondary px-4" data-bs-dismiss="modal" aria-label="Close">{{ lang('close') }}</button>
+                    <!-- BTN -->
+                    <div class="m-0 p-0 ps-2" v-if="chargeAmountinWhmcs && chargingValidity == 'fine' && theChargingSteps == 0">
+                        <button class="btn btn-primary col-auto px-4"  @click="CreateUnpaidInvoice">
+                            <span>{{ lang('starttransferring') }}</span>
+                        </button>
                     </div>
                 </div>
             </div>

@@ -4,6 +4,10 @@
 <body class="container-fluid p-1 p-md-3 bg-body-secondary">
     <div id="app" class="row py-5 mx-auto px-0 px-md-2 px-lg-4" style="max-width: 1200px;">
         <div class="" v-cloak>
+            <?php if(isset($DemoMode) && $DemoMode == 'on' ): ?>
+                <?php  include('./includes/baselayout/DemoHeader.php');   ?>
+                <p class="mt-4"></p>
+            <?php endif ?>
             <?php  include('./includes/baselayout/backflash.php');     ?>
             <div class="col-12 m-0 p-0 mt-5" style="min-height: 1000px">
                 <div class="row m-0 p-0">

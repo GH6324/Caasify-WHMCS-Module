@@ -1,8 +1,8 @@
 <!-- create machine modal -->
 <div class="modal fade modal-lg" id="createModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
     aria-labelledby="actionModalLabel" aria-hidden="false" ref="myModal">
-    <div class="modal-dialog" style="max-width: 800px !important;">
-        <div class="modal-content border-0">
+    <div class="modal-dialog modal-dialog-top" style="max-width: 800px !important; padding-top: 150px">
+        <div class="modal-content border-0" :class="CreateIsLoading ? 'text-secondary' : 'text-dark'">
             <!-- Modal Body -->
             <div class="m-0 p-0">
                 <div class="modal-body px-0 px-md-3" style="min-height: 350px !important;" id="CreateModalTop">
@@ -119,22 +119,31 @@
                                 <div v-if="!themachinename || !SelectedRegion || !SelectedPlan"
                                     class="row m-0 p-0 mt-5">
                                     <p class="alert alert-danger py-1">
-                                        Warning: {{ lang('notprovideallinformation') }}
+                                        <span>
+                                            {{ lang('Warning') }}
+                                        </span>
+                                        <span>
+                                            : 
+                                        </span>
+                                        <span>
+                                            {{ lang('notprovideallinformation') }}
+                                        </span>
                                     </p>
                                 </div>
 
                                 <!-- Low Balance -->
-                                <div v-if="user.balance < 2"
-                                    class="d-flex flex-row justify-content-between align-items-center mt-5">
-                                    <div class="flex-grow-1 me-4">
-                                        <p class="alert alert-warning text-start m-0 p-0 px-3 py-1">
-                                            {{ lang('balanceisnotenough') }}
-                                        </p>
-                                    </div>
-                                    <div>
-                                        <a class="btn btn-outline-secondary float-end py-2 btn-sm"
+                                <div class="" v-if="user?.balance && CaasifyConfigs?.MinBalanceAllowToCreate" >
+                                    <div v-if="user.balance < CaasifyConfigs?.MinBalanceAllowToCreate" class="d-flex flex-row justify-content-between align-items-center mt-5">
+                                        <div class="flex-grow-1 me-4">
+                                            <p class="alert alert-warning text-start m-0 p-0 px-3 py-1">
+                                                {{ lang('balanceisnotenough') }}
+                                            </p>
+                                        </div>
+                                        <div>
+                                            <a class="btn btn-outline-secondary float-end py-2 btn-sm"
                                             href="<?php echo($PersonalRootDirectoryURL); ?>/index.php?m=caasify&action=pageIndex"
                                             target='_top'>{{ lang('movebalance') }}</a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -176,9 +185,8 @@
                         <div class="py-4 rounded-4 bg-primary" style="--bs-bg-opacity: 0.15;">
                             <div class="form-check form-switch d-flex flex-row justify-content-start align-items-center px-0 px-md-3">
                                 <input v-model="checkboxconfirmation" class="form-check-input ms-2 fs-5" type="checkbox"
-                                    role="switch" id="checkboxconfirmation">
-                                <label class="form-check-label ms-3 text-dark" :class="checkboxconfirmation ? '' : 'text-secondary'"
-                                    for="checkboxconfirmation">
+                                    role="switch" id="checkboxconfirmation" :disabled="CreateIsLoading">
+                                <label class="form-check-label ms-3" :class="CreateIsLoading ? 'text-secondary' : 'text-dark'" for="checkboxconfirmation">
                                     {{ lang('confirmationtext') }}
                                 </label>
                             </div>
@@ -194,8 +202,10 @@
 
                 <!-- Balance -->
                 <div class="m-0 p-0 mx-3">
-                    <span class="text-dark fw-medium me-2">{{ lang('balance') }} : </span>
-                    <span v-if="user.balance" class="text-primary fw-medium">
+                    <span class="fw-medium me-2" :class="CreateIsLoading ? 'text-secondary' : 'text-dark'">
+                        {{ lang('balance') }} : 
+                    </span>
+                    <span v-if="user.balance" class="fw-medium" :class="CreateIsLoading ? 'text-secondary' : 'text-primary'">
                         <span v-if="CurrenciesRatioCloudToWhmcs != null">
                             {{ showBalanceWhmcsUnit(ConvertFromCaasifyToWhmcs(user.balance)) }}
                             {{ userCurrencySymbolFromWhmcs }}
@@ -213,44 +223,56 @@
 
                     <!-- 1- Normal close, before click -->
                     <div v-if="!userClickedCreationBtn || createActionFailed" class="m-0 p-0">
-                        <a @click="closeConfirmDialog" type="button" class="btn btn-secondary px-4 mx-2 border-0"
-                            style="background-color: #515151" data-bs-dismiss="modal">
+                        <button @click="closeConfirmDialog" type="button" class="btn btn-secondary px-4 mx-2 border-0"
+                            style="background-color: #515151" data-bs-dismiss="modal" :disabled="CreateIsLoading">
                             <div>
                                 {{ lang('close') }}
                             </div>
-                        </a>
+                        </button>
                     </div>
 
                     <!-- 2- CloseReload, after click [Close + Reload = make another machine] -->
                     <div v-if="userClickedCreationBtn && createActionSucced" class="m-0 p-0">
                         <a @click="reloadpage" type="button" class="btn btn-secondary px-4 mx-2 border-0"
-                            style="background-color: #515151" data-bs-dismiss="modal">
+                            style="background-color: #515151" data-bs-dismiss="modal" :disabled="CreateIsLoading">
                             <div>
                                 {{ lang('createanothermachine') }}
                             </div>
                         </a>
                     </div>
 
-
+                    <?php 
+                        $DemoMode == 'off' ;
+                    ?>
                     <!-- Create BTN -->
-                    <div v-if="!userClickedCreationBtn">
-                        <div class="m-0 p-0"
-                            v-if="themachinename && SelectedRegion && SelectedPlan && NewMachinePrice != null">
-                            <a v-if="checkboxconfirmation" @click="acceptConfirmDialog" type="button"
-                                class="btn btn-primary px-5 mx-2">
-                                <span>{{ lang('Create Machine') }}</span>
-                            </a>
+                    <?php if(isset($DemoMode) && $DemoMode == 'on' ): ?>
+                        <div v-if="!userClickedCreationBtn">
+                            <div class="m-0 p-0" v-if="themachinename && SelectedRegion && SelectedPlan && NewMachinePrice != null">
+                                <button v-if="checkboxconfirmation" @click="RunDemoModal" type="button" class="btn btn-primary px-5 mx-2">
+                                    <span>{{ lang('Create Machine') }}</span>
+                                    <div v-if="CreateIsLoading" class="spinner-border spinner-border-sm text-light small p-0 m-0 ms-3" role="status"></div>
+                                </button>
+                            </div>
                         </div>
-                    </div>
+                    <?php else: ?>
+                        <div v-if="!userClickedCreationBtn">
+                            <div class="m-0 p-0" v-if="themachinename && SelectedRegion && SelectedPlan && NewMachinePrice != null">
+                                <button v-if="checkboxconfirmation" @click="acceptConfirmDialog" type="button" class="btn btn-primary px-5 mx-2" :disabled="CreateIsLoading">
+                                    <span>{{ lang('Create Machine') }}</span>
+                                    <div v-if="CreateIsLoading" class="spinner-border spinner-border-sm text-light small p-0 m-0 ms-3" role="status"></div>
+                                </button>
+                            </div>
+                        </div>
+                    <?php endif ?>
 
 
                     <!-- try again, (force reload) -->
                     <div v-if="userClickedCreationBtn && createActionFailed" class="m-0 p-0">
                         <div class="m-0 p-0">
-                            <a @click="closeConfirmDialog" type="button" class="btn btn-primary px-5 mx-2"
-                                data-bs-dismiss="modal">
+                            <button @click="reloadpage" type="button" class="btn btn-primary px-5 mx-2"
+                                data-bs-dismiss="modal" :disabled="CreateIsLoading">
                                 <span>{{ lang('tryagain') }}</span>
-                            </a>
+                            </button>
                         </div>
                     </div>
 

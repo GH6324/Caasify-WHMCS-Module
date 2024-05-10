@@ -322,6 +322,7 @@ let common = {
     "ipvversion6" : "",
     "IPV6" : "IPV6",
     "Create Machine" : "Create Machine",
+    "createmachinefailed" : "Create Machine Failed",
     // End create order page
 
 
@@ -371,7 +372,9 @@ let common = {
     "FAILED" : "ÉCHOUÉ",
     "PENDING" : "EN ATTENTE",
 
-
+    "Warning" : "Warning",
+    "MoreThanMax" : "Not valid: it is more than allowed charge, call your admin",    
+    "DeleteIsNotAllowed" : "You are not allowed to DELETE this machine in DEMO Mode",    
 
 
 

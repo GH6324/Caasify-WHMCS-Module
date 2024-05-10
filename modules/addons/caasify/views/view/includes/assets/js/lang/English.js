@@ -344,7 +344,7 @@ let common = {
     "machinecreatesuccessfully" : "Machine Create Successfully",
     "createanothermachine" : "Create Another Machine",
     "ID" : "ID",
-    "Alive" : "Create Another Machine",
+    "Alive" : "Alive from",
     "Price" : "Price",
     "Views" : "Views",
     "Order is Loading" : "Order is Loading",
@@ -379,9 +379,12 @@ let common = {
     "DELIVERED" : "DELIVERED",
     "FAILED" : "FAILED",
     "PENDING" : "PENDING",
+    "Warning" : "Warning",
 
 
-
+    "MoreThanMax" : "Not valid: it is more than allowed charge, call your admin",    
+    "DeleteIsNotAllowed" : "You are not allowed to DELETE this machine in DEMO Mode",    
+    "CreateDemoText" : "You are not allowed to create machine in DEMO",    
     
 }
 

@@ -4,23 +4,26 @@ app = createApp({
 
     data() {
         return {
+            ChargeMSG: '',
 
-            
             CaasifyUserIsNull: null,
             WhmcsUserIsNull: null,
             DataCenterIsNull: null,
 
 
-            config : {
+            config: {
                 MinimumCharge: null,
+                MaximumCharge: null,
+                MinBalanceAllowToCreate: null,
                 MonthlyCostDecimal: null,
                 HourlyCostDecimal: null,
                 BalanceDecimal: null,
-            },            
+                DemoMode: null,
+            },
 
             // views
             orderID: null,
-            thisProduct:null,
+            thisProduct: null,
             thisOrder: null,
             ordeIsLoaded: null,
 
@@ -36,16 +39,16 @@ app = createApp({
             ValidControllerItems: null,
             ControllersAreLoading: true,
             NoValidControllerItems: null,
-            
-            actionWouldBeHappened:null,
+
+            actionWouldBeHappened: null,
             ActionAlert: null,
             ActionAlertStatus: null,
             ActionHistory: null,
             ActionHistoryIsLoaded: null,
-            
-            
+
+
             PassVisible: false,
-            
+
 
 
 
@@ -99,7 +102,7 @@ app = createApp({
             RullesText: null,
 
 
-            DataCenters: [],            
+            DataCenters: [],
             SelectedDataCenter: null,
             DataCentersAreLoaded: false,
             DataCentersLength: 0,
@@ -111,16 +114,12 @@ app = createApp({
             SelectedPlan: null,
             plansAreLoaded: false,
             plansAreLoading: false,
-            
+
 
             PlanSections: null,
             PlanConfigSelectedOptions: {},
 
-            
 
-
-
-            
             confirmDialog: false,
             confirmTitle: null,
             confirmText: null,
@@ -141,7 +140,7 @@ app = createApp({
             createActionFailed: false,
             createActionSucced: false,
             userClickedCreationBtn: false,
-            isLoading: false,
+            CreateIsLoading: false,
             showAlertModal: false,
 
 
@@ -163,7 +162,7 @@ app = createApp({
         },
 
 
-        thisOrder(){
+        thisOrder() {
             this.findValidControllers();
         },
 
@@ -177,7 +176,7 @@ app = createApp({
                     this.LoadWhmcsCurrencies();
 
                     this.loadPollingIndex()
-                    
+
                 } else if (newFielName == "create.php") {
                     this.CreateRandomHostName()
                     this.LoadCaasifyUser();
@@ -185,7 +184,7 @@ app = createApp({
                     this.LoadWhmcsCurrencies();
                     this.loadDataCenters();
                     this.readLanguageFirstTime();
-                    
+
                     this.loadPollingCreate()
 
                 } else if (newFielName == "view.php") {
@@ -193,18 +192,18 @@ app = createApp({
                     this.LoadWhmcsUser();
                     this.LoadWhmcsCurrencies();
                     this.orderId();
-                    
+
                     this.LoadCaasifyUser();
                     this.LoadTheOrder();
 
                     setTimeout(() => {
                         this.LoadOrderViews();
                     }, 6 * 1000);
-                    
+
                     setTimeout(() => {
-                        this.LoadActionsHistory();    
+                        this.LoadActionsHistory();
                     }, 8 * 1000);
-                    
+
                     setTimeout(() => {
                         this.loadPollingViewMachine()
                     }, 5 * 1000);
@@ -213,11 +212,14 @@ app = createApp({
             }
         },
 
-        CaasifyConfigs(NewCaasifyConfigs){
+        CaasifyConfigs(NewCaasifyConfigs) {
             this.config.MinimumCharge = NewCaasifyConfigs.MinimumCharge
+            this.config.MaximumCharge = NewCaasifyConfigs.MaximumCharge
+            this.config.MinBalanceAllowToCreate = NewCaasifyConfigs.MinBalanceAllowToCreate
             this.config.MonthlyCostDecimal = NewCaasifyConfigs.MonthlyCostDecimal
             this.config.HourlyCostDecimal = NewCaasifyConfigs.HourlyCostDecimal
             this.config.BalanceDecimal = NewCaasifyConfigs.BalanceDecimal
+            this.config.DemoMode = NewCaasifyConfigs.DemoMode
         },
 
         orderID(neworderID) {
@@ -241,7 +243,7 @@ app = createApp({
     mounted() {
         this.scrollToTop();
         this.fetchModuleConfig();
-        
+
     },
 
     computed: {
@@ -309,6 +311,7 @@ app = createApp({
                 let usercredit = this.UserCreditInCaasifyCurrency;
                 let chargeAmount = this.chargeAmountInCaasifyCurrency;
                 let minimum = this.config.MinimumCharge;
+                let maximum = this.config.MaximumCharge;
 
                 if (usercredit == null || chargeAmount == null) {
                     return null
@@ -321,6 +324,8 @@ app = createApp({
                         return "noenoughchargeamount"
                     } else if (!this.isIntOrFloat(chargeAmount)) {
                         return "notinteger"
+                    } else if (chargeAmount > maximum) {
+                        return "MoreThanMax"
                     } else if (chargeAmount > usercredit) {
                         return "overcredit"
                     } else {
@@ -413,7 +418,7 @@ app = createApp({
             let NewMachinePrice = null
             let decimal = this.config.MonthlyCostDecimal
 
-            if(this.SelectedPlan?.price != null && this.SumConfigPrice() != null){
+            if (this.SelectedPlan?.price != null && this.SumConfigPrice() != null) {
                 let planPrice = this.SelectedPlan.price
                 let ConfigPrice = this.SumConfigPrice()
 
@@ -432,24 +437,30 @@ app = createApp({
 
     methods: {
 
-        CheckData(){
 
-            if(this.WhmcsUserIsNull == true){
+        RunDemoModal(){
+            $('#DemotModalCreateSuccess').modal('show');
+            $('#createModal').modal('hide');
+        },
+
+        CheckData() {
+
+            if (this.WhmcsUserIsNull == true) {
                 this.LoadWhmcsUser();
             }
-            
-            
-            if(this.CaasifyUserIsNull == true){
+
+
+            if (this.CaasifyUserIsNull == true) {
                 this.LoadCaasifyUser();
             }
-            
-            if(this.WhmcsCurrencies == null){
+
+            if (this.WhmcsCurrencies == null) {
                 this.LoadWhmcsCurrencies();
             }
         },
-        
-        CheckDataCenterLoaded(){
-            if(this.DataCenterIsNull == true){
+
+        CheckDataCenterLoaded() {
+            if (this.DataCenterIsNull == true) {
                 this.loadDataCenters();
             }
         },
@@ -468,7 +479,7 @@ app = createApp({
                 .then(response => response.json())
                 .then(data => {
                     this.CaasifyConfigs = data.configs;
-                    
+
                     this.systemUrl = data.configs.systemUrl;
                     if (this.systemUrl.endsWith('/')) {
                         this.systemUrl = this.systemUrl.slice(0, -1);
@@ -526,18 +537,18 @@ app = createApp({
             let RequestLink = systemUrl + '/index.php?m=caasify&action=' + action;
             return RequestLink;
         },
- 
+
         async LoadUserOrders() {
             let page = 1;
             let reachEndPage = false
             this.UserOrders = []
-            
+
             while (!reachEndPage) {
                 let formData = new FormData();
-                formData.append('page', page);    
+                formData.append('page', page);
                 let RequestLink = this.CreateRequestLink(action = 'UserOrders');
                 let response = await axios.post(RequestLink, formData);
-                
+
                 if (response.data?.data != null) {
                     this.UserOrders = this.UserOrders.concat(response.data.data);
                     this.machinsLoaded = true;
@@ -559,7 +570,7 @@ app = createApp({
             RequestLink = this.CreateRequestLink(action = 'CaasifyUserInfo');
             let response = await axios.get(RequestLink);
 
-            if(response?.data == null){
+            if (response?.data == null) {
                 console.error('Caasify User Is Null');
                 this.CaasifyUserIsNull = true
             } else {
@@ -580,7 +591,7 @@ app = createApp({
             RequestLink = this.CreateRequestLink(action = 'WhmcsUserInfo');
             let response = await axios.get(RequestLink);
 
-            if(response?.data == null){
+            if (response?.data == null) {
                 console.error('WHMCS User Is Null');
                 this.WhmcsUserIsNull = true
             } else {
@@ -826,7 +837,7 @@ app = createApp({
 
         open(order) {
             let base = ''
-            if(this.systemUrl != null){
+            if (this.systemUrl != null) {
                 base = this.systemUrl
             }
             let address = base + '/modules/addons/caasify/views/view/view.php'
@@ -835,13 +846,22 @@ app = createApp({
             }).toString()
             window.open([address, params].join('?'), "_top")
         },
-        
+
         openCreatePage() {
             let base = ''
-            if(this.systemUrl != null){
+            if (this.systemUrl != null) {
                 base = this.systemUrl
             }
             let address = base + '/modules/addons/caasify/views/view/create.php'
+            window.open([address], "_top")
+        },
+        
+        openIndexPage() {
+            let base = ''
+            if (this.systemUrl != null) {
+                base = this.systemUrl
+            }
+            let address = base + '/index.php?m=caasify&action=pageIndex'
             window.open([address], "_top")
         },
 
@@ -944,6 +964,11 @@ app = createApp({
                         this.applyTheCredit();
                     }, 6000);
                 } else {
+                    
+                    if (response?.data?.message){
+                        this.ChargeMSG = response?.data?.message
+                    }
+
                     this.GlobalError = 2
                     this.markCancelInvoice()
                     setTimeout(() => {
@@ -1065,10 +1090,15 @@ app = createApp({
         },
 
         acceptConfirmDialog() {
+            this.actionWouldBeHappened = null
             this.confirmResolve(true)
         },
 
         closeConfirmDialog() {
+            this.actionWouldBeHappened = null
+            this.ChargeMSG = null
+            this.CreateMSG = null
+
             this.confirmResolve(false)
         },
 
@@ -1170,7 +1200,7 @@ app = createApp({
             RequestLink = this.CreateRequestLink(action = 'CaasifyGetDataCenters');
             let response = await axios.get(RequestLink);
 
-            if(response?.data == null){
+            if (response?.data == null) {
                 console.error('DataCenters Is Null');
                 this.DataCenterIsNull = true
             } else {
@@ -1200,7 +1230,7 @@ app = createApp({
             this.SelectedDataCenter = DataCenter
             this.regions = DataCenter.categories
         },
-        
+
         isDataCenter(DataCenter) {
             if (this.SelectedDataCenter == DataCenter) {
                 return true
@@ -1235,7 +1265,7 @@ app = createApp({
             this.PlanConfigSelectedOptions = {}
             this.SelectedPlan = plan
             this.PlanSections = null
-            if(this.SelectedPlan != null && this.SelectedPlan?.sections){
+            if (this.SelectedPlan != null && this.SelectedPlan?.sections) {
                 this.PlanSections = this.SelectedPlan?.sections
             }
             this.initPlanConfigSelectedOptions()
@@ -1267,12 +1297,12 @@ app = createApp({
             this.plansAreLoading = true
             this.plans = [];
 
-            if(this.SelectedRegion?.id){
+            if (this.SelectedRegion?.id) {
                 let formData = new FormData();
                 formData.append('CategoryID', this.SelectedRegion?.id);
                 RequestLink = this.CreateRequestLink(action = 'CaasifyGetPlans');
                 let response = await axios.post(RequestLink, formData);
-                
+
                 if (response?.data?.message) {
                     this.plansAreLoading = false;
                     this.plansAreLoaded = true;
@@ -1289,43 +1319,48 @@ app = createApp({
 
         async create() {
             this.scrollToTop();
-            
             let accept = await this.openConfirmDialog('create')
 
             if (accept) {
-                this.isLoading = true;
-                let formData = new FormData();
-                formData.append('note', this.themachinename);
-                formData.append('product_id', this.SelectedPlan.id);
-                
-                let configs = this.PlanConfigSelectedOptions;
-                for (let key in configs) {
-                    if(configs[key].hasOwnProperty('value')){ // type dropdown
-                        formData.append(key, configs[key].value);
-                    } else if(configs[key].hasOwnProperty('options')){ // type text
-                        formData.append(key, configs[key].options);
+                if(this.config?.DemoMode != null && this.config.DemoMode.toLowerCase() == 'on'){
+                    this.RunDemoModal()
+                } else if(this.config?.DemoMode != null && this.config.DemoMode.toLowerCase() == 'off'){
+                    this.CreateIsLoading = true;
+                    let formData = new FormData();
+                    formData.append('note', this.themachinename);
+                    formData.append('product_id', this.SelectedPlan.id);
+
+                    let configs = this.PlanConfigSelectedOptions;
+                    for (let key in configs) {
+                        if (configs[key].hasOwnProperty('value')) { // type dropdown
+                            formData.append(key, configs[key].value);
+                        } else if (configs[key].hasOwnProperty('options')) { // type text
+                            formData.append(key, configs[key].options);
+                        }
                     }
-                }                
 
-                RequestLink = this.CreateRequestLink(action = 'CaasifyCreateOrder');
-                let response = await axios.post(RequestLink, formData);
+                    RequestLink = this.CreateRequestLink(action = 'CaasifyCreateOrder');
+                    let response = await axios.post(RequestLink, formData);
 
-                
-                response = response.data
+                    response = response.data
 
-                if (response?.data) {
-                    this.isLoading = false;
-                    this.userClickedCreationBtn = true
-                    this.createActionSucced = true
-                } else if (response?.message) {
-                    this.isLoading = false;
-                    this.CreateMSG = response?.message
-                    this.openMessageDialog(this.lang(response?.message))
-                    this.createActionFailed = true
+                    if (response?.data) {
+                        this.CreateIsLoading = false;
+                        this.userClickedCreationBtn = true
+                        this.createActionSucced = true
+                    } else if (response?.message) {
+                        this.CreateIsLoading = false;
+                        this.CreateMSG = response?.message
+                        this.openMessageDialog(this.lang(response?.message))
+                        this.createActionFailed = true
+                    } else {
+                        this.createActionFailed = true
+                        this.CreateIsLoading = false;
+                    }
                 } else {
-                    this.createActionFailed = true
-                    this.isLoading = false;
+                    console.error('DemoMode is null')
                 }
+                
             }
         },
 
@@ -1353,16 +1388,16 @@ app = createApp({
 
         findValidControllers() {
             this.ValidControllerItems = null;
-            this.NoValidControllerItems = false            
+            this.NoValidControllerItems = false
 
-            if(this.thisOrder?.records){
+            if (this.thisOrder?.records) {
                 let records = this.thisOrder.records;
-                for(var i = 0; i < 1; i++){
+                for (var i = 0; i < 1; i++) {
                     let record = records[i];
-                    if(this.ValidControllerItems === null){
+                    if (this.ValidControllerItems === null) {
                         this.thisProduct = record.product
                         let groups = record.product.groups
-                        for(var j = 0; j < 1; j++){
+                        for (var j = 0; j < 1; j++) {
                             let group = groups[j]
                             if (group?.buttons) {
                                 if (this.ValidControllerItems === null) {
@@ -1375,19 +1410,19 @@ app = createApp({
                     }
                 }
             }
-            if(this.ValidControllerItems == null){
+            if (this.ValidControllerItems == null) {
                 this.NoValidControllerItems = true
             }
         },
 
-        initPlanConfigSelectedOptions(){
+        initPlanConfigSelectedOptions() {
             this.PlanConfigSelectedOptions = {};
-            if(this.PlanSections != null && Array.isArray(this.PlanSections)){
-                for(let PlanSection of this.PlanSections){
-                    for(let field of PlanSection.fields){
-                        if(field?.type == 'dropdown'){
+            if (this.PlanSections != null && Array.isArray(this.PlanSections)) {
+                for (let PlanSection of this.PlanSections) {
+                    for (let field of PlanSection.fields) {
+                        if (field?.type == 'dropdown') {
                             this.PlanConfigSelectedOptions[field.name] = field.options[0]
-                        } else if (field?.type == 'text'){
+                        } else if (field?.type == 'text') {
                             this.PlanConfigSelectedOptions[field.name] = field
                         }
                     }
@@ -1395,7 +1430,7 @@ app = createApp({
             }
         },
 
-        SumConfigPrice(){
+        SumConfigPrice() {
             let ConfigPrice = 0
             let obj = this.PlanConfigSelectedOptions
 
@@ -1423,7 +1458,7 @@ app = createApp({
             if (orderID != null) {
                 let formData = new FormData();
                 formData.append('orderID', orderID);
-                        
+
                 RequestLink = this.CreateRequestLink(action = 'LoadOrder');
                 let response = await axios.post(RequestLink, formData);
 
@@ -1443,31 +1478,31 @@ app = createApp({
         },
 
         async LoadOrderViews() {
-                let orderID = this.orderID;
-                if (orderID != null) {
-                    let formData = new FormData();
-                    formData.append('orderID', orderID);
-                    this.viewsAreLoading = true
+            let orderID = this.orderID;
+            if (orderID != null) {
+                let formData = new FormData();
+                formData.append('orderID', orderID);
+                this.viewsAreLoading = true
 
-                    RequestLink = this.CreateRequestLink(action = 'CaasifyGetOrderViews');
-                    let response = await axios.post(RequestLink, formData);
+                RequestLink = this.CreateRequestLink(action = 'CaasifyGetOrderViews');
+                let response = await axios.post(RequestLink, formData);
 
-                    if (response?.data?.message) {
-                        this.viewsAreLoading = false;
-                        this.viewsAreLoaded = true;
-                        
-                        console.error('can not find any views');
-                    }
+                if (response?.data?.message) {
+                    this.viewsAreLoading = false;
+                    this.viewsAreLoaded = true;
 
-                    if (response?.data?.data) {
-                        this.viewsAreLoading = false;
-                        this.viewsAreLoaded = true;
-                        this.createCPULinearChart();
-                        this.createRAMLinearChart();
-                        this.views = response?.data?.data
-                        this.findValidViews()
-                    }
+                    console.error('can not find any views');
                 }
+
+                if (response?.data?.data) {
+                    this.viewsAreLoading = false;
+                    this.viewsAreLoaded = true;
+                    // this.createCPULinearChart();
+                    // this.createRAMLinearChart();
+                    this.views = response?.data?.data
+                    this.findValidViews()
+                }
+            }
         },
 
         async LoadRequestNewView() {
@@ -1486,7 +1521,7 @@ app = createApp({
                 }
 
                 if (response?.data?.data) {
-                    this.NewViewStatus = response?.data?.data?.status      
+                    this.NewViewStatus = response?.data?.data?.status
                 }
             }
         },
@@ -1511,123 +1546,125 @@ app = createApp({
                     this.ActionHistoryIsLoaded = true
                 }
             }
-            
+
         },
-        
+
         async PushButtonController(button_id, button_name) {
             this.ActionAlertStatus = null
             this.ActionAlert = null
 
             let accept = await this.openConfirmDialog(button_name)
-
             if (accept) {
                 let orderID = this.orderID;
                 if (orderID != null && button_id != null) {
                     let formData = new FormData();
                     formData.append('orderID', orderID);
                     formData.append('button_id', button_id);
+                    
+                    
+                    if(this.config?.DemoMode != null){
+                        if (button_name.toLowerCase() != 'delete' || this.config?.DemoMode.toLowerCase() == 'off') {
+                            RequestLink = this.CreateRequestLink(action = 'CaasifyOrderDoAction');
+                            let response = await axios.post(RequestLink, formData);
 
-                    RequestLink = this.CreateRequestLink(action = 'CaasifyOrderDoAction');
-                    let response = await axios.post(RequestLink, formData);
+                            if (response?.data?.message) {
+                                this.showAlertModal = true;
+                                this.LoadActionsHistory()
+                                this.ActionAlertStatus = 'failed'
+                                this.ActionAlert = response?.data?.message
+                                console.error('Action Error: ' + response?.data?.message);
+                            }
 
-                    if (response?.data?.message) {
-                        this.showAlertModal = true;
-                        this.LoadActionsHistory()
-                        this.ActionAlertStatus = 'failed'
-                        this.ActionAlert = response?.data?.message
-                        console.error('Action Error: ' + response?.data?.message);
-                    }
+                            if (response?.data?.data) {
+                                this.LoadActionsHistory()
+                                this.ActionAlertStatus = 'success'
+                                this.ActionAlert = button_name + ' has send Successfully'
+                                this.findValidViews()
 
-                    if (response?.data?.data) {
-                        this.LoadActionsHistory()
-                        this.ActionAlertStatus = 'success'
-                        this.ActionAlert = button_name + ' has send Successfully'
-                        this.findValidViews()
-                            
-                        if(button_name == 'DELETE'){
+                                if (button_name.toLowerCase() == 'delete') {
+                                    setTimeout(() => {
+                                        window.location.reload();
+                                    }, 6 * 1000);
+                                }
+                            }
+                        
                             setTimeout(() => {
-                                window.location.reload();
-                            }, 6*1000);
+                                this.ActionAlertStatus = null
+                                this.ActionAlert = null
+                                this.LoadActionsHistory()
+                                setTimeout(() => {
+                                    if (this.ActionHistory[0].status == 'pending') {
+                                        this.ActionAlertStatus = null
+                                        this.ActionAlert = null
+                                        this.LoadActionsHistory()
+                                    }
+                                }, 15 * 1000);
+                            }, 15 * 1000);
+                        } else {
+                            console.error('DemoMode is null')
                         }
                     }
                 }
-
-                setTimeout(() => {
-                    this.ActionAlertStatus = null
-                    this.ActionAlert = null
-                    this.LoadActionsHistory()
-                    
-                    setTimeout(() => {
-                        if(this.ActionHistory[0].status == 'pending'){
-                            this.ActionAlertStatus = null
-                            this.ActionAlert = null
-                            this.LoadActionsHistory()     
-                        }  
-                    }, 15 * 1000);
-                }, 15 * 1000);
-
             }
         },
 
         loadPollingViewMachine() {
-            setInterval(this.LoadTheOrder, 30*1000)
-            setInterval(this.LoadRequestNewView, 40*1000)
-            setInterval(this.LoadOrderViews, 35*1000)
-            setInterval(this.LoadActionsHistory, 50*1000)
-            
-            setInterval(this.CheckData, 20*1000)     
+            setInterval(this.LoadTheOrder, 30 * 1000)
+            setInterval(this.LoadRequestNewView, 40 * 1000)
+            setInterval(this.LoadOrderViews, 35 * 1000)
+            setInterval(this.LoadActionsHistory, 50 * 1000)
+
+            setInterval(this.CheckData, 20 * 1000)
         },
 
         loadPollingIndex() {
-            setInterval(this.LoadUserOrders, 50*1000)
-            setInterval(this.CheckData, 20*1000)     
-        },
-        
-        loadPollingCreate() {
-            setInterval(this.CheckData, 20*1000)     
-            setInterval(this.CheckDataCenterLoaded, 10*1000)     
+            setInterval(this.LoadUserOrders, 50 * 1000)
+            setInterval(this.CheckData, 20 * 1000)
         },
 
-        ShowHidePassword(){
+        loadPollingCreate() {
+            setInterval(this.CheckData, 20 * 1000)
+            setInterval(this.CheckDataCenterLoaded, 10 * 1000)
+        },
+
+        ShowHidePassword() {
             this.PassVisible = !this.PassVisible
         },
 
-        MachineSpendTime(timeVariable) {
-            const creationDate = new Date(timeVariable);
-            const currentDate = new Date();
-            const timeDifference = currentDate - creationDate;
-            const totalSeconds = Math.floor(timeDifference / 1000);
-            const totalMinutes = Math.floor(totalSeconds / 60);
-            const totalHours = Math.floor(totalMinutes / 60);
-            const totalDays = Math.floor(totalHours / 24);
-            const totalMonths = Math.floor(totalDays / 30);
-        
-            const days = totalDays % 30;
-            const hours = totalHours % 24;
-            const minutes = totalMinutes % 60;
-        
-            let duration = '1' + this.lang('minutes');
-        
-            if (totalMonths > 0) {
-                duration = `${totalDays} ${this.lang('days')}${totalDays > 1 ? 's' : ''} ${hours} ${this.lang('hours')}${hours > 1 ? 's' : ''}`;
-            } else if (totalDays > 0) {
-                duration = `${totalDays} ${this.lang('days')}${totalDays > 1 ? 's' : ''} ${hours} ${this.lang('hours')}${hours > 1 ? 's' : ''}`;
-            } else if (totalHours > 0) {
-                duration = `${totalHours} ${this.lang('hours')}${totalHours > 1 ? 's' : ''} ${minutes} ${this.lang('minutes')}`;
-            } else {
-                duration = `${totalMinutes} ${this.lang('minutes')}`;
-            }
-        
-            return duration;        
-        },
-        
-        
+        // MachineSpendTime(timeVariable) {
+        //     const creationDate = new Date(timeVariable);
+        //     const currentDate = new Date();
+        //     const timeDifference = currentDate - creationDate;
+        //     const totalSeconds = Math.floor(timeDifference / 1000);
+        //     const totalMinutes = Math.floor(totalSeconds / 60);
+        //     const totalHours = Math.floor(totalMinutes / 60);
+        //     const totalDays = Math.floor(totalHours / 24);
+        //     const totalMonths = Math.floor(totalDays / 30);
+
+        //     const days = totalDays % 30;
+        //     const hours = totalHours % 24;
+        //     const minutes = totalMinutes % 60;
+
+        //     let duration = '1' + this.lang('minutes');
+
+        //     if (totalMonths > 0) {
+        //         duration = `${totalDays} ${this.lang('days')}${totalDays > 1 ? 's' : ''} ${hours} ${this.lang('hours')}${hours > 1 ? 's' : ''}`;
+        //     } else if (totalDays > 0) {
+        //         duration = `${totalDays} ${this.lang('days')}${totalDays > 1 ? 's' : ''} ${hours} ${this.lang('hours')}${hours > 1 ? 's' : ''}`;
+        //     } else if (totalHours > 0) {
+        //         duration = `${totalHours} ${this.lang('hours')}${totalHours > 1 ? 's' : ''} ${minutes} ${this.lang('minutes')}`;
+        //     } else {
+        //         duration = `${totalMinutes} ${this.lang('minutes')}`;
+        //     }
+
+        //     return duration;
+        // },
 
         Is40SecondPassed(timeVariable) {
             const creationDate = new Date(timeVariable);
             const currentDate = new Date();
             const timeDifference = currentDate - creationDate;
-            if(timeDifference > 40 * 1000){
+            if (timeDifference > 40 * 1000) {
                 return true
             } else {
                 return false
@@ -1636,23 +1673,23 @@ app = createApp({
 
         convertTime(time) {
             const formatDate = (dateString) => {
-              const date = new Date(dateString);
-              const months = [
-                "Jan", "Feb", "Mar", "Apr", "May", "Jun",
-                "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
-              ];
-              const day = date.getDate();
-              const month = months[date.getMonth()];
-              const hours = String(date.getHours()).padStart(2, "0");
-              const minutes = String(date.getMinutes()).padStart(2, "0");
-              
-              return `${day} ${month} at ${hours}:${minutes}`;
+                const date = new Date(dateString);
+                const months = [
+                    "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+                    "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+                ];
+                const day = date.getDate();
+                const month = months[date.getMonth()];
+                const hours = String(date.getHours()).padStart(2, "0");
+                const minutes = String(date.getMinutes()).padStart(2, "0");
+
+                return `${day} ${month} at ${hours}:${minutes}`;
             };
-            
+
             return formatDate(time);
         },
 
-        CreateRandomHostName(){
+        CreateRandomHostName() {
             const length = 7;
             const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
             let result = '';
@@ -1661,7 +1698,6 @@ app = createApp({
             }
             this.themachinename = result;
         },
-
 
         createCPULinearChart() {
 
@@ -1686,11 +1722,11 @@ app = createApp({
                 text = 'CPU Usage',
             )
 
-           
 
-              let element = document.querySelector('.RAMLinear')
-              var chart = new ApexCharts(element, options);
-              chart.render();
+
+            let element = document.querySelector('.RAMLinear')
+            var chart = new ApexCharts(element, options);
+            chart.render();
         },
 
 

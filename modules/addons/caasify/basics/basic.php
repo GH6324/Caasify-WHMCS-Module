@@ -128,16 +128,21 @@ function get_config_array_temp(){
         'BackendUrl' => null,
         'DefLang' => null,
         'CaasifyCurrency' => null,
-        'errorMessage' => null,
-        'DevelopeMode' => null,
+        'CloudTopupLink' => null,
         'ChargeModule' => null,
         'ViewExchanges' => null,
-        'CloudTopupLink' => null,
-        
         'MinimumCharge' => null,
+        'MaximumCharge' => null,
+        'MinBalanceAllowToCreate' => null,
         'MonthlyCostDecimal' => null,
         'HourlyCostDecimal' => null,
         'BalanceDecimal' => null,
+        
+        'DevelopeMode' => null,
+        'DemoMode' => null,        
+        
+        'errorMessage' => null,
+        
     ];
     return $ModuleConfigArray;
 }
@@ -194,6 +199,34 @@ function caasify_get_reseller_token(){
     }
 
     return $ResellerToken;
+}
+
+
+// Get Reseller Token form module addons
+function caasify_get_Demo_Mode(){
+    
+    try {
+        $configTable = Capsule::table('tbladdonmodules')->where('module', 'caasify')->get();
+    } catch (\Exception $e) {
+        echo "Can not access caasify tables in demo mode";
+        return false;
+    }
+
+    if(!empty($configTable)){
+        foreach($configTable as $config){
+            if($config->setting == 'DemoMode'){
+                $DemoMode = $config->value;
+                break;
+            }
+        }
+    }
+
+    if(empty($DemoMode)){
+        echo "token is emprty";
+        return false;
+    }
+
+    return $DemoMode;
 }
 
 // Get currency list

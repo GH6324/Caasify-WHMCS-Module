@@ -8,8 +8,9 @@ class ClientCaasifyController
     protected $ResellerToken;
     protected $clientId;
     protected $UserToken;
+    protected $DemoMode;
 
-    public function __construct($BackendUrl, $ResellerToken, $clientId)
+    public function __construct($BackendUrl, $ResellerToken, $clientId, $DemoMode)
     {
         $BackendUrl = str_replace(' ', '', $BackendUrl);
         $BackendUrl = preg_replace('/\s+/', '', $BackendUrl);        
@@ -19,6 +20,12 @@ class ClientCaasifyController
 
         $this->ResellerToken = $ResellerToken;   
         $this->UserToken = $this->getUserTokenFromDB();
+
+        if(!isset($DemoMode) || $DemoMode != 'on'){
+            $DemoMode = 'off';
+        }
+
+        $this->DemoMode = $DemoMode;
     }
 
     public function getUserTokenFromDB()
@@ -89,6 +96,7 @@ class ClientCaasifyController
 
         $headers = [
             'Accept' => 'application/json',
+            'Date-Humanize' => 1,
             'Authorization' => 'Bearer ' . $UserToken
         ];
         
@@ -177,16 +185,16 @@ class ClientCaasifyController
         return Request::instance()->setAddress($address)->setHeaders($headers)->getResponse()->asObject();
     }
 
+
     public function CaasifyGetPlans()
     {
         $UserToken = $this->getUserTokenFromDB();
         $response = null;
         $CategoryID = caasify_get_post('CategoryID');
-        
         if($UserToken && $CategoryID){
             $response = $this->sendCaasifyGetPlansRequest($UserToken, $CategoryID);
+            $this->response($response);
         }
-        $this->response($response);
     }
 
     public function sendCaasifyGetPlansRequest($UserToken, $CategoryID)
@@ -214,16 +222,19 @@ class ClientCaasifyController
     public function CaasifyCreateOrder()
     {
         $UserToken = $this->getUserTokenFromDB();
+        $params = caasify_get_post_array_all();
         $response = null;
         
-        $params = caasify_get_post_array_all();
-       
-        if($UserToken && $params){
-            $response = $this->sendCaasifyCreateOrderRequest($UserToken, $params);
+        $DemoMode = $this->DemoMode;
+        if($DemoMode == 'off'){
+            if($UserToken && $params){
+                $response = $this->sendCaasifyCreateOrderRequest($UserToken, $params);
+            }
         }
 
         $this->response($response);
     }
+    
     
     public function sendCaasifyCreateOrderRequest($UserToken, $params)
     {
@@ -287,6 +298,7 @@ class ClientCaasifyController
 
         $headers = [
             'Accept' => 'application/json',
+            'Date-Humanize' => 1,
             'Authorization' => 'Bearer ' . $UserToken
         ];
         

@@ -41,6 +41,12 @@ if(!isset($DevelopeMode)){
     $DevelopeMode = 'off';
 }
 
+// DemoMode
+$DemoMode = $configs['DemoMode'];
+if(!isset($DemoMode)){
+    $DemoMode = 'off';
+}
+
 // ChargeModule
 $ChargeModule = $configs['ChargeModule'];
 if(isset($ChargeModule) && $ChargeModule == 'off' ){
@@ -62,6 +68,11 @@ if(isset($ViewExchanges) && $ViewExchanges =='on'){
 $CloudTopupLink = $configs['CloudTopupLink'];
 if(!isset($CloudTopupLink)){
     $CloudTopupLink = '/clientarea.php?action=addfunds';
+}
+
+$MinBalanceAllowToCreate = $configs['MinBalanceAllowToCreate'];
+if(!isset($MinBalanceAllowToCreate) || !is_numeric($MinBalanceAllowToCreate) ){
+    $MinBalanceAllowToCreate = 1;
 }
 
 

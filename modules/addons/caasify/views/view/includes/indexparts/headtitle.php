@@ -51,14 +51,10 @@
                             <?php if($ChargeModuleEnable): ?>
                             <!-- Credit -->
                             <div class="col-12 col-md-5 col-lg-6 m-0 p-0 mb-2">
-                                <div
-                                    class="d-flex flex-row align-items-center justify-content-between border border-2 rounded-4 bg-body-secondary py-4 px-3 px-lg-4 px-xl-5 ms-0 ms-md-2">
+                                <div class="d-flex flex-row align-items-center justify-content-between border border-2 rounded-4 bg-body-secondary py-4 px-3 px-lg-4 px-xl-5 ms-0 ms-md-2">
                                     <?php include('showcredit.php'); ?>
                                     <div class="m-0 p-0">
-                                        <a class="btn btn-primary" target="_top" type="button"
-                                            href="<?php echo($CloudTopupLink); ?>">
-                                            {{ lang('topup') }}
-                                        </a>
+                                        <a class="btn btn-primary" target="_top" type="button" href="<?php echo($CloudTopupLink); ?>"> {{ lang('topup') }} </a>
                                     </div>
                                 </div>
                             </div>

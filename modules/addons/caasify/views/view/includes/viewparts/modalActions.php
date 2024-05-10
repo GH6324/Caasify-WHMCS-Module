@@ -8,7 +8,9 @@
                 </h1>
             </div>
 
-            <div class="modal-body py-5">
+            <!-- Product MODE -->
+            
+            <div class="modal-body py-5" v-if="actionWouldBeHappened != null">
                 <p class="mb-5 py-5 fs-5 fw-light">
                     <span>
                         {{ lang('You are going to') }}
@@ -19,9 +21,14 @@
                     <span>
                         {{ lang('your machine, are you sure ?') }}
                     </span>
+
+                    <?php if(isset($DemoMode) && $DemoMode == 'on' ): ?>
+                        <p class="alert alert-danger" v-if="actionWouldBeHappened.toLowerCase() == 'delete'">
+                            {{ lang('DeleteIsNotAllowed') }}
+                        </p>
+                    <?php endif ?>
                 </p>
             </div>
-            
             <div class="m-0 p-0">
                 <div class="d-flex flex-row modal-footer justify-content-end">
                     <div class="m-0 p-0 mx-2">
@@ -29,13 +36,34 @@
                             {{ lang('close') }}
                         </button>
                     </div>
-                    <div v-if="actionWouldBeHappened" class="m-0 p-0">
-                        <button @click="acceptConfirmDialog" type="button" class="btn btn-primary px-4 mx-2 border-0" data-bs-dismiss="modal">
-                            <span v-if="actionWouldBeHappened != null">
-                                {{ lang(actionWouldBeHappened.toUpperCase()) }}
-                            </span>
-                        </button>
-                    </div>
+                    <!-- DemoMode -->
+                    <?php if(isset($DemoMode) && $DemoMode == 'on' ): ?>
+                        <!-- others -->
+                        <div v-if="actionWouldBeHappened && actionWouldBeHappened.toLowerCase() != 'delete'" class="m-0 p-0">
+                            <button @click="acceptConfirmDialog" type="button" class="btn btn-primary px-4 mx-2 border-0" data-bs-dismiss="modal">
+                                <span v-if="actionWouldBeHappened != null">
+                                    {{ lang(actionWouldBeHappened.toUpperCase()) }}
+                                </span>
+                            </button>
+                        </div>
+                        <!-- DELETE Exception -->
+                        <div v-if="actionWouldBeHappened && actionWouldBeHappened.toLowerCase() == 'delete'" class="m-0 p-0">
+                            <button type="button" class="btn btn-primary px-4 mx-2 border-0" data-bs-dismiss="modal" disabled>
+                                <span v-if="actionWouldBeHappened != null">
+                                    {{ lang(actionWouldBeHappened.toUpperCase()) }}
+                                </span>
+                            </button>
+                        </div>
+                    <?php else: ?>
+                        <!-- ProMode -->
+                        <div v-if="actionWouldBeHappened" class="m-0 p-0">
+                            <button @click="acceptConfirmDialog" type="button" class="btn btn-primary px-4 mx-2 border-0" data-bs-dismiss="modal">
+                                <span v-if="actionWouldBeHappened != null">
+                                    {{ lang(actionWouldBeHappened.toUpperCase()) }}
+                                </span>
+                            </button>
+                        </div>
+                    <?php endif ?>
                 </div>
             </div>
         </div>

@@ -51,21 +51,19 @@
 
                         <!-- Uptime -->
                         <td class="fw-medium">
-                            <span v-if="order.status" class="ms-2">{{ MachineSpendTime(order?.created_at) }}</span>
+                            <span v-if="order?.created_at" class="ms-2">
+                                {{ order?.created_at }} 
+                            </span>
                             <span v-else class="fw-medium"> --- </span>
                         </td>
-
-                        <!-- created_at -->
-                        <!-- <td class="fw-medium">
-                            <span v-if="order.created_at" class="ms-2">{{ order.created_at }}</span>
-                            <span v-else class="fw-medium" > --- </span>
-                        </td> -->
 
                         <!-- record -->
                         <td class="fw-medium d-none d-md-block py-3">
                             <span v-for="record in order.records" class="m-0 p-0">
-                                <span v-if="record.price" class="ms-2 text-primary">{{ showMachinePriceInWhmcsUnit(ConvertFromCaasifyToWhmcs(record.price)) }}
-                                    {{ userCurrencySymbolFromWhmcs }}</span>
+                                <span v-if="record.price" class="ms-2 text-primary">
+                                    {{ showMachinePriceInWhmcsUnit(ConvertFromCaasifyToWhmcs(record.price)) }}
+                                    {{ userCurrencySymbolFromWhmcs }}
+                                </span>
                                 <span v-else class="fw-medium"> --- </span>
                             </span>
                         </td>
@@ -74,9 +72,9 @@
                         <!-- view -->
                         <td class="fw-medium">
                             <span v-if="order.id" class="ms-2">
-                                <a class="btn btn-outline-primary px-3 px-md-5 py-2" @click="open(order)">
+                                <button class="btn btn-outline-primary px-3 px-md-5 py-2" @click="open(order)">
                                     {{ lang('viewontable') }}
-                                </a>
+                                </button>
                             </span>
                         </td>
                     </tr>

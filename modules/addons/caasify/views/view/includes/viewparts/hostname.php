@@ -56,7 +56,8 @@
                 <span class="btn bg-primary text-primary py-2 d-flex flex-row align-items-center px-2 ms-2 btn-sm"
                     style="--bs-bg-opacity: .2">
                     <span class="ms-1 pe-2 fw-medium" v-if="thisOrder?.created_at">
-                        {{ MachineSpendTime(thisOrder?.created_at) }} </span>
+                        {{ thisOrder?.created_at }} 
+                    </span>
                     <span class="ms-1" v-else> - </span>
                 </span>
             </div>

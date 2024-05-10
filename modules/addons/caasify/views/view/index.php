@@ -4,8 +4,11 @@
     <div class="row py-5">
         <div class="col-12" id="app">
             <div class="bg-white rounded-4 border border-2 border-body-secondary" v-cloak>
+            <?php if(isset($DemoMode) && $DemoMode == 'on' ): ?>
+                <?php  include('./includes/baselayout/DemoHeader.php');   ?>
+            <?php endif ?>
             <?php include('./includes/indexparts/headtitle.php');     ?>
-            <?php include('./includes/indexparts/orderslist.php');  ?>
+            <?php include('./includes/indexparts/orderslist.php');    ?>
         </div>
     </div>
 </div> 

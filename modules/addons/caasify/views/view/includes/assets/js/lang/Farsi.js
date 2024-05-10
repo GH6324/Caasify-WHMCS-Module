@@ -330,7 +330,7 @@ let common = {
 // admin panel
     "usertoken" : "توکن کاربر",
 
-
+    
 
     // new CAASIFY
     "Locations" : "موقعیت جغرافیایی",
@@ -373,6 +373,16 @@ let common = {
     "DELIVERED" : "ارسال موفق",
     "FAILED" : "خطای ارسال",
     "PENDING" : "در حال پردازش",
+    "Marketplace" : "بازارچه",
+    "createmachinefailed" : "ساخت ماشین با مشکل مواجه شده است",
+    "Warning" : "اخطار",
+
+    "MoreThanMax" : "این مقدار از حداکثر مبلغ اجازه شارژ بیشتر است",    
+    "DeleteIsNotAllowed" : "در حالت دمو، اجازه حذف ماشین را ندارید",    
+
+
+
+
 }
 
 const words = {
