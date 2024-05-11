@@ -123,7 +123,7 @@ let common = {
         "russian" : "Russian", 
         
         "setlanguage" : "Set Language",
-        "traffics" : "Traffics",
+        "traffics" : "Public Traffic",
         "buytraffics" : "Purchase",
         "tabeltraffic" : "Traffic: ",
         "traffictype" : "Type: ",
@@ -385,6 +385,7 @@ let common = {
     "MoreThanMax" : "Not valid: it is more than allowed charge, call your admin",    
     "DeleteIsNotAllowed" : "You are not allowed to DELETE this machine in DEMO Mode",    
     "CreateDemoText" : "You are not allowed to create machine in DEMO",    
+    "TrafficAlert" : "It may take more than 10 minutes",    
     
 }
 

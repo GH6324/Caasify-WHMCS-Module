@@ -131,48 +131,75 @@
             </div>
         </div>
     </div>
-
     <!-- Actions -->
     <div class="d-flex flex-column col-12 col-xl-6 p-0 m-0 mb-2 flex-grow-1">
         <div class="row m-0 p-0">
             <div class="col-12 col-md-6 m-0 p-0 mb-2">
                 <div class="row m-0 p-0 h-100">
-                    <div class="col-12 border border-2 rounded-4 bg-white m-0 p-0 py-4 px-4 mx-0">
+                    <div class="col-12 border border-2 rounded-4 bg-white m-0 p-0 py-4 px-4 mx-0" style="height: 150px;">
                         <div class="row">
-                            <p class="text-secondary p-0 m-0 mb-2 ms-3" style="font-size: 1.25rem !important;">
-                                <i class="bi bi-arrow-down-up pe-1"></i>
-                                {{ lang('traffics') }}
-                            </p>
+                            <div class="d-flex flex-row justify-content-between align-items-center mb-2">
+                                <div class="d-flex flex-row justify-content-between align-items-center">
+                                    <img src="/modules/addons/caasify/views/view/includes/assets/img/bandwidth.svg" width="18">
+                                    <span class="m-0 p-0 text-secondary ps-2" style="font-size: 1.15rem !important;">
+                                        {{ lang('traffics') }}
+                                    </span>
+                                </div>
+                                <div class="text-end text-primary fw-medium p-0 m-0">
+                                    <span v-if="TrafficTotal" class="" style="font-size: 1.15rem !important;">
+                                        {{ TrafficTotal }}
+                                    </span>
+                                </div>
+                            </div>
                         </div>
                         <div class="m-0 p-0 pb-2">
                             <hr class="text-secondary border-2 border-secondary m-0 p-0">
                         </div>
-                        <div class="row fw-medium py-1">
-                            <span>
-                                <span class="text-secondary">
-                                    <i class="bi bi-cloud-arrow-up-fill"></i>
+                        <div v-if="trafficsIsLoaded == true" class="row pt-2">
+                            <div class="row fw-medium py-1">
+                                <span>
+                                    <span class="text-secondary">
+                                        <i class="bi bi-cloud-arrow-down fs-5 pe-2"></i>
+                                    </span>
+                                    <span class="ps-1 text-secondary">
+                                        Inbound
+                                    </span>
+                                    <span class="px-1 text-secondary">:</span>
+                                    
+                                    <span class="text-primary" v-if="TrafficInbound">
+                                        {{ TrafficInbound }}
+                                    </span>
+                                    <span class="text-primary" v-else>
+                                        0 MB
+                                    </span>
                                 </span>
-                                <span class="ps-1 text-secondary">
-                                    Inbound
+                            </div>
+                            <div class="row fw-medium py-1">
+                                <span>
+                                    <span class="text-secondary">
+                                        <i class="bi bi-cloud-arrow-up-fill fs-5 pe-2"></i>
+                                    </span>
+                                    <span class="ps-1 text-secondary">
+                                        Outbound
+                                    </span>
+                                    <span class="px-1 text-secondary">:</span>
+                                    <span class="text-primary" v-if="TrafficOutbound">
+                                        {{ TrafficOutbound }}
+                                    </span>
+                                    <span class="text-primary" v-else>
+                                        0 MB
+                                    </span>
                                 </span>
-                                <span class="px-1 text-secondary">:</span>
-                                <span class="text-primary">
-                                    103 GB
-                                </span>
-                            </span>
+                            </div>
                         </div>
-                        <div class="row fw-medium py-1">
+                        <div v-if="trafficsIsLoaded != true" class="row pt-2 text-primary">
                             <span>
-                                <span class="text-secondary">
-                                    <i class="bi bi-cloud-arrow-down "></i>
+                                <span class="pe-2">
+                                    {{ lang('loadingmsg') }}
                                 </span>
-                                <span class="ps-1 text-secondary">
-                                    Outbound
-                                </span>
-                                <span class="px-1 text-secondary">:</span>
-                                <span class="text-primary">
-                                    103 GB
-                                </span>
+                                <span>
+                                    <?php include('./includes/baselayout/threespinner.php'); ?>
+                                </span>    
                             </span>
                         </div>
                     </div>

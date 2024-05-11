@@ -14,7 +14,7 @@
                     <div class="col-6 m-0 p-0 d-grid" v-for="(button, index) in ValidControllerItems">
                         <button data-bs-toggle="modal" data-bs-target="#actionsModal"
                             class="btn btn-light px-4 py-4 fw-medium border-2 border-secondary mx-1 my-1 rounded-4"
-                            style="--bs-border-opacity: 0.3;"
+                            style="--bs-border-opacity: 0.3; height: 70px;"
                             @click="PushButtonController(button.id, button.name)" :key="index"
                             :disabled="button.name.toLowerCase() === 'delete'"
                             >
@@ -27,7 +27,7 @@
                     <div class="col-6 m-0 p-0 d-grid" v-for="(button, index) in ValidControllerItems">
                         <button data-bs-toggle="modal" data-bs-target="#actionsModal"
                             class="btn btn-light px-4 py-4 fw-medium border-2 border-secondary mx-1 my-1 rounded-4"
-                            style="--bs-border-opacity: 0.3;"
+                            style="--bs-border-opacity: 0.3; height: 70px;"
                             @click="PushButtonController(button.id, button.name)" :key="index">
                             <span>
                                 {{ lang(button.name.toUpperCase()) }}

@@ -14,18 +14,17 @@ class ClientCaasifyController
     {
         $BackendUrl = str_replace(' ', '', $BackendUrl);
         $BackendUrl = preg_replace('/\s+/', '', $BackendUrl);        
-        $this->BackendUrl = $BackendUrl;
-        
-        $this->clientId = $clientId;
 
+        $this->BackendUrl = $BackendUrl;
+        $this->clientId = $clientId;
         $this->ResellerToken = $ResellerToken;   
         $this->UserToken = $this->getUserTokenFromDB();
 
         if(!isset($DemoMode) || $DemoMode != 'on'){
             $DemoMode = 'off';
         }
-
         $this->DemoMode = $DemoMode;
+
     }
 
     public function getUserTokenFromDB()
@@ -136,27 +135,6 @@ class ClientCaasifyController
         return Request::instance()->setAddress($address)->setHeaders($headers)->getResponse()->asObject();
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// New for create page
     public function CaasifyGetDataCenters()
     {
         $UserToken = $this->getUserTokenFromDB();
@@ -184,7 +162,6 @@ class ClientCaasifyController
 
         return Request::instance()->setAddress($address)->setHeaders($headers)->getResponse()->asObject();
     }
-
 
     public function CaasifyGetPlans()
     {
@@ -233,8 +210,7 @@ class ClientCaasifyController
         }
 
         $this->response($response);
-    }
-    
+    }  
     
     public function sendCaasifyCreateOrderRequest($UserToken, $params)
     {
@@ -252,32 +228,6 @@ class ClientCaasifyController
 
         return Request::instance()->setAddress($address)->setHeaders($headers)->setParams($params)->getResponse()->asObject();
     }
-
-    
-//
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// New for view page
 
     public function LoadOrder()
     {
@@ -342,7 +292,6 @@ class ClientCaasifyController
         return Request::instance()->setAddress($address)->setHeaders($headers)->getResponse()->asObject();
     }
 
-
     public function CaasifyOrderDoAction()
     {
         $UserToken = $this->getUserTokenFromDB();
@@ -379,7 +328,6 @@ class ClientCaasifyController
         return Request::instance()->setAddress($address)->setHeaders($headers)->setParams($params)->getResponse()->asObject();
     }
 
-
     public function CaasifyRequestNewView()
     {
         $UserToken = $this->getUserTokenFromDB();
@@ -410,8 +358,6 @@ class ClientCaasifyController
 
         return Request::instance()->setAddress($address)->setHeaders($headers)->getResponse()->asObject();
     }
-
-
 
     public function CaasifyActionsHistory()
     {
@@ -446,39 +392,37 @@ class ClientCaasifyController
         return Request::instance()->setAddress($address)->setHeaders($headers)->getResponse()->asObject();
     }
 
+    public function CaasifyOrderTraffics()
+    {
+        $UserToken = $this->getUserTokenFromDB();
+        $response = null;
 
+        $orderID = caasify_get_post('orderID');
 
+        if($UserToken && $orderID){
+            $response = $this->SendOrderTraffics($UserToken, $orderID);
+        }
 
+        $this->response($response);
+    }
 
+    public function SendOrderTraffics($UserToken, $orderID)
+    {
 
+        $headers = [
+            'Accept' => 'application/json',
+            'Authorization' => 'Bearer ' . $UserToken
+        ];
+        
+        $BackendUrl = $this->BackendUrl;
+        
+        $address = [
+            $BackendUrl, 'api', 'monitoring', 'orders', $orderID, 'traffic'
+        ];
+        
+        return Request::instance()->setAddress($address)->setHeaders($headers)->getResponse()->asObject();
+    }
 
-
-
-
-
-
-
-
-
-//
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// Trans --------------------------
     public function CreateUnpaidInvoice()
     {
         $requestData = json_decode(file_get_contents("php://input"), true);
@@ -616,33 +560,7 @@ class ClientCaasifyController
             $this->response($results); 
         } 
     }  
-// End Trans --------------------------
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    // ---------------------------------------------------//
-    // Basic Codes to manage Json Request and Responces
     public function response($response)
     {
         header('Content-Type: application/json');
@@ -650,7 +568,6 @@ class ClientCaasifyController
         exit($response);
     }
 
-    // Basic Codes to manage Json Request and Responces
     public function handle($action)
     {
         $class = new ReflectionClass($this);
@@ -659,14 +576,5 @@ class ClientCaasifyController
             return $method->invoke($this);
         }
     }
-    // ---------------------------------------------------//
 
-
-    // just for test
-    public function test()
-    {
-        $response = $this->getUserTokenFromDB();
-        // $response = ['data'=> 'value'];
-        $this->response($response);
-    }
 }

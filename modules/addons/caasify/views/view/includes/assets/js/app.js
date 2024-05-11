@@ -6,6 +6,12 @@ app = createApp({
         return {
             ChargeMSG: '',
 
+            thisOrderTraffic: null,
+            trafficsIsLoaded: false,
+            TrafficInbound: false,
+            TrafficOutbound: false,                    
+            TrafficTotal: false,                    
+
             CaasifyUserIsNull: null,
             WhmcsUserIsNull: null,
             DataCenterIsNull: null,
@@ -161,7 +167,6 @@ app = createApp({
             }, 4000);
         },
 
-
         thisOrder() {
             this.findValidControllers();
         },
@@ -199,6 +204,7 @@ app = createApp({
                     setTimeout(() => {
                         this.LoadOrderViews();
                         this.LoadActionsHistory();
+                        this.LoadOrderTraffics();
                     }, 3 * 1000);
 
                     setTimeout(() => {
@@ -234,7 +240,6 @@ app = createApp({
         SelectedRegion() {
             this.loadPlans()
         },
-
     },
 
     mounted() {
@@ -1443,13 +1448,61 @@ app = createApp({
             return ConfigPrice
         },
 
+        async LoadOrderTraffics() {
+            let orderID = this.orderID;
+            if (orderID != null) {
+                let formData = new FormData();
+                formData.append('orderID', orderID);
+
+                RequestLink = this.CreateRequestLink(action = 'CaasifyOrderTraffics');
+                let response = await axios.post(RequestLink, formData);
+                
+                let inbound = 0
+                let outbound = 0
+                let total = 0
+                
+                if (response.data) {
+                    this.trafficsIsLoaded = true
+                    thisOrderTraffic = response.data
+                    this.thisOrderTraffic = response.data
+
+                    if(thisOrderTraffic?.inbound){
+                        inbound = (response.data?.inbound)/1024/1024/1024
+                        if(inbound > 1){
+                            this.TrafficInbound = inbound.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) + ' GB'
+                        } else {
+                            this.TrafficInbound = (inbound * 1000).toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) + ' MB'
+                        }
+                    }
+                    
+                    if(thisOrderTraffic?.outbound){
+                        outbound = (response.data?.outbound)/1024/1024/1024
+                        if(outbound > 1){
+                            this.TrafficOutbound = outbound.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) + ' GB'
+                        } else {
+                            this.TrafficOutbound = (outbound * 1000).toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 })
+                        }
+                    }
+                    
+                    total = inbound + outbound
+                    
+                    if(total == 0){
+                        this.TrafficTotal = '0 MB'
+                    }
+                    else if(total > 1){
+                        this.TrafficTotal = total.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) + ' GB'
+                    } else {
+                        this.TrafficTotal = (total * 1000).toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) + ' MB'
+                    }
 
 
+                } else if (response?.message) {
+                    this.trafficsIsLoaded = true
+                    console.error('Traffics: ' + response.message);
+                }
+            }
+        },
 
-
-
-
-        // View Machine
         async LoadTheOrder() {
             let orderID = this.orderID;
             if (orderID != null) {
@@ -1610,7 +1663,7 @@ app = createApp({
             setInterval(this.LoadRequestNewView, 40 * 1000)
             setInterval(this.LoadOrderViews, 35 * 1000)
             setInterval(this.LoadActionsHistory, 50 * 1000)
-
+            setInterval(this.LoadOrderTraffics, 50 * 1000)
             setInterval(this.CheckData, 20 * 1000)
         },
 

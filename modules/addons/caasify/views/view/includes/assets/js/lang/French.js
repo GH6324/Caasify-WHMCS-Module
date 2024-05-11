@@ -375,6 +375,7 @@ let common = {
     "Warning" : "Warning",
     "MoreThanMax" : "Not valid: it is more than allowed charge, call your admin",    
     "DeleteIsNotAllowed" : "You are not allowed to DELETE this machine in DEMO Mode",    
+    "TrafficAlert" : "It may take more than 10 minutes",    
 
 
 
