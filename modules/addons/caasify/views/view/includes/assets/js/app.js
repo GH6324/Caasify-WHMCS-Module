@@ -1467,7 +1467,7 @@ app = createApp({
                     this.thisOrderTraffic = response.data
 
                     if(thisOrderTraffic?.inbound){
-                        inbound = (response.data?.inbound)/1024/1024/1024
+                        inbound = (response.data?.inbound)/1000/1000/1000
                         if(inbound > 1){
                             this.TrafficInbound = inbound.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' GB'
                         } else {
@@ -1476,7 +1476,7 @@ app = createApp({
                     }
                     
                     if(thisOrderTraffic?.outbound){
-                        outbound = (response.data?.outbound)/1024/1024/1024
+                        outbound = (response.data?.outbound)/1000/1000/1000
                         if(outbound > 1){
                             this.TrafficOutbound = outbound.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' GB'
                         } else {
