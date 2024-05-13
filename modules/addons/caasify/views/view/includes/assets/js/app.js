@@ -1469,18 +1469,18 @@ app = createApp({
                     if(thisOrderTraffic?.inbound){
                         inbound = (response.data?.inbound)/1024/1024/1024
                         if(inbound > 1){
-                            this.TrafficInbound = inbound.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) + ' GB'
+                            this.TrafficInbound = inbound.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' GB'
                         } else {
-                            this.TrafficInbound = (inbound * 1000).toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) + ' MB'
+                            this.TrafficInbound = (inbound * 1000).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' MB'
                         }
                     }
                     
                     if(thisOrderTraffic?.outbound){
                         outbound = (response.data?.outbound)/1024/1024/1024
                         if(outbound > 1){
-                            this.TrafficOutbound = outbound.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) + ' GB'
+                            this.TrafficOutbound = outbound.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' GB'
                         } else {
-                            this.TrafficOutbound = (outbound * 1000).toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 })
+                            this.TrafficOutbound = (outbound * 1000).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
                         }
                     }
                     
@@ -1490,9 +1490,9 @@ app = createApp({
                         this.TrafficTotal = '0 MB'
                     }
                     else if(total > 1){
-                        this.TrafficTotal = total.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) + ' GB'
+                        this.TrafficTotal = total.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' GB'
                     } else {
-                        this.TrafficTotal = (total * 1000).toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) + ' MB'
+                        this.TrafficTotal = (total * 1000).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' MB'
                     }
 
 

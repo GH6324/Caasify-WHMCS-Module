@@ -29,11 +29,9 @@
                         <i v-if="!PassVisible" class="bi bi-eye-slash-fill"></i>
                     </a>
                 </div>
-
                 <div class="m-0 p-0 pb-4 my-3">
                     <hr class="text-secondary border-2 border-secondary m-0 p-0">
                 </div>
-
                 <!-- bottom slice -->
                 <div class="m-0 p-0 px-1">
                     <div class="m-0 p-0 mt-0">
@@ -125,9 +123,7 @@
                         </div>
 
                     </div>
-                </div><!-- end bottom -->
-
-                
+                </div><!-- end bottom --> 
             </div>
         </div>
     </div>
@@ -140,7 +136,7 @@
                         <div class="row">
                             <div class="d-flex flex-row justify-content-between align-items-center mb-2">
                                 <div class="d-flex flex-row justify-content-between align-items-center">
-                                    <img src="/modules/addons/caasify/views/view/includes/assets/img/bandwidth.svg" width="18">
+                                    <img src="<?php echo($systemUrl); ?>/modules/addons/caasify/views/view/includes/assets/img/bandwidth.svg" width="18">
                                     <span class="m-0 p-0 text-secondary ps-2" style="font-size: 1.15rem !important;">
                                         {{ lang('traffics') }}
                                     </span>
