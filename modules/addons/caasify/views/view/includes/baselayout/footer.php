@@ -20,13 +20,21 @@
         if($environ == 'dev'){
             echo ('<script src="./includes/assets/js/vue.global.js"></script>');
             echo ('<script src="./includes/assets/js/lang/' . $templatelang . '.js?v=' . time() . '"></script>');
-            echo ('<script src="./includes/assets/js/app.js?v=' . time() . '"></script>');
+            if(isset($parentFileName) && $parentFileName == 'admin'){
+                echo ('<script src="./includes/assets/js/adminapp.js?v=' . time() . '"></script>');
+            } else {
+                echo ('<script src="./includes/assets/js/app.js?v=' . time() . '"></script>');
+            }
         }
 
         if($environ == 'prod'){
             echo ('<script src="./includes/assets/js/vue.global.prod.js"></script>');
             echo ('<script src="./includes/assets/js/lang/' . $templatelang. '.js"></script>');
-            echo ('<script src="./includes/assets/js/app.js"></script>');
+            if(isset($parentFileName) && $parentFileName == 'admin'){
+                echo ('<script src="./includes/assets/js/adminapp.js"></script>');
+            } else {
+                echo ('<script src="./includes/assets/js/app.js"></script>');
+            }
         }
         
     ?>

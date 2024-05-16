@@ -4,8 +4,9 @@ use WHMCS\Service\Service;
 use WHMCS\User\Client;
 
 $path = dirname(__FILE__);
+echo($path);
+require_once $path . '/AdminCaasifyController.php';
 require_once $path . '/basics.php';
-
 
 add_hook('ClientAreaPrimaryNavbar', 1, function($primaryNavbar) {
     /** @var \WHMCS\View\Menu\Item $primaryNavbar */
@@ -21,101 +22,121 @@ add_hook('ClientAreaPrimaryNavbar', 1, function($primaryNavbar) {
     );
 });
 
-
 // Create User Token in DataBase
 add_hook('ClientAreaPage', 100, function($params) {
+    $WhUserId = caasify_get_session('uid');
+    if(empty($WhUserId)){
+        // echo 'can not find WhUserId to construct controller  in ClientAreaPage';
+        return false;
+    }
+
+    $config = caasify_get_config();
+    $ResellerToken = caasify_get_reseller_token();
+    $BackendUrl = $config['BackendUrl'];    
+
+    if(empty($config)){
+        echo 'can not find config in ClientAreaPage <br>';
+        return false;
+    }
+    
+    if(empty($ResellerToken)){
+        echo 'can not find ResellerToken to construct controller in ClientAreaPage <br>';
+        return false;
+    }
+
+    if(empty($BackendUrl)){
+        echo 'can not find BackendUrl to construct controller  in ClientAreaPage <br>';
+        return false;
+    } 
+
+
+    $UserToken = caasify_get_token_by_handling($ResellerToken, $BackendUrl, $WhUserId);
+    if(empty($UserToken)){
+        echo 'can not get UserToken from handler func in Client hook <br>';
+        return false;
+    }  
+});
+
+add_hook('AdminAreaClientSummaryPage', 1, function($vars) {
+    // TODO: Admin view
+    
+    // Check if it is admin
+    $admin = caasify_get_session('adminid');
+    if(empty($admin)){
+        return false;
+    }
 
     $config = caasify_get_config();
     $ResellerToken = caasify_get_reseller_token();
     $BackendUrl = $config['BackendUrl'];
+    $WhUserId = $vars['userid'];
 
-    if(empty($ResellerToken)){
-        echo('Cant find ResellerToken in ClientAreaPage hook');
+    if(empty($config)){
+        echo 'can not find config in AdminHook <br>';
         return false;
     }
     
+    if(empty($ResellerToken)){
+        echo 'can not find ResellerToken to construct controller in AdminHook <br>';
+        return false;
+    }
 
     if(empty($BackendUrl)){
-        echo('Cant find BackendUrl in ClientAreaPage hook');
+        echo 'can not find BackendUrl to construct controller  in AdminHook <br>';
+        return false;
+    } 
+
+    if(empty($WhUserId)){
+        echo 'can not find WhUserId to construct controller  in AdminHook <br>';
         return false;
     }
-
-    // create token if cloud is active
-    if(!empty($ResellerToken) && !empty($BackendUrl)){
-        $clientId = caasify_get_session('uid');
-        if (empty($clientId)) {
-            return false;
-        }
-
-
-        $client = Client::find($clientId);
-        if(empty($client)) {
-            echo('can not find the client in ClientAreaPage hook');
-            return false;
-        }
-
-        // get token from tabale if exist
-        $token = caasify_get_user_token_from_db($clientId);
-
-
-        // if there is token in database, then finish
-        if($token) {
-            return false;
-        }
-        
-        // create new user if can not find Token
-        $password = caasify_createPassword($client);
-        $CreateResponse = caasify_create_user($BackendUrl, $ResellerToken, $client, $password);
-        if(empty($CreateResponse)) {
-            echo('create request did not work');
-            return false;
-        }
-        
-        $message = property_exists($CreateResponse, 'message');
-        if (!empty($message)) {     
-            echo($CreateResponse->message);
-            return false;
-        }
-
-        $CaasifyUserId = $CreateResponse->data->id;
-        if(empty($CaasifyUserId)){
-            echo('Can not get CaasifyUserId');
-            return false;
-        }
-        
-        $CaasifyUserEmail = $CreateResponse->data->email;
-        if(empty($CaasifyUserEmail)){
-            echo('Can not get CaasifyUserEmail');
-            return false;
-        }
-
-        // Get Token from API TO RECORD INTO DATABASE
-        $requestTokenResponse = caasify_get_user_token_from_api($BackendUrl, $client, $password);
-        if(empty($requestTokenResponse)) {
-            echo ('can not get the token in login');
-            return false;
-        }
-
-        $message = property_exists($requestTokenResponse, 'message');
-        if(!empty($message)) {  
-            echo($requestTokenResponse->message);
-            return false;
-        }
-
-        $token = $requestTokenResponse->data->token;
-        if(empty($token)){
-            echo('token received is empty');
-            return false;
-        }
-
-        // Save token in WHMCS
-        $params = ['client_id' => $client->id, 'caasify_user_id' => $CaasifyUserId, 'token' => $token, 'email' => $CaasifyUserEmail, 'password' => $password];
-
-        Capsule::table('tblcaasify_user')
-            ->insert($params);
-            
-    } else {
+    
+    // GET token
+    $UserToken = caasify_get_token_by_handling($ResellerToken, $BackendUrl, $WhUserId);
+    if(empty($UserToken)){
+        echo 'can not get UserToken from handler func in AdminHook <br>';
         return false;
     }
+    
+    $CaasifyUserId = caasify_get_CaasifyUserId_from_WhmUserId($WhUserId);
+    if(empty($CaasifyUserId)){
+        echo('Can not find caasify user id by WhUserId in BD <br>');
+        return false;
+    }
+    
+    $DevelopeMode = $config['DevelopeMode'];
+    if(empty($DevelopeMode)){
+        $DevelopeMode = 'off';
+    }
+
+    $action = caasify_get_query('action');
+    if(!empty($action) && !empty($UserToken) && !empty($CaasifyUserId) && !empty($ResellerToken) && !empty($BackendUrl)){
+        try {
+            $controller = new AdminCaasifyController($BackendUrl, $ResellerToken, $UserToken, $CaasifyUserId, $WhUserId);
+            return $controller->handle($action);
+        } catch (Exception $e) {
+            if($DevelopeMode == 'on'){
+                echo "Error run AdminController in admin hook: <br>" . $e . "<br>";
+                return false;
+            } else {
+                echo('Error while run admin controler <br>');
+                return false;
+            }
+        }
+    }
+
+    $systemUrl = $config['systemUrl'];
+    if(empty($systemUrl)){
+        $systemUrl = '';
+    }
+
+
+    $link = $systemUrl . '/modules/addons/caasify/views/view/admin.php?userid=' . $WhUserId;
+    $value = '
+        <iframe src="' . $link . '" class="caasify"></iframe>
+        <style type="text/css"> .caasify{width: 100%; height: 420px;border: none;}</style>
+    ';
+    
+    return $value;
 
 });

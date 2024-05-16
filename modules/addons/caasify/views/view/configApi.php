@@ -1,3 +1,4 @@
+<?php $parentFile = __FILE__; ?>
 <?php
 // This file get neede data from config.php and latest $config params
 

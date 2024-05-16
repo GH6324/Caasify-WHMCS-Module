@@ -9,8 +9,8 @@ app = createApp({
             thisOrderTraffic: null,
             trafficsIsLoaded: false,
             TrafficInbound: false,
-            TrafficOutbound: false,                    
-            TrafficTotal: false,                    
+            TrafficOutbound: false,
+            TrafficTotal: false,
 
             CaasifyUserIsNull: null,
             WhmcsUserIsNull: null,
@@ -74,7 +74,7 @@ app = createApp({
 
 
             // index
-            machinsLoaded: false,
+            OrdersLoaded: false,
 
             user: {},
             UserOrders: [],
@@ -145,6 +145,7 @@ app = createApp({
 
             createActionFailed: false,
             createActionSucced: false,
+            createActionIsInQueue: false,
             userClickedCreationBtn: false,
             CreateIsLoading: false,
             showAlertModal: false,
@@ -198,9 +199,9 @@ app = createApp({
                     this.LoadWhmcsCurrencies();
                     this.orderId();
                     this.LoadCaasifyUser();
-                    
+
                     this.LoadTheOrder();
-                    
+
                     setTimeout(() => {
                         this.LoadOrderViews();
                         this.LoadActionsHistory();
@@ -440,7 +441,7 @@ app = createApp({
     methods: {
 
 
-        RunDemoModal(){
+        RunDemoModal() {
             $('#DemotModalCreateSuccess').modal('show');
             $('#createModal').modal('hide');
         },
@@ -541,31 +542,20 @@ app = createApp({
         },
 
         async LoadUserOrders() {
-            let page = 1;
-            let reachEndPage = false
-            this.UserOrders = []
+            let RequestLink = this.CreateRequestLink(action = 'UserOrders');
+            let response = await axios.get(RequestLink);
 
-            while (!reachEndPage) {
-                let formData = new FormData();
-                formData.append('page', page);
-                let RequestLink = this.CreateRequestLink(action = 'UserOrders');
-                let response = await axios.post(RequestLink, formData);
-
-                if (response.data?.data != null) {
-                    this.UserOrders = this.UserOrders.concat(response.data.data);
-                    this.machinsLoaded = true;
-                } else if (response.data?.message) {
-                    reachEndPage = true;
-                    this.machinsLoaded = true;
-                }
-
-                if (response.data == null) {
-                    reachEndPage = true;
-                    this.machinsLoaded = true;
-                }
-                page += 1;
+            if (response?.data) {
+                this.OrdersLoaded = true;
             }
 
+            if (response?.data?.data) {
+                this.UserOrders = response?.data?.data;
+            } else if (response?.data?.message) {
+                console.error(response?.data?.message);
+            } else {
+                console.error('LoadUserOrders: Unknown');
+            }
         },
 
         async LoadCaasifyUser() {
@@ -857,7 +847,7 @@ app = createApp({
             let address = base + '/modules/addons/caasify/views/view/create.php'
             window.open([address], "_top")
         },
-        
+
         openIndexPage() {
             let base = ''
             if (this.systemUrl != null) {
@@ -926,7 +916,7 @@ app = createApp({
                     setTimeout(() => {
                         this.theStepStatus = 12;
                         this.chargeCaasify();
-                    }, 5000);
+                    }, 0.1 * 1000);
                 } else {
                     this.GlobalError = 1
                     setTimeout(() => {
@@ -964,10 +954,10 @@ app = createApp({
                     setTimeout(() => {
                         this.theStepStatus = 22;
                         this.applyTheCredit();
-                    }, 1000);
+                    }, 0.1 * 1000);
                 } else {
-                    
-                    if (response?.data?.message){
+
+                    if (response?.data?.message) {
                         this.ChargeMSG = response?.data?.message
                     }
 
@@ -1324,9 +1314,9 @@ app = createApp({
             let accept = await this.openConfirmDialog('create')
 
             if (accept) {
-                if(this.config?.DemoMode != null && this.config.DemoMode.toLowerCase() == 'on'){
+                if (this.config?.DemoMode != null && this.config.DemoMode.toLowerCase() == 'on') {
                     this.RunDemoModal()
-                } else if(this.config?.DemoMode != null && this.config.DemoMode.toLowerCase() == 'off'){
+                } else if (this.config?.DemoMode != null && this.config.DemoMode.toLowerCase() == 'off') {
                     this.CreateIsLoading = true;
                     let formData = new FormData();
                     formData.append('note', this.themachinename);
@@ -1344,25 +1334,26 @@ app = createApp({
                     RequestLink = this.CreateRequestLink(action = 'CaasifyCreateOrder');
                     let response = await axios.post(RequestLink, formData);
 
-                    response = response.data
-
-                    if (response?.data) {
-                        this.CreateIsLoading = false;
+                    if (response?.data?.data) {
                         this.userClickedCreationBtn = true
-                        this.createActionSucced = true
-                    } else if (response?.message) {
                         this.CreateIsLoading = false;
-                        this.CreateMSG = response?.message
-                        this.openMessageDialog(this.lang(response?.message))
+                        this.createActionSucced = true
+                        this.createActionFailed = false
+                    } else if (response?.data?.message) {
+                        this.userClickedCreationBtn = true
+                        this.CreateIsLoading = false;
+                        this.CreateMSG = response?.data?.message
                         this.createActionFailed = true
+                        this.createActionSucced = false
                     } else {
+                        this.userClickedCreationBtn = true
                         this.createActionFailed = true
                         this.CreateIsLoading = false;
                     }
                 } else {
                     console.error('DemoMode is null')
                 }
-                
+
             }
         },
 
@@ -1456,40 +1447,40 @@ app = createApp({
 
                 RequestLink = this.CreateRequestLink(action = 'CaasifyOrderTraffics');
                 let response = await axios.post(RequestLink, formData);
-                
+
                 let inbound = 0
                 let outbound = 0
                 let total = 0
-                
+
                 if (response.data) {
                     this.trafficsIsLoaded = true
                     thisOrderTraffic = response.data
                     this.thisOrderTraffic = response.data
 
-                    if(thisOrderTraffic?.inbound){
-                        inbound = (response.data?.inbound)/1000/1000/1000
-                        if(inbound > 1){
+                    if (thisOrderTraffic?.inbound) {
+                        inbound = (response.data?.inbound) / 1024 / 1024 / 1024
+                        if (inbound > 1) {
                             this.TrafficInbound = inbound.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' GB'
                         } else {
                             this.TrafficInbound = (inbound * 1000).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' MB'
                         }
                     }
-                    
-                    if(thisOrderTraffic?.outbound){
-                        outbound = (response.data?.outbound)/1000/1000/1000
-                        if(outbound > 1){
+
+                    if (thisOrderTraffic?.outbound) {
+                        outbound = (response.data?.outbound) / 1024 / 1024 / 1024
+                        if (outbound > 1) {
                             this.TrafficOutbound = outbound.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' GB'
                         } else {
                             this.TrafficOutbound = (outbound * 1000).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
                         }
                     }
-                    
+
                     total = inbound + outbound
-                    
-                    if(total == 0){
+
+                    if (total == 0) {
                         this.TrafficTotal = '0 MB'
                     }
-                    else if(total > 1){
+                    else if (total > 1) {
                         this.TrafficTotal = total.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' GB'
                     } else {
                         this.TrafficTotal = (total * 1000).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' MB'
@@ -1610,9 +1601,9 @@ app = createApp({
                     let formData = new FormData();
                     formData.append('orderID', orderID);
                     formData.append('button_id', button_id);
-                    
-                    
-                    if(this.config?.DemoMode != null){
+
+
+                    if (this.config?.DemoMode != null) {
                         if (button_name.toLowerCase() != 'delete' || this.config?.DemoMode.toLowerCase() == 'off') {
                             RequestLink = this.CreateRequestLink(action = 'CaasifyOrderDoAction');
                             let response = await axios.post(RequestLink, formData);
@@ -1637,7 +1628,7 @@ app = createApp({
                                     }, 6 * 1000);
                                 }
                             }
-                        
+
                             setTimeout(() => {
                                 this.ActionAlertStatus = null
                                 this.ActionAlert = null

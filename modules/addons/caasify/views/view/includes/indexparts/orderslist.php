@@ -3,7 +3,7 @@
     <div class="py-5">
 
         <!-- Fetching  -->
-        <div v-if="!machinsLoaded">
+        <div v-if="!OrdersLoaded">
             <span>
                 <div class="spinner-border spinner-border-sm text-primary small" role="status"></div>
                 <span class="h4 text-primary py-3 ps-3">{{ lang('listofactiveorders') }}</span>
@@ -14,14 +14,14 @@
         </div>
 
         <!-- Has no orders -->
-        <div v-if="machinsLoaded && activeorders == null">
+        <div v-if="OrdersLoaded && activeorders == null">
             <p class="fs-5 ps-3 text-danger">
                 {{ lang('noactiveorder') }}
             </p>
         </div>
 
         <!-- show activ orders -->
-        <div v-if="machinsLoaded && activeorders != null">
+        <div v-if="OrdersLoaded && activeorders != null">
             <table v-if="!isEmpty(activeorders)" class="table table-borderless pb-5 mb-5"
                 style="--bs-table-bg: #ff000000;">
                 <thead>

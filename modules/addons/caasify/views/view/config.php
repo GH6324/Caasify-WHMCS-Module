@@ -1,7 +1,6 @@
 <?php
+
 // This file aims to get configs from WHMCS and use it inside module
-
-
 
 // INCLUDE NEEDED FILES
 $position = strpos($_SERVER['PHP_SELF'], "modules");
@@ -19,8 +18,28 @@ require_once($initAdress);
 require_once ($caasifyAddress);
 
 // READY TO READ DATA
-// --------------------------------------- //
 
+// TODO : Check Auth: finished
+// if(isset($parentFileName) && ($parentFileName  == 'index' || $parentFileName  == 'create' || $parentFileName  == 'view' || $parentFileName  == 'admin')){
+//     if($parentFileName  == 'admin'){
+//         if(isset($_SESSION['adminid'])){
+//             // echo('admin');
+//         } else {
+//             header('Location: /admin/login.php');
+//             exit();     
+//         }
+//     } else {
+//         if(isset($_SESSION['uid'])){
+//             // echo('clinet');
+//         } else {
+//             header('Location: /index.php?rp=/login');
+//             exit();         
+//         }
+//     }
+// } else {
+//     header('Location: /index.php?rp=/login');
+//     exit();     
+// }
 
 
 // Get and Set Language

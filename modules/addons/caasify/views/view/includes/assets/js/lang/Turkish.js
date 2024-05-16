@@ -226,7 +226,7 @@ let common = {
     "accountcredit" : "Hesap Kredisi",
     "successful" : "Başarılı",
     "chargingdonesuccessfully" : "Şarj işlemi başarıyla tamamlandı, sonucu görmek için lütfen sayfayı yeniden yükleyin",
-    "currentbalanceautovm": "Mevcut AutoVM Bakiyesi",
+    "currentbalanceautovm": "Mevcut Caasify Bakiyesi",
     "addorremove": "Bakiye Ekle/Çıkar ±",
     "increase": "Artır",
     "decrease": "Azalt",
@@ -239,7 +239,7 @@ let common = {
     "adjustusebalance" : "User Balance",
     "maketransaction" : "Record New Transaction",
     "email" : "Email",
-    "userdetailautovm" : "AutoVM'deki Kullanıcı Ayrıntıları",
+    "userdetailautovm" : "Caasify'deki Kullanıcı Ayrıntıları",
     "taketimetoseeresult" : "Genellikle bulut bakiyenizdeki ücreti görmek bir dakikadan fazla sürer.",
     "noaction" : "No Action Recorded",
 // end index
@@ -375,7 +375,7 @@ let common = {
     "MoreThanMax" : "Not valid: it is more than allowed charge, call your admin",    
     "DeleteIsNotAllowed" : "You are not allowed to DELETE this machine in DEMO Mode",    
     "TrafficAlert" : "It may take more than 10 minutes",    
-
+    "Machine Info" : "Machine Info",
     
 }
 

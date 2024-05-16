@@ -7,9 +7,11 @@
 // Kill if not admin
 define('ROOTDIR', dirname(__FILE__));
 require_once(ROOTDIR . '/init.php');
-$session = $_SESSION['adminid'];
-if($session != 1){
-    exit("Opps");
+
+$admin = $_SESSION['adminid'];
+if(empty($admin)){
+    header('Location: /index.php');
+    exit(); 
 }
 
 
@@ -28,7 +30,7 @@ $RemoteVersionAddress = 'https://update.caasify.com/whmcs/caasifyversion.txt';
 $RemoteVersion = file_get_contents($RemoteVersionAddress);
 if(empty($RemoteVersion)){$RemoteVersion = 0;}
 
-$localZipAddress = __DIR__ . '/downlodedcaasify.zip';
+$localZipAddress = __DIR__ . '/downloadedcaasify.zip';
 $RooteAddress = __DIR__ . '/';
 $LocalVersionAddress = __DIR__ . '/caasifyversion.txt';
 $LocalVersion = file_get_contents($LocalVersionAddress);
@@ -65,7 +67,7 @@ if($method == 'install' || $method == 'update')
     DownloadZip($RemoteZipAddress, $localZipAddress);
     ExtractZip($localZipAddress, $RooteAddress);
     DeletDirectory('__MACOSX');
-    DeletDirectory('downlodedcaasify.zip');
+    DeletDirectory('downloadedcaasify.zip');
     foreach ($DirectoriesList as $item) {
         setPermissions($item, $maxDepth);
     }

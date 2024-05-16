@@ -226,7 +226,7 @@ let common = {
     "accountcredit" : "Кредит аккаунта",
     "successful" : "Успешно",
     "chargingdonesuccessfully" : "Процесс пополнения завершился успешно, пожалуйста, перезагрузите страницу, чтобы увидеть результат",
-    "currentbalanceautovm" : "Current AutoVM Balance",
+    "currentbalanceautovm" : "Current Caasify Balance",
     "addorremove" : "Add/Remove Balance ±",
     "increase" : "Increase",
     "decrease" : "Decrease",
@@ -239,7 +239,7 @@ let common = {
     "adjustusebalance" : "Adjust User Balance",
     "maketransaction" : "Record New Transaction",
     "email" : "Email",
-    "userdetailautovm" : "User Details in AutoVM",
+    "userdetailautovm" : "User Details in Caasify",
     "taketimetoseeresult" : "Обычно требуется больше минуты, чтобы увидеть списание на вашем облачном балансе.",
     "noaction" : "No Action Recorded",
     // End index page
@@ -376,7 +376,7 @@ let common = {
     "DeleteIsNotAllowed" : "You are not allowed to DELETE this machine in DEMO Mode",    
     "TrafficAlert" : "It may take more than 10 minutes",    
     
-
+    "Machine Info" : "Machine Info",
     
 
 }

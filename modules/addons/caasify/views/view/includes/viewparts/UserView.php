@@ -3,10 +3,11 @@
     <div class="col-12 col-xl-6 p-0 m-0 mb-2 flex-grow-1 pe-xl-1">
         <div class="border border-2 rounded-4 bg-white m-0 p-0 py-4 px-4 mx-0 me-xl-1 pb-5 h-100">
             <div class="m-0 p-0">
-
                 <p class="text-secondary fs-5">
-                    <i class="bi bi-person-circle pe-1"></i>
-                    {{ lang('login') }}
+                    <img src="<?php echo($systemUrl); ?>/modules/addons/caasify/views/view/includes/assets/img/osicon.svg" width="18">
+                    <span class="text-secondary m-0 p-0 ps-4">
+                        {{ lang('Machine Info') }}
+                    </span>
                 </p>
                 <div class="input-group mt-5 mb-2">
                     <span class="input-group-text" id="basic-addon1" style="width: 100px;">
@@ -35,9 +36,8 @@
                 <!-- bottom slice -->
                 <div class="m-0 p-0 px-1">
                     <div class="m-0 p-0 mt-0">
-
                         <p class="text-secondary mb-4 fs-5">
-                            <i class="bi bi-currency-exchange pe-1"></i>
+                            <i class="bi bi-currency-exchange pe-4"></i>
                             {{ lang('finance') }}
                         </p>
                         <!-- Price -->
@@ -51,8 +51,7 @@
                                 </span>
                             </div>
                             <div class="col-auto m-0 p-0">
-                                <span class="text-primary align-middle m-0 p-0 fw-medium"
-                                    v-if="thisOrder?.records[thisOrder.records.length - 1].price">
+                                <span class="text-primary align-middle m-0 p-0 fw-medium" v-if="thisOrder?.records[thisOrder.records.length - 1].price">
                                     <span>
                                         {{ showBalanceWhmcsUnit(ConvertFromCaasifyToWhmcs(thisOrder.records[thisOrder.records.length - 1].price)) }}
                                     </span>

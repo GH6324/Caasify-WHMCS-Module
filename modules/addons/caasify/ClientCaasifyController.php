@@ -6,46 +6,21 @@ class ClientCaasifyController
 {
     protected $BackendUrl;
     protected $ResellerToken;
-    protected $clientId;
     protected $UserToken;
+    protected $CaasifyUserId;
+    protected $WhUserId;
     protected $DemoMode;
 
-    public function __construct($BackendUrl, $ResellerToken, $clientId, $DemoMode)
+    public function __construct($BackendUrl, $ResellerToken, $UserToken, $CaasifyUserId, $WhUserId, $DemoMode)
     {
         $BackendUrl = str_replace(' ', '', $BackendUrl);
         $BackendUrl = preg_replace('/\s+/', '', $BackendUrl);        
-
         $this->BackendUrl = $BackendUrl;
-        $this->clientId = $clientId;
-        $this->ResellerToken = $ResellerToken;   
-        $this->UserToken = $this->getUserTokenFromDB();
-
-        if(!isset($DemoMode) || $DemoMode != 'on'){
-            $DemoMode = 'off';
-        }
-        $this->DemoMode = $DemoMode;
-
-    }
-
-    public function getUserTokenFromDB()
-    {
-        $params = [ 'clientID' => $this->clientId ];
-        $user = Capsule::selectOne('SELECT token FROM tblcaasify_user WHERE client_id = :clientID', $params);
-        if($user) { 
-            return $user->token; 
-        }
-        
-        return null;
-    }
-
-    public function getCaasifyUserIDFromDB()
-    {
-        $params = [ 'clientID' => $this->clientId ];
-        $user = Capsule::selectOne('SELECT caasify_user_id FROM tblcaasify_user WHERE client_id = :clientID', $params);
-        if($user) { 
-            return $user->caasify_user_id; 
-        }
-        return null;
+        $this->ResellerToken = $ResellerToken;
+        $this->UserToken = $UserToken;   
+        $this->CaasifyUserId = $CaasifyUserId;   
+        $this->WhUserId = $WhUserId;   
+        $this->DemoMode = $DemoMode;   
     }
 
     public function pageIndex()
@@ -65,44 +40,40 @@ class ClientCaasifyController
 
     public function WhmcsUserInfo()
     {
-        $clientId = $this->clientId;
-        $response = caasify_get_whmcs_user($clientId);
+        $WhUserId = $this->WhUserId;
+        $response = caasify_get_whmcs_user($WhUserId);
         $this->response($response);
     }
 
     public function WhmcsCurrencies()
     {
-        $clientId = $this->clientId;
-        $response = caasify_get_Whmcs_Currencies($clientId);
+        $response = caasify_get_Whmcs_Currencies();
         $this->response($response);
     }
 
     public function UserOrders()
     {
-        $UserToken = $this->getUserTokenFromDB();
+        $UserToken = $this->UserToken;
         $response = null;
-        $page = caasify_get_post('page');
-        
         if($UserToken){
-            $response = $this->sendUserOrdersRequest($UserToken, $page);
+            $response = $this->sendUserOrdersRequest($UserToken);
         }
         
         $this->response($response);
     }
 
-    public function sendUserOrdersRequest($UserToken, $page)
+    public function sendUserOrdersRequest($UserToken)
     {
+        $BackendUrl = $this->BackendUrl;
 
         $headers = [
             'Accept' => 'application/json',
             'Date-Humanize' => 1,
             'Authorization' => 'Bearer ' . $UserToken
-        ];
-        
-        $BackendUrl = $this->BackendUrl;
+        ]; 
 
         $address = [
-            $BackendUrl, 'api', 'orders', '?page=' . $page
+            $BackendUrl, 'api', 'orders'
         ];
         
         return Request::instance()->setAddress($address)->setHeaders($headers)->getResponse()->asObject();
@@ -110,7 +81,7 @@ class ClientCaasifyController
 
     public function CaasifyUserInfo()
     {
-        $UserToken = $this->getUserTokenFromDB();
+        $UserToken = $this->UserToken;
         $response = null;
 
         if($UserToken){
@@ -121,12 +92,12 @@ class ClientCaasifyController
 
     public function sendCaasifyUserInfoRequest($UserToken)
     {
+        $BackendUrl = $this->BackendUrl;
+
         $headers = [
             'Accept' => 'application/json',
             'Authorization' => 'Bearer ' . $UserToken
         ];
-        
-        $BackendUrl = $this->BackendUrl;
 
         $address = [
             $BackendUrl, 'api', 'profile', 'show'
@@ -137,7 +108,7 @@ class ClientCaasifyController
 
     public function CaasifyGetDataCenters()
     {
-        $UserToken = $this->getUserTokenFromDB();
+        $UserToken = $this->UserToken;
         $response = null;
 
         if($UserToken){
@@ -148,13 +119,12 @@ class ClientCaasifyController
 
     public function sendCaasifyGetDataCentersRequest($UserToken)
     {
-        
+        $BackendUrl = $this->BackendUrl;
+
         $headers = [
             'Accept' => 'application/json',
             'Authorization' => 'Bearer ' . $UserToken
         ];
-        
-        $BackendUrl = $this->BackendUrl;
         
         $address = [
             $BackendUrl, 'api', 'common', 'categories'
@@ -162,12 +132,14 @@ class ClientCaasifyController
 
         return Request::instance()->setAddress($address)->setHeaders($headers)->getResponse()->asObject();
     }
-
+    
     public function CaasifyGetPlans()
     {
-        $UserToken = $this->getUserTokenFromDB();
+        $UserToken = $this->UserToken;
         $response = null;
+
         $CategoryID = caasify_get_post('CategoryID');
+        
         if($UserToken && $CategoryID){
             $response = $this->sendCaasifyGetPlansRequest($UserToken, $CategoryID);
             $this->response($response);
@@ -176,7 +148,8 @@ class ClientCaasifyController
 
     public function sendCaasifyGetPlansRequest($UserToken, $CategoryID)
     {
-        
+        $BackendUrl = $this->BackendUrl;
+
         $headers = [
             'Accept' => 'application/json',
             'Authorization' => 'Bearer ' . $UserToken
@@ -185,25 +158,22 @@ class ClientCaasifyController
         $params = http_build_query([
             'category' => $CategoryID,
         ]);
-        
-        $BackendUrl = $this->BackendUrl;
 
         $address = [
             $BackendUrl, 'api', 'common', 'products', "?{$params}"
         ];
-
         
         return Request::instance()->setAddress($address)->setHeaders($headers)->getResponse()->asObject();
     }
 
     public function CaasifyCreateOrder()
     {
-        $UserToken = $this->getUserTokenFromDB();
+        $UserToken = $this->UserToken;
         $params = caasify_get_post_array_all();
         $response = null;
         
         $DemoMode = $this->DemoMode;
-        if($DemoMode == 'off'){
+        if(isset($DemoMode) && $DemoMode == 'off'){
             if($UserToken && $params){
                 $response = $this->sendCaasifyCreateOrderRequest($UserToken, $params);
             }
@@ -231,7 +201,7 @@ class ClientCaasifyController
 
     public function LoadOrder()
     {
-        $UserToken = $this->getUserTokenFromDB();
+        $UserToken = $this->UserToken;
         $response = null;
 
         $orderID = caasify_get_post('orderID');
@@ -263,12 +233,12 @@ class ClientCaasifyController
     
     public function CaasifyGetOrderViews()
     {
-        $UserToken = $this->getUserTokenFromDB();
+        $UserToken = $this->UserToken;
         $response = null;
 
         $orderID = caasify_get_post('orderID');
 
-        if($UserToken){
+        if($UserToken && $orderID){
             $response = $this->sendOrderViewsRequest($UserToken, $orderID);
         }
 
@@ -294,13 +264,13 @@ class ClientCaasifyController
 
     public function CaasifyOrderDoAction()
     {
-        $UserToken = $this->getUserTokenFromDB();
+        $UserToken = $this->UserToken;
         $response = null;
 
         $orderID = caasify_get_post('orderID');
         $button_id = caasify_get_post('button_id');
 
-        if($UserToken){
+        if($UserToken && $orderID && $button_id){
             $response = $this->sendOrderAction($UserToken, $orderID, $button_id);
         }
 
@@ -330,7 +300,7 @@ class ClientCaasifyController
 
     public function CaasifyRequestNewView()
     {
-        $UserToken = $this->getUserTokenFromDB();
+        $UserToken = $this->UserToken;
         $response = null;
 
         $orderID = caasify_get_post('orderID');
@@ -361,7 +331,7 @@ class ClientCaasifyController
 
     public function CaasifyActionsHistory()
     {
-        $UserToken = $this->getUserTokenFromDB();
+        $UserToken = $this->UserToken;
         $response = null;
 
         $orderID = caasify_get_post('orderID');
@@ -386,15 +356,13 @@ class ClientCaasifyController
         $address = [
             $BackendUrl, 'api', 'orders', $orderID, 'actions'
         ];
-
-        
         
         return Request::instance()->setAddress($address)->setHeaders($headers)->getResponse()->asObject();
     }
 
     public function CaasifyOrderTraffics()
     {
-        $UserToken = $this->getUserTokenFromDB();
+        $UserToken = $this->UserToken;
         $response = null;
 
         $orderID = caasify_get_post('orderID');
@@ -432,23 +400,22 @@ class ClientCaasifyController
             echo 'can not access charge amount (E01-Create Invoice)';
         }
 
-        $userId = $this->clientId;
+        $CaasifyUserId = $this->CaasifyUserId;
+        $WhUserId = $this->WhUserId;
         $currentDateTime = date('Y-m-d');
         $nextDay = date('Y-m-d', strtotime($currentDateTime . ' +1 day'));
         
-        if(isset($chargeamount) && isset($userId)){
+        if(isset($chargeamount) && isset($WhUserId)){
             $command = 'CreateInvoice';
             $postData = array(
-                'userid' => $userId,
+                'userid' => $WhUserId,
                 'taxrate' => '0',
                 'date' => $currentDateTime,
                 'duedate' => $nextDay,
                 'itemdescription1' => 'Charge Caasify Account',
                 'itemamount1' => $chargeamount,
                 'itemtaxed1' => '0',
-                'notes' => 'This is an auto created invoice. If it has yet been unpaid, 
-                            you should check it with Client Caasify Account and if Transaction has down successfully, 
-                            then ask customer to pay this invoice',
+                'notes' => 'Caasify: WhUserId = ' . $WhUserId . ' , CaasifyUserId = ' . $CaasifyUserId,
                 'autoapplycredit' => '0',
             );
             $results = localAPI($command, $postData);
@@ -464,8 +431,9 @@ class ClientCaasifyController
         } else {
             echo 'Can not access Invoice Id (E02-Mark Cancel)';
         }
-
-        $userId = $this->clientId;
+        
+        $CaasifyUserId = $this->CaasifyUserId;
+        $WhUserId = $this->WhUserId;
         $currentDateTime = date('Y-m-d');
 
         $command = 'UpdateInvoice';
@@ -473,8 +441,7 @@ class ClientCaasifyController
                 'invoiceid' => $invoiceid,
                 'status' => 'Cancelled',
                 'date' => $currentDateTime,
-                'notes' => 'This invoice created automatically to charge Caasify Balance, but we have error in Caasify Api request, 
-                            so this invoice cancelled automatically, it means that the Caasify balance did not charged',
+                'notes' => 'Caasify: WhUserId = ' . $WhUserId . ' , CaasifyUserId = ' . $CaasifyUserId,
             );
             $results = localAPI($command, $postData);
             $this->response($results); 
@@ -496,26 +463,26 @@ class ClientCaasifyController
             echo 'can not access charge amount (E03-Charge Caasify)';
         }
 
-        $userId = $this->getCaasifyUserIDFromDB();
-        if(empty($userId)){
+        $CaasifyUserId = $this->CaasifyUserId;
+        if(empty($CaasifyUserId)){
             return false;
         }
         
         $ResellerToken = $this->ResellerToken;
     
-        $response = $this->sendChargeCaasifyRequest($userId, $chargeamount, $invoiceid);
+        $response = $this->sendChargeCaasifyRequest($CaasifyUserId, $chargeamount, $invoiceid);
         $this->response($response);
     }
 
-    public function sendChargeCaasifyRequest($userId, $chargeamount, $invoiceid)
+    public function sendChargeCaasifyRequest($CaasifyUserId, $chargeamount, $invoiceid)
     {
         $ResellerToken = $this->ResellerToken;
+        $BackendUrl = $this->BackendUrl;
 
         $headers = [
             'Accept' => 'application/json',
             'Authorization' => 'Bearer ' . $ResellerToken
         ];
-
 
         $params = [
             'amount' => $chargeamount,
@@ -524,11 +491,8 @@ class ClientCaasifyController
             'status' => 'paid'
         ];
 
-
-        $BackendUrl = $this->BackendUrl;
-
         $address = [
-            $BackendUrl, 'api', 'users', $userId, 'transactions', 'create'
+            $BackendUrl, 'api', 'users', $CaasifyUserId, 'transactions', 'create'
         ];
         
         return Request::instance()->setAddress($address)->setHeaders($headers)->setParams($params)->getResponse()->asObject();

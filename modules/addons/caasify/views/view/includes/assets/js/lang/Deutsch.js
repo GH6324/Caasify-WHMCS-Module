@@ -226,7 +226,7 @@ let common = {
     "accountcredit" : "Kontoguthaben",
     "successful" : "Erfolgreich",
     "chargingdonesuccessfully" : "Der Aufladevorgang wurde erfolgreich abgeschlossen. Bitte laden Sie die Seite neu, um das Ergebnis zu sehen",   
-    "currentbalanceautovm" : "Current AutoVM Balance",
+    "currentbalanceautovm" : "Current Caasify Balance",
     "addorremove" : "Add/Remove Balance ±",
     "increase" : "Increase",
     "decrease" : "Decrease",
@@ -239,7 +239,7 @@ let common = {
     "adjustusebalance" : "Adjust User Balance",
     "maketransaction" : "Record New Transaction",
     "email" : "Email",
-    "userdetailautovm" : "User Details in AutoVM",
+    "userdetailautovm" : "User Details in Caasify",
     "taketimetoseeresult" : "Es dauert in der Regel länger als eine Minute, um die Gebühr auf Ihrem Cloud-Guthaben zu sehen.",
     "noaction" : "No Action Recorded",
 // End index page
@@ -374,7 +374,8 @@ let common = {
     "Warning" : "Warning",
     "MoreThanMax" : "Not valid: it is more than allowed charge, call your admin",    
     "DeleteIsNotAllowed" : "You are not allowed to DELETE this machine in DEMO Mode",    
-    "TrafficAlert" : "It may take more than 10 minutes",    
+    "TrafficAlert" : "It may take more than 10 minutes",   
+    "Machine Info" : "Machine Info", 
 
 
 }

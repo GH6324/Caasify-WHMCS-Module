@@ -5,7 +5,6 @@ use WHMCS\User\Client;
 
 $path = dirname(__FILE__);
 require_once $path . '/ClientCaasifyController.php';
-require_once $path . '/AdminCaasifyController.php';
 require_once $path . '/basics.php';
 
 // Create Table user and order
@@ -14,27 +13,19 @@ function caasify_activate(){
     if (empty($hasTable)) {
         Capsule::schema()->create('tblcaasify_user', function ($table) {
             $table->increments('id');
-            $table->string('client_id');
-            $table->string('caasify_user_id');
-            $table->string('email');
-            $table->string('token');
-            $table->string('password');
-        });
-    }
-
-
-    $hasTable = Capsule::schema()->hasTable('tblcaasify_order');
-    if (empty($hasTable)) {
-        Capsule::schema()->create('tblcaasify_order', function ($table) {
-            $table->increments('id');
-            $table->string('order_id');
-            $table->string('machine_id');
+            $table->string('wh_user_id')->nullable();
+            $table->string('caasify_user_id')->nullable();
+            $table->string('email')->nullable();
+            $table->string('token')->nullable();
+            $table->string('password')->nullable();
         });
     }
 }
 
 // Module Config
 function caasify_config(){
+
+    $SystemUrl = caasify_get_systemUrl();
     // Variables
     $CurrencyOptions = caasify_create_currency_options();
     $LanguageOptions = array (
@@ -70,7 +61,8 @@ function caasify_config(){
     
     $ChargeModuleLabel = 'Switch on if wish to use Charging Module that allows users to transfer their Credit too their Caasify Balance';
     $ViewExchangesLabel = 'Switch on if wish to see exchange in both Caasify and user profile currency';
-    $CloudTopupLinkLabel = 'Insert relative TopUp Link, as an Example "/clientarea.php?action=addfunds"';
+    $CloudTopupLinkLabel = 'Insert relative TopUp Link, as an Example <strong>"/clientarea.php?action=addfunds"</strong>';
+    $AdminClientsSummaryLinkLabel = 'Insert admin panel URL for the Clients Summary Page, e.g <strong>(' . $SystemUrl . '/admin/clientssummary.php)</strong>';
 
     // Configs Label
     $MinimumChargeLabel = 'in EURO , insert MIN amount users are allowed to charge their Balance';
@@ -87,7 +79,7 @@ function caasify_config(){
     $configarray = array(
         "name" => "Caasify",
         "description" => "This addon utility allows you to easily connect to Caasify Marketpalce to sell almost everything",
-        "version" => "1.0.1",
+        "version" => "1.0.0",
         "author" => "Caasify",
         "fields" => array(
             "BackendUrl" => array ("FriendlyName" => "Backend URL", "Type" => "text", "Size" => "31", "Description" => $BackendUrlLabel, "Default" => "https://api.caasify.com"),
@@ -95,6 +87,8 @@ function caasify_config(){
             "DefLang" => array ("FriendlyName" => "Panel Language", "Type" => "dropdown", "Options" => $LanguageOptions, "Description" => $DefLangLabel, "Default" => "English"),
             "CaasifyCurrency" => array ("FriendlyName" => "<strong>Caasify Currency</strong>", "Type" => "dropdown", "Options" => $CurrencyOptions, "Description" => $CaasifyCurrencyLabel, "Default" => 'USD'),
             "CloudTopupLink" => array ("FriendlyName" => "Topup Link", "Type" => "text", "Size" => "31", "Description" => $CloudTopupLinkLabel, "Default" => "/clientarea.php?action=addfunds"),
+            "AdminClientsSummaryLink" => array ("FriendlyName" => "Admin Panel URL", "Type" => "text", "Size" => "31", "Description" => $AdminClientsSummaryLinkLabel, "Default" => $SystemUrl . '/admin/clientssummary.php'),
+
             "ChargeModule" => array ("FriendlyName" => "Chargeing Module", "Type" => "dropdown", "Options" => $YesNoOptions, "Description" => $ChargeModuleLabel, "Default" => 'on'),
             "ViewExchanges" => array ("FriendlyName" => "View Exchange", "Type" => "dropdown", "Options" => $YesNoOptions, "Description" => $ViewExchangesLabel, "Default" => 'off'),
             "MinimumCharge" => array ("FriendlyName" => "Minimum TopUp", "Type" => "text", "Size" => "10", "Description" => $MinimumChargeLabel, "Default" => 2),
@@ -139,7 +133,7 @@ function caasify_output($vars) {
         $systemUrl = '/';
     }
 
-    $iframe = '<iframe src="' . $systemUrl . 'caasifyupdatepage.php" frameborder="0" class="iframe"></iframe><style>.iframe{width:100%; height: 800px;}</style>';
+    $iframe = '<iframe src="' . $systemUrl . '/caasifyupdatepage.php" frameborder="0" class="iframe"></iframe><style>.iframe{width:100%; height: 800px;}</style>';
     echo $iframe;
 
     // show error if config is empty or there is any error
@@ -153,36 +147,74 @@ function caasify_output($vars) {
 
 // Create Client Panel Controller
 function caasify_clientarea($vars){   
-    $DemoMode = caasify_get_Demo_Mode();
-    $action = caasify_get_query('action');
-    $clientId = caasify_get_session('uid');
+    // TODO: Client index redirect
+    if (!isset($_SESSION['uid'])) {
+        header('Location: /index.php?rp=/login');
+        exit(); 
+    }
     
-    if(empty($clientId)){
-        echo 'can not find clientID to construct controller';
+    $WhUserId = caasify_get_session('uid');
+    if(empty($WhUserId)){
+        echo 'can not find WhUserId to construct controller <br>';
         return false;
     }
 
-    
     $ResellerToken = caasify_get_reseller_token();
     if(empty($ResellerToken)){
-        echo 'can not find ResellerToken to construct controller';
+        echo 'can not find ResellerToken to construct controller <br>';
         return false;
-    }
-    
+    }    
 
     $configs = caasify_get_config();
     $BackendUrl = $configs['BackendUrl'];
     if(empty($BackendUrl)){
-        echo 'can not find BackendUrl to construct controller';
+        echo 'can not find BackendUrl to construct controller <br>';
         return false;
     }   
+    
+    $DevelopeMode = $config['DevelopeMode'];
+    if(empty($DevelopeMode)){
+        $DevelopeMode = 'off';
+    }
+    
+    $DemoMode = caasify_get_Demo_Mode();
+    if(empty($DemoMode) || $DemoMode != 'on'){
+        $DemoMode = 'off';
+    }
 
-    if(!empty($action) && !empty($clientId) && !empty($ResellerToken) && !empty($BackendUrl)){
+    // TODO: change control params
+    if(!empty($ResellerToken) && !empty($BackendUrl) && !empty($WhUserId)){
+        $UserToken = caasify_get_token_by_handling($ResellerToken, $BackendUrl, $WhUserId);
+    }
+
+    if(empty($UserToken)){
+        echo "can not find user token in client area <br>";
+        return false;
+    }
+
+
+    $CaasifyUserId = caasify_get_CaasifyUserId_from_WhmUserId($WhUserId);
+    if(empty($CaasifyUserId)){
+        echo "can not find CaasifyUserId in client area <br>";
+        return false;
+    }
+
+    $action = caasify_get_query('action');
+
+    if(!empty($action) && !empty($BackendUrl) && !empty($ResellerToken) && !empty($UserToken) && !empty($CaasifyUserId) && !empty($WhUserId) && !empty($DemoMode)){
         try {
-            $controller = new ClientCaasifyController($BackendUrl, $ResellerToken, $clientId, $DemoMode);
+            $controller = new ClientCaasifyController($BackendUrl, $ResellerToken, $UserToken, $CaasifyUserId, $WhUserId, $DemoMode);
             return $controller->handle($action);
         } catch (Exception $e) {
-            return "Error";
+            if($DevelopeMode == 'on'){
+                echo("Error run AdminController in admin hook: " . $e);
+                return false;
+            } else {
+                echo('Error while run admin controler');
+                return false;
+            }
         }
     }
 }
+
+

@@ -109,26 +109,24 @@ if ($client) {
     }
 }
 
-// Find the current logged in admin
 $admin = caasify_get_session('adminid');
 
 if ($admin) {
     $service = Service::find($serviceId);
 }
 
-// Handle caasify requests
 if ($service) {
     $controller = new AVMController($serviceId);
     $controller->handle($action);
 } 
 
-// Create an array to store config
 function get_config_array_temp(){
     $ModuleConfigArray = [
         'BackendUrl' => null,
         'DefLang' => null,
         'CaasifyCurrency' => null,
         'CloudTopupLink' => null,
+        'AdminClientsSummaryLink' => null,
         'ChargeModule' => null,
         'ViewExchanges' => null,
         'MinimumCharge' => null,
@@ -147,7 +145,6 @@ function get_config_array_temp(){
     return $ModuleConfigArray;
 }
 
-// Get config array
 function caasify_get_config(){
     try {
         $configTable = Capsule::table('tbladdonmodules')->where('module', 'caasify')->get();
@@ -162,7 +159,7 @@ function caasify_get_config(){
             foreach($configTable as $items){
                 if($items->setting == $key){
                     $ModuleConfigArray[$key] = $items->value;
-                    if($items->value == ''){
+                    if(empty($items->value)){
                         $ModuleConfigArray['errorMessage'] = $key . ' is empty';
                     }
                 }
@@ -170,11 +167,10 @@ function caasify_get_config(){
         }
     }
 
-    $ModuleConfigArray['systemUrl'] = caasify_get_systemurl();
+    $ModuleConfigArray['systemUrl'] = caasify_get_systemUrl();
     return $ModuleConfigArray;
 }
 
-// Get Reseller Token form module addons
 function caasify_get_reseller_token(){
     
     try {
@@ -201,8 +197,6 @@ function caasify_get_reseller_token(){
     return $ResellerToken;
 }
 
-
-// Get Reseller Token form module addons
 function caasify_get_Demo_Mode(){
     
     try {
@@ -229,7 +223,6 @@ function caasify_get_Demo_Mode(){
     return $DemoMode;
 }
 
-// Get currency list
 function caasify_get_currency_list(){
     $command = 'GetCurrencies';
     $postData = array(
@@ -247,20 +240,19 @@ function caasify_get_currency_list(){
     return $CurrencyArray;
 }
 
-// Get SystemUrl
-function caasify_get_systemurl(){
+function caasify_get_systemUrl(){
     $command = 'GetConfigurationValue';
     $postData = array(
-        'setting' => 'SystemURL',
+        'setting' => 'systemUrl',
     );
     $results = localAPI($command, $postData);
-    if(empty($results['value'])){
-        $results['value'] = '/';
+    $systemUrl = rtrim($results['value'], '/');
+    if(empty($systemUrl)){
+        $systemUrl = '/';
     }
-    return $results['value'];
+    return $systemUrl;
 }
 
-// Create Currency option
 function caasify_create_currency_options(){
     $CurrencyArray = caasify_get_currency_list();
     $CurrencyOptions = [];
@@ -272,7 +264,6 @@ function caasify_create_currency_options(){
     return $CurrencyOptions;
 }
 
-// Get Default Language
 function caasify_GetDefaulLanguage(){
     $CaasifyConfig = caasify_get_config();
     $allowedLanguages = ['English', 'Farsi', 'Turkish', 'Russian', 'French', 'Deutsch', 'Brizilian', 'Italian'];
@@ -305,17 +296,28 @@ function caasify_GetDefaulLanguage(){
     return $templatelang;
 }
 
-function caasify_get_user_token_from_db($userId){
-    $params = ['userId' => $userId];    
-    $user = Capsule::selectOne('SELECT token FROM tblcaasify_user WHERE client_id = :userId', $params);
-    return current($user);
+function caasify_get_user_token_from_db($WhUserId){
+    $params = ['WhUserId' => $WhUserId];    
+    $user = Capsule::selectOne('SELECT token FROM tblcaasify_user WHERE wh_user_id = :WhUserId', $params);
+    return $user->token;
 }
 
-// create ENd user by Api and find token
-function caasify_create_user($BackendUrl, $ResellerToken, $client, $password){
+function caasify_get_CaasifyUserId_from_WhmUserId($WhUserId){
+    $params = ['WhUserId' => $WhUserId];    
+    $user = Capsule::selectOne('SELECT caasify_user_id FROM tblcaasify_user WHERE wh_user_id = :WhUserId', $params);
+    return $user->caasify_user_id;
+}
+
+function caasify_get_userInfo_from_db_if_exist($WhUserId){
+    $params = ['WhUserId' => $WhUserId];    
+    $user = Capsule::selectOne('SELECT wh_user_id FROM tblcaasify_user WHERE wh_user_id = :WhUserId', $params);
+    return $user;
+}
+
+function caasify_create_user($BackendUrl, $ResellerToken, $UserFullName, $UserEmail, $password){
     
     $params = [
-        'name' => $client->fullName, 'email' => $client->email, 'password' => $password
+        'name' => $UserFullName, 'email' => $UserEmail, 'password' => $password
     ];
 
     $headers = [
@@ -330,15 +332,25 @@ function caasify_create_user($BackendUrl, $ResellerToken, $client, $password){
     return Request::instance()->setAddress($address)->setHeaders($headers)->setParams($params)->getResponse()->asObject();
 }
 
-// Create password
-function caasify_createPassword($client){       
-    return $client->email;
+function caasify_createPassword(){
+    $Password = generateRandomPassword();
+    return $Password;
 }
 
-function caasify_get_user_token_from_api($BackendUrl, $client, $password){
+function generateRandomPassword($length = 12) {
+    $possibleChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_-=+;:,<.>?';
+    $password = '';
+    for ($i = 0; $i < $length; $i++) {
+        $rand = mt_rand(0, strlen($possibleChars) - 1);
+        $password .= $possibleChars[$rand];
+    }
+    return $password;
+}
+
+function caasify_get_user_token_from_api($BackendUrl, $UserEmail, $password){
         
     $params = [
-        'email' => $client->email, 'password' => $password
+        'email' => $UserEmail, 'password' => $password
     ];
 
     $headers = ['Accept' =>  'application/json'];
@@ -350,12 +362,11 @@ function caasify_get_user_token_from_api($BackendUrl, $client, $password){
     return Request::instance()->setAddress($address)->setHeaders($headers)->setParams($params)->getResponse()->asObject();
 }
 
-
-function caasify_get_whmcs_user($clientId)
+function caasify_get_whmcs_user($WhUserId)
 {
     $command = 'GetClientsDetails';
     $postData = array(
-        'clientid' => $clientId,
+        'clientid' => $WhUserId,
         'stats' => true,
     );
     $results = localAPI($command, $postData);
@@ -375,11 +386,131 @@ function caasify_get_whmcs_user($clientId)
     } 
 }
 
-
 function caasify_get_Whmcs_Currencies()
 {
     $command = 'GetCurrencies';
     $postData = array();
     $results = localAPI($command, $postData);
     return $results; 
+}
+
+// TODO: func token
+function caasify_get_token_by_handling($ResellerToken, $BackendUrl, $WhUserId)
+{
+    $client = Client::find($WhUserId);
+    if(empty($client)) {
+        echo('can not find the client in token handling');
+        return false;
+    }
+    
+    $token = caasify_get_user_token_from_db($WhUserId);
+    // if has no teken in DB, then register on caasify
+    if(empty($token)) {
+        $UserEmail = $client->email;
+        $UserFullName = $client->firstname . ' ' . $client->lastname;
+
+        if(empty($UserEmail)) {
+            echo('can not UserEmail');
+            return false;
+        }
+        
+        if(empty($UserFullName)) {
+            echo('can not UserFullName');
+            return false;
+        }
+
+        $password = caasify_createPassword();
+        if($BackendUrl != null && $ResellerToken != null && $UserFullName != null && $UserEmail != null && $password != null){   
+            $CreateResponse = caasify_create_user($BackendUrl, $ResellerToken, $UserFullName, $UserEmail, $password);
+        } else {
+            echo('something is missing');
+            return false;
+        }
+
+        if(empty($CreateResponse)) {
+            echo('create request did not work in token handling');
+            return false;
+        }
+
+        $message = property_exists($CreateResponse, 'message');
+        if (!empty($message)) {     
+            echo($CreateResponse->message);
+            return false;
+        }  
+
+        $wh_user_id = caasify_get_userInfo_from_db_if_exist($WhUserId);
+        if(empty($wh_user_id)){
+            $params = [
+                'wh_user_id' => $WhUserId, 
+                'caasify_user_id' => null, 
+                'token' => null, 
+                'email' => $UserEmail, 
+                'password' => $password
+            ];
+
+            try {
+                Capsule::table('tblcaasify_user')->insert($params);
+            } catch (\Exception $e) {
+                echo 'Error inserting user info into data base in handling  <br>';
+                return false;
+            }
+        } 
+
+        // Get Token from API TO RECORD INTO DATABASE
+        $requestTokenResponse = caasify_get_user_token_from_api($BackendUrl, $UserEmail, $password);
+        if(empty($requestTokenResponse)) {
+            echo 'can not get the token while login in token handling  <br>' ;
+            return false;
+        }
+
+        $message = property_exists($requestTokenResponse, 'message');
+        if(!empty($message)) {  
+            echo($requestTokenResponse->message);
+            return false;
+        }
+
+        $token = $requestTokenResponse->data->token;
+        if(empty($token)){
+            echo('token received is empty');
+            return false;
+        }
+
+        $CaasifyUserId = $CreateResponse->data->id;
+        if(empty($CaasifyUserId)){
+            echo 'No id in regiteration received is empty <br>';
+            return false;
+        }
+
+        // Save token in WHMCS
+        $params = [
+            'wh_user_id' => $WhUserId, 
+            'caasify_user_id' => $CaasifyUserId, 
+            'token' => $token, 
+            'email' => $UserEmail, 
+            'password' => $password
+        ];
+
+        try {
+            // Check if a record with the given wh_user_id exists
+            $existingRecord = Capsule::table('tblcaasify_user')
+                ->where('wh_user_id', $WhUserId)
+                ->first();
+    
+            if ($existingRecord) {
+                // If record exists, update it
+                Capsule::table('tblcaasify_user')
+                    ->where('wh_user_id', $WhUserId)
+                    ->update($params);
+            } else {
+                // If no record exists, insert a new one
+                Capsule::table('tblcaasify_user')
+                    ->insert($params);
+            }
+        } catch (\Exception $e) {
+            echo 'Error inserting data into data base in handling <br>';
+            return false; // Indicate failure
+        }
+    }
+
+    return $token;
 }

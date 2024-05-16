@@ -1,3 +1,4 @@
+<?php $parentFileName = basename(__FILE__, '.php'); ?>
 <?php  include('./config.php'); ?>
 <?php  include('./includes/baselayout/header.php');   ?>
 

@@ -226,7 +226,7 @@ let common = {
     "accountcredit": "Credito dell'Account",
     "successful": "Successo",
     "chargingdonesuccessfully": "Il processo di ricarica è stato completato con successo, ricarica la pagina per vedere il risultato",
-    "currentbalanceautovm": "Bilancio AutoVM Attuale",
+    "currentbalanceautovm": "Bilancio Caasify Attuale",
     "addorremove": "Aggiungi/Rimuovi Bilancio ±",
     "increase": "Aumenta",
     "decrease": "Diminuisci",
@@ -239,7 +239,7 @@ let common = {
     "adjustusebalance": "Regola il Bilancio Utente",
     "maketransaction" : "Record New Transaction",
     "email": "Email",
-    "userdetailautovm": "Dettagli Utente in AutoVM",
+    "userdetailautovm": "Dettagli Utente in Caasify",
     "taketimetoseeresult": "Di solito ci vogliono più di alcuni minuti per vedere l'addebito sul tuo Bilancio Cloud",
     "noaction": "Nessuna Azione Registrata",
 
@@ -377,7 +377,7 @@ let common = {
     "DeleteIsNotAllowed" : "You are not allowed to DELETE this machine in DEMO Mode",  
     "TrafficAlert" : "It may take more than 10 minutes",      
 
-
+    "Machine Info" : "Machine Info",
 
     
 }

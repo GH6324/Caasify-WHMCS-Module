@@ -227,7 +227,7 @@ let common = {
     "accountcredit" : "Crédito da Conta",
     "successful" : "Bem-sucedido",
     "chargingdonesuccessfully" : "O processo de carregamento foi concluído com sucesso, por favor, recarregue a página para ver o resultado",
-    "currentbalanceautovm" : "Saldo Atual do AutoVM",
+    "currentbalanceautovm" : "Saldo Atual do Caasify",
     "addorremove" : "Adicionar/Remover Saldo ±",
     "increase" : "Aumentar",
     "decrease" : "Diminuir",
@@ -240,7 +240,7 @@ let common = {
     "adjustusebalance" : "Ajustar Saldo do Usuário",
     "maketransaction" : "Record New Transaction",
     "email" : "E-mail",
-    "userdetailautovm" : "Detalhes do Usuário no AutoVM",
+    "userdetailautovm" : "Detalhes do Usuário no Caasify",
     "taketimetoseeresult" : "Normalmente, leva mais de alguns minutos para ver o carregamento em seu Saldo na Nuvem",
     "noaction" : "Nenhuma Ação Registrada",
 
@@ -375,7 +375,8 @@ let common = {
     "Warning" : "Warning",
     "MoreThanMax" : "Not valid: it is more than allowed charge, call your admin",    
     "DeleteIsNotAllowed" : "You are not allowed to DELETE this machine in DEMO Mode",    
-    "TrafficAlert" : "It may take more than 10 minutes",    
+    "TrafficAlert" : "It may take more than 10 minutes",  
+    "Machine Info" : "Machine Info",  
 
 
 }

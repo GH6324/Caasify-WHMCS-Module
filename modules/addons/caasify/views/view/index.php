@@ -1,3 +1,4 @@
+<?php $parentFileName = basename(__FILE__, '.php'); ?>
 <?php  include('./config.php'); ?>
 <?php  include('./includes/baselayout/header.php');   ?>
 <body class="container-fluid m-0 p-0" style="background-color: #ff000000 !important;">
