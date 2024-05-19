@@ -125,6 +125,7 @@ function get_config_array_temp(){
         'BackendUrl' => null,
         'DefLang' => null,
         'CaasifyCurrency' => null,
+        'Commission' => null,
         'CloudTopupLink' => null,
         'AdminClientsSummaryLink' => null,
         'ChargeModule' => null,
@@ -159,7 +160,7 @@ function caasify_get_config(){
             foreach($configTable as $items){
                 if($items->setting == $key){
                     $ModuleConfigArray[$key] = $items->value;
-                    if(empty($items->value)){
+                    if(!isset($items->value) || $items->value === ''){
                         $ModuleConfigArray['errorMessage'] = $key . ' is empty';
                     }
                 }

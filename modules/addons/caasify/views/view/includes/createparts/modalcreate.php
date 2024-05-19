@@ -109,7 +109,7 @@
                                             <span class="px-1">
                                                 :
                                             </span>
-                                            {{ showMachinePriceInWhmcsUnit(ConvertFromCaasifyToWhmcs(NewMachinePrice)) }}
+                                            {{ showMachinePriceInWhmcsUnit(ConvertFromCaasifyToWhmcs(addCommision(NewMachinePrice))) }}
                                             {{ userCurrencySymbolFromWhmcs }}
                                         </p>
                                     </div>
@@ -207,7 +207,7 @@
                     </span>
                     <span v-if="user.balance" class="fw-medium" :class="CreateIsLoading ? 'text-secondary' : 'text-primary'">
                         <span v-if="CurrenciesRatioCloudToWhmcs != null">
-                            {{ showBalanceWhmcsUnit(ConvertFromCaasifyToWhmcs(user.balance)) }}
+                            {{ showBalanceWhmcsUnit(ConvertFromCaasifyToWhmcs(addCommision(user.balance))) }}
                             {{ userCurrencySymbolFromWhmcs }}
                         </span>
                         <span v-else>

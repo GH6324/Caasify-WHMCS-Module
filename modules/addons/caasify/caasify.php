@@ -52,12 +52,14 @@ function caasify_config(){
         '4' => '4',
         '5' => '5',
     );
+
     
     // Labels
     $BackendUrlLabel = "Default is (https://api.caasify.com)";
     $ResellerTokenLabel = 'Insert your Reseller Token here, get it by registering on my.caasify.com';
     $DefLangLabel = 'This is Defaul Language for clients panel on first visit, they can chagne it by their preference';
     $CaasifyCurrencyLabel = 'It must be <strong>EURO</strong> (Caasify Currency). If you dont have EURO, you must create one in System Setting/currency and then select it here';
+    $CommissionCurrencyLabel = '<strong> % Percent </strong>, this is the comission which will add to the product prices, default is 10%';
     
     $ChargeModuleLabel = 'Switch on if wish to use Charging Module that allows users to transfer their Credit too their Caasify Balance';
     $ViewExchangesLabel = 'Switch on if wish to see exchange in both Caasify and user profile currency';
@@ -79,24 +81,25 @@ function caasify_config(){
     $configarray = array(
         "name" => "Caasify",
         "description" => "This addon utility allows you to easily connect to Caasify Marketpalce to sell almost everything",
-        "version" => "1.0.0",
+        "version" => "1.0.1",
         "author" => "Caasify",
         "fields" => array(
-            "BackendUrl" => array ("FriendlyName" => "Backend URL", "Type" => "text", "Size" => "31", "Description" => $BackendUrlLabel, "Default" => "https://api.caasify.com"),
+            "BackendUrl" => array ("FriendlyName" => "Backend URL", "Type" => "dropdown", "Options" => 'https://api.caasify.com', "Description" => $BackendUrlLabel, "Default" => 'https://api.caasify.com'),
             "ResellerToken" => array ("FriendlyName" => "Reseller Token", "Type" => "text", "Size" => "31", "Description" => $ResellerTokenLabel, "Default" => ""),
             "DefLang" => array ("FriendlyName" => "Panel Language", "Type" => "dropdown", "Options" => $LanguageOptions, "Description" => $DefLangLabel, "Default" => "English"),
             "CaasifyCurrency" => array ("FriendlyName" => "<strong>Caasify Currency</strong>", "Type" => "dropdown", "Options" => $CurrencyOptions, "Description" => $CaasifyCurrencyLabel, "Default" => 'USD'),
+            "Commission" => array ("FriendlyName" => "<strong>Commission</strong>", "Type" => "text", "Description" => $CommissionCurrencyLabel, "Default" => '10'),
             "CloudTopupLink" => array ("FriendlyName" => "Topup Link", "Type" => "text", "Size" => "31", "Description" => $CloudTopupLinkLabel, "Default" => "/clientarea.php?action=addfunds"),
             "AdminClientsSummaryLink" => array ("FriendlyName" => "Admin Panel URL", "Type" => "text", "Size" => "31", "Description" => $AdminClientsSummaryLinkLabel, "Default" => $SystemUrl . '/admin/clientssummary.php'),
 
             "ChargeModule" => array ("FriendlyName" => "Chargeing Module", "Type" => "dropdown", "Options" => $YesNoOptions, "Description" => $ChargeModuleLabel, "Default" => 'on'),
             "ViewExchanges" => array ("FriendlyName" => "View Exchange", "Type" => "dropdown", "Options" => $YesNoOptions, "Description" => $ViewExchangesLabel, "Default" => 'off'),
-            "MinimumCharge" => array ("FriendlyName" => "Minimum TopUp", "Type" => "text", "Size" => "10", "Description" => $MinimumChargeLabel, "Default" => 2),
-            "MaximumCharge" => array ("FriendlyName" => "Maximum TopUp", "Type" => "text", "Size" => "10", "Description" => $MaxChargeLabel, "Default" => 100),
-            "MinBalanceAllowToCreate" => array ("FriendlyName" => "Minimum Balance to order", "Type" => "text", "Size" => "10", "Description" => $MinimumBalanceLabel, "Default" => 2),
-            "MonthlyCostDecimal" => array ("FriendlyName" => "Monthly Cost Decimal", "Type" => "dropdown", "Options" => $DecimalOptions, "Description" => $MonthlyCostDecimalLabel, "Default" => '0'),
-            "HourlyCostDecimal" => array ("FriendlyName" => "Hourly Cost Decimal", "Type" => "dropdown", "Options" => $DecimalOptions, "Description" => $HourlyCostDecimalLabel, "Default" => '0'),
-            "BalanceDecimal" => array ("FriendlyName" => "Balance Decimal", "Type" => "dropdown", "Options" => $DecimalOptions, "Description" => $BalanceDecimalLabel, "Default" => '0'),
+            "MinimumCharge" => array ("FriendlyName" => "Minimum TopUp", "Type" => "text", "Size" => "10", "Description" => $MinimumChargeLabel, "Default" => 1),
+            "MaximumCharge" => array ("FriendlyName" => "Maximum TopUp", "Type" => "text", "Size" => "10", "Description" => $MaxChargeLabel, "Default" => 500),
+            "MinBalanceAllowToCreate" => array ("FriendlyName" => "Minimum Balance to order", "Type" => "text", "Size" => "10", "Description" => $MinimumBalanceLabel, "Default" => 1),
+            "MonthlyCostDecimal" => array ("FriendlyName" => "Monthly Cost Decimal", "Type" => "dropdown", "Options" => $DecimalOptions, "Description" => $MonthlyCostDecimalLabel, "Default" => '2'),
+            "HourlyCostDecimal" => array ("FriendlyName" => "Hourly Cost Decimal", "Type" => "dropdown", "Options" => $DecimalOptions, "Description" => $HourlyCostDecimalLabel, "Default" => '2'),
+            "BalanceDecimal" => array ("FriendlyName" => "Balance Decimal", "Type" => "dropdown", "Options" => $DecimalOptions, "Description" => $BalanceDecimalLabel, "Default" => '2'),
             "DevelopeMode" => array ("FriendlyName" => "<strong>Develope Mode</strong>", "Type" => "dropdown", "Options" => $YesNoOptions, "Description" => $DevelopeModeLabel, "Default" => 'off'),
             "DemoMode" => array ("FriendlyName" => "<strong>DEMO Mode</strong>", "Type" => "dropdown", "Options" => $YesNoOptions, "Description" => $DemoModeLabel, "Default" => 'off'),
         ));
@@ -127,27 +130,28 @@ function caasify_output($vars) {
     echo($text);
 
     
-    $configs = caasify_get_config();
-    $systemUrl = $configs['systemUrl'];
-    if(empty($systemUrl)){
-        $systemUrl = '/';
-    }
-
-    $iframe = '<iframe src="' . $systemUrl . '/caasifyupdatepage.php" frameborder="0" class="iframe"></iframe><style>.iframe{width:100%; height: 800px;}</style>';
-    echo $iframe;
-
     // show error if config is empty or there is any error
     $ModuleConfigArray = caasify_get_config();
     if($ModuleConfigArray['errorMessage']){
         $text = '<pre><p style="color:red" class="h5">' . $ModuleConfigArray['errorMessage'] . '</p></pre>';
         echo($text);
     }
+    
+    $configs = caasify_get_config();
+    $systemUrl = $configs['systemUrl'];
+    if(empty($systemUrl)){
+        $systemUrl = '/';
+    }
+
+    $iframe = '<iframe src="' . $systemUrl . '/caasifyupdatepage.php" frameborder="0" class="iframe"></iframe><style>.iframe{width:100%; height: 550px;}</style>';
+    echo $iframe;
+
+    
 
 }
 
 // Create Client Panel Controller
 function caasify_clientarea($vars){   
-    // TODO: Client index redirect
     if (!isset($_SESSION['uid'])) {
         header('Location: /index.php?rp=/login');
         exit(); 
@@ -182,7 +186,6 @@ function caasify_clientarea($vars){
         $DemoMode = 'off';
     }
 
-    // TODO: change control params
     if(!empty($ResellerToken) && !empty($BackendUrl) && !empty($WhUserId)){
         $UserToken = caasify_get_token_by_handling($ResellerToken, $BackendUrl, $WhUserId);
     }

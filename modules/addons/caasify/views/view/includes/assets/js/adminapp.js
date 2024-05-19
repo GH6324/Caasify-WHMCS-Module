@@ -12,6 +12,7 @@ app = createApp({
                 BackendUrl: null,
                 DefLang: null,
                 CaasifyCurrency: null,
+                Commission: null,
                 CloudTopupLink: null,
                 AdminClientsSummaryLink: null,
                 ChargeModule: null,
@@ -67,13 +68,14 @@ app = createApp({
             this.config.CloudTopupLink = NewCaasifyConfigs.CloudTopupLink
             this.config.AdminClientsSummaryLink = NewCaasifyConfigs.AdminClientsSummaryLink
             this.config.ChargeModule = NewCaasifyConfigs.ChargeModule
+            this.config.Commission = parseFloat(NewCaasifyConfigs.Commission)
             this.config.ViewExchanges = NewCaasifyConfigs.ViewExchanges
-            this.config.MinimumCharge = NewCaasifyConfigs.MinimumCharge
-            this.config.MaximumCharge = NewCaasifyConfigs.MaximumCharge
-            this.config.MinBalanceAllowToCreate = NewCaasifyConfigs.MinBalanceAllowToCreate
-            this.config.MonthlyCostDecimal = NewCaasifyConfigs.MonthlyCostDecimal
-            this.config.HourlyCostDecimal = NewCaasifyConfigs.HourlyCostDecimal
-            this.config.BalanceDecimal = NewCaasifyConfigs.BalanceDecimal
+            this.config.MinimumCharge = parseFloat(NewCaasifyConfigs.MinimumCharge)
+            this.config.MaximumCharge = parseFloat(NewCaasifyConfigs.MaximumCharge)
+            this.config.MinBalanceAllowToCreate = parseFloat(NewCaasifyConfigs.MinBalanceAllowToCreate)
+            this.config.MonthlyCostDecimal = parseFloat(NewCaasifyConfigs.MonthlyCostDecimal)
+            this.config.HourlyCostDecimal = parseFloat(NewCaasifyConfigs.HourlyCostDecimal)
+            this.config.BalanceDecimal = parseFloat(NewCaasifyConfigs.BalanceDecimal)
             this.config.DevelopeMode = NewCaasifyConfigs.DevelopeMode
             this.config.DemoMode = NewCaasifyConfigs.DemoMode
             this.config.errorMessage = NewCaasifyConfigs.errorMessage
@@ -126,7 +128,7 @@ app = createApp({
             if (this.config?.AdminClientsSummaryLink != null && this.WhUserId != null) {
                 this.readyToLoad = true;   
             } else {
-                console.log('AdminLink or UserId is missed');
+                console.error('AdminLink or UserId is missed');
             }
         },
 
@@ -214,7 +216,6 @@ app = createApp({
             if(response) {
                 this.ChargeAmount = null
                 this.ChargingIsInProcess = false
-                console.log(response);
             }
             
             if (response?.data?.data) {

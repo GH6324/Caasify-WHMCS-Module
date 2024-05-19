@@ -61,7 +61,7 @@
                         <td class="fw-medium d-none d-md-block py-3">
                             <span v-for="record in order.records" class="m-0 p-0">
                                 <span v-if="record.price" class="ms-2 text-primary">
-                                    {{ showMachinePriceInWhmcsUnit(ConvertFromCaasifyToWhmcs(record.price)) }}
+                                    {{ showMachinePriceInWhmcsUnit(ConvertFromCaasifyToWhmcs(addCommision(record.price))) }}
                                     {{ userCurrencySymbolFromWhmcs }}
                                 </span>
                                 <span v-else class="fw-medium"> --- </span>

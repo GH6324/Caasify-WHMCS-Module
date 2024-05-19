@@ -30,7 +30,7 @@
                         </select>
                     </div>
                     <div v-if="PlanConfigSelectedOptions[field.name]?.price > 0" class="text-secondary small pt-2 ps-2">
-                        {{ showMachinePriceInWhmcsUnit(ConvertFromCaasifyToWhmcs(PlanConfigSelectedOptions[field.name].price)) }}
+                        {{ showMachinePriceInWhmcsUnit(ConvertFromCaasifyToWhmcs(addCommision(PlanConfigSelectedOptions[field.name].price))) }}
                         {{ userCurrencySymbolFromWhmcs }}
                     </div>
                 </div>

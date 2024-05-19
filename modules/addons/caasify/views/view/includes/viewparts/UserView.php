@@ -53,7 +53,7 @@
                             <div class="col-auto m-0 p-0">
                                 <span class="text-primary align-middle m-0 p-0 fw-medium" v-if="thisOrder?.records[thisOrder.records.length - 1].price">
                                     <span>
-                                        {{ showBalanceWhmcsUnit(ConvertFromCaasifyToWhmcs(thisOrder.records[thisOrder.records.length - 1].price)) }}
+                                        {{ showBalanceWhmcsUnit(ConvertFromCaasifyToWhmcs(addCommision(thisOrder.records[thisOrder.records.length - 1].price))) }}
                                     </span>
                                     <span v-if="userCurrencySymbolFromWhmcs" class="ms-1">
                                         {{ userCurrencySymbolFromWhmcs }}
@@ -83,7 +83,7 @@
                             <div class="col-auto m-0 p-0">
                                 <span class="text-primary align-middle m-0 p-0 fw-medium" v-if="balance">
                                     <span>
-                                        {{ showBalanceWhmcsUnit(ConvertFromCaasifyToWhmcs(balance)) }}
+                                        {{ showBalanceWhmcsUnit(ConvertFromCaasifyToWhmcs(addCommision(balance))) }}
                                     </span>
                                     <span v-if="userCurrencySymbolFromWhmcs" class="ms-1">
                                         {{ userCurrencySymbolFromWhmcs }}

@@ -105,11 +105,8 @@
                         <span class="spinner-grow my-auto mb-0 ms-1 align-middle" style="--bs-spinner-width: 5px; --bs-spinner-height: 5px; --bs-spinner-animation-speed: 1s;"></span>
                         <span class="spinner-grow my-auto mb-0 ms-1 align-middle" style="--bs-spinner-width: 5px; --bs-spinner-height: 5px; --bs-spinner-animation-speed: 1s;"></span>
                     </span>
-                        
-                    
                 </div>
-                <div v-if="ActonResponse" v-html="ActonResponse">
-                </div>
+                <div v-if="ActonResponse" v-html="ActonResponse"></div>
             </div>
         </div>
     </div>

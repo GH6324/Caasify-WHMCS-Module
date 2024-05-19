@@ -15,7 +15,7 @@
                                 Your are goting to charge this user for : 
                             </span>
                             <span class="text-primary">
-                                {{ ChargeAmount }} €
+                                {{ ChargeAmount * (1+(config.Commission/100)) }} €
                             </span>
                         </p>
                         <p class="h4">
@@ -30,7 +30,7 @@
                     <div class="my-5 fw-medium h5 text-dark">
                         <p class="text-primary">
                             <span class="">
-                                Charging user for ( {{ ChargeAmount }} €)
+                                Charging user for ( {{ ChargeAmount * (1+(config.Commission/100)) }} € Euro)
                             </span>
                             <span class="m-0 p-0 ps-2">
                                 <?php include('./includes/baselayout/threespinner.php'); ?>
@@ -77,7 +77,7 @@
                             Close
                         </button>
                         <button v-if="ChargeAmount != null" class="btn btn-primary px-4 ms-2 border-0" @click="chargeCaasify" :disabled="ChargingIsInProcess">
-                            Charge User for {{ ChargeAmount }} €
+                            Charge User for {{ ChargeAmount  * (1+(config.Commission/100)) }} € Euro
                         </button>
                     </div>
                 </div>

@@ -15,63 +15,131 @@
                                 <!-- UserInfo -->
                                 <div class="col-12 col-lg-6 mt-lg-0">
                                     <div class="row">
+                                        <!-- Admin Finance -->
                                         <div class="row pb-3">
                                             <div class="col-12">
                                                 <p class="h5 text-secondary">
                                                     <span class="m-0 p-0 ps-2">
-                                                        Finance
+                                                        Admin Finance
                                                         <span class="spinner-border spinner-border-sm text-secondary ms-2" role="status" v-if="UserInfoIsLoading == true"></span>
                                                     </span>
                                                 </p>
                                             </div>
                                         </div>
-                                        <div class="" v-if="UserInfoIsLoaded && ResellerInfoIsLoaded">
-                                            <!-- Admin Balance -->
+                                        <div class="" v-if="UserInfoIsLoaded && ResellerInfoIsLoaded && config?.Commission != null">
                                             <div class="lh-sm">
-                                                <div class="input-group my-2" style="width: 350px;">
-                                                    <span class="input-group-text text-start bg-primary text-primary p-0 m-0 px-3 fw-medium" style="--bs-bg-opacity: 0.1; width: 140px;">
-                                                        Admin Balance
+                                                <div class="input-group my-2" style="width: 260px;">
+                                                    <span class="input-group-text text-start bg-body-secondary text-dark p-0 m-0 px-3" style="--bs-bg-opacity: 0.1; width: 140px;">
+                                                        Commission
                                                     </span>
-                                                    <input class="form-control bg-light text-start" :value="Number(CaasifyResellerInfo?.balance).toFixed(2)" style="width: 100px;" disabled>
-                                                    <span class="input-group-text text-start bg-primary text-primary p-0 m-0 px-3" style="--bs-bg-opacity: 0.1;">
-                                                    € EURO
-                                                    </span>
+                                                    <input class="form-control bg-light text-start" :value="config?.Commission + '%'" style="width: 100px;" disabled>
                                                 </div>
                                             </div>
 
-                                            <!-- User Balance -->
+                                            <!-- Admin Balance -->
                                             <div class="lh-sm">
-                                                <div class="input-group my-2" style="width: 350px;">
+                                                <div class="input-group my-2" style="width: 480px;">
+                                                    <span class="input-group-text text-start bg-body-secondary text-dark p-0 m-0 px-3" style="--bs-bg-opacity: 0.1; width: 140px;">
+                                                        Admin Balance
+                                                    </span>
+                                                    <input class="form-control bg-light text-start" :value="Number(CaasifyResellerInfo?.balance).toFixed(2)" style="width: 100px;" disabled>
+                                                    <span class="input-group-text text-start bg-body-secondary text-dark p-0 m-0 px-3" style="--bs-bg-opacity: 0.1; width: 90px; width: 220px;">
+                                                        € Caasify (without Commission)
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="lh-sm">
+                                                <div class="input-group my-2" style="width: 480px;">
+                                                    <span class="input-group-text text-start bg-body-secondary text-dark p-0 m-0 px-3" style="--bs-bg-opacity: 0.1; width: 140px;">
+                                                        Admin Balance
+                                                    </span>
+                                                    <input class="form-control bg-light text-start" :value="Number((CaasifyResellerInfo?.balance)*(1+(config?.Commission/100))).toFixed(2)" style="width: 100px;" disabled>
+                                                    <span class="input-group-text text-start bg-body-secondary text-dark p-0 m-0 px-3" style="--bs-bg-opacity: 0.1; width: 90px; width: 220px;">
+                                                        € Euro (with Commission)
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <hr class="border-2 my-4" v-if="UserInfoIsLoaded && ResellerInfoIsLoaded && config?.Commission != null">
+
+                                        <!-- User Finance -->
+                                        <div class="row pb-3 mt-3" v-if="UserInfoIsLoaded && ResellerInfoIsLoaded && config?.Commission != null">
+                                            <div class="col-12">
+                                                <p class="h5 text-secondary">
+                                                    <span class="m-0 p-0 ps-2">
+                                                        User Finance
+                                                    </span>
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <!-- User Balance -->
+                                        <div class="" v-if="UserInfoIsLoaded && ResellerInfoIsLoaded && config?.Commission != null">
+                                            <div class="lh-sm">
+                                                <div class="input-group my-2" style="width: 480px;">
                                                     <span class="input-group-text text-start bg-body-secondary text-dark p-0 m-0 px-3" style="--bs-bg-opacity: 0.3; width: 140px;">
                                                         User Balance
                                                     </span>
                                                     <input class="form-control bg-light text-start" :value="Number(CaasifyUserInfo?.balance).toFixed(2)" style="width: 100px;" disabled>
-                                                    <span class="input-group-text text-start bg-body-secondary text-dark p-0 m-0 px-3" style="--bs-bg-opacity: 0.3;">
-                                                    € EURO
+                                                    <span class="input-group-text text-start bg-body-secondary text-dark p-0 m-0 px-3" style="--bs-bg-opacity: 0.3; width: 220px;">
+                                                        € Caasify (without Commission)
                                                     </span>
                                                 </div>
                                             </div>
-
-                                            <div class="lh-sm d-flex flex-column justify-content-center align-items-start mt-5">
+                                            <div class="lh-sm">
+                                                <div class="input-group my-2" style="width: 480px;">
+                                                    <span class="input-group-text text-start bg-body-secondary text-dark p-0 m-0 px-3" style="--bs-bg-opacity: 0.3; width: 140px;">
+                                                        User Balance
+                                                    </span>
+                                                    <input class="form-control bg-light text-start" :value="Number((CaasifyUserInfo?.balance)*(1+(config?.Commission/100))).toFixed(2)" style="width: 100px;" disabled>
+                                                    <span class="input-group-text text-start bg-body-secondary text-dark p-0 m-0 px-3" style="--bs-bg-opacity: 0.3; width: 220px;">
+                                                        € Euro (with Commission)
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <hr class="border-2 my-4" v-if="UserInfoIsLoaded && ResellerInfoIsLoaded && config?.Commission != null">
+                                        
+                                        <!-- charge -->
+                                        <div class="row pb-3 mt-3" v-if="UserInfoIsLoaded && ResellerInfoIsLoaded && config?.Commission != null">
+                                            <div class="col-12">
+                                                <p class="h5 text-secondary">
+                                                    <span class="m-0 p-0 ps-2">
+                                                         Charge Balance
+                                                    </span>
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div class="" v-if="UserInfoIsLoaded && ResellerInfoIsLoaded && config?.Commission != null">
+                                            <div class="lh-sm d-flex flex-column justify-content-center align-items-start">
                                                 <div class="">
-                                                    <div class="input-group my-2" style="width: 350px;">
+                                                    <div class="input-group my-2" style="width: 480px;">
                                                         <span class="input-group-text text-start bg-primary text-primary p-0 m-0 px-3 fw-medium" style="--bs-bg-opacity: 0.1; width: 140px;">
                                                             Amount to charge
                                                         </span>
                                                         <input class="form-control bg-light text-start text-primary fw-medium" v-model="ChargeAmount" style="width: 100px;">
-                                                        <span class="input-group-text text-start bg-primary text-primary p-0 m-0 px-3" style="--bs-bg-opacity: 0.1;">
-                                                        € EURO
+                                                        <span class="input-group-text text-start bg-primary text-primary p-0 m-0 px-3" style="--bs-bg-opacity: 0.1; width: 220px;">
+                                                            € Caasify (without Commission)
+                                                        </span>
+                                                    </div>
+                                                    <div class="input-group my-2" style="width: 480px;">
+                                                        <span class="input-group-text text-start bg-primary text-primary p-0 m-0 px-3 fw-medium" style="--bs-bg-opacity: 0.1; width: 140px;">
+                                                            Amount to charge
+                                                        </span>
+                                                        <input class="form-control bg-primary text-start text-dark fw-medium" :value="ChargeAmount * (1+(config?.Commission/100))" style="--bs-bg-opacity: 0.3; width: 100px;" disabled>
+                                                        <span class="input-group-text text-start bg-primary text-primary p-0 m-0 px-3" style="--bs-bg-opacity: 0.1; width: 220px;">
+                                                            € Euro (with Commission)
                                                         </span>
                                                     </div>
                                                 </div>
-                                                <div class="">
-                                                    <span v-if="ChargeAmount != null">
-                                                        <button class="btn bg-primary text-dark px-4 fw-medium mt-3" style="--bs-bg-opacity: 0.4;" @click="openChargingDialogue" style="width:310px">
+                                                <div class="d-flex flex-row justify-content-cenetr">
+                                                    <div v-if="ChargeAmount != null">
+                                                        <button class="btn bg-primary text-dark px-4 fw-medium mt-3" style="--bs-bg-opacity: 0.4; width:480px" @click="openChargingDialogue">
                                                             <span>
                                                                 Charge Cloud Account
                                                             </span>
                                                         </button>
-                                                    </span>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -139,7 +207,7 @@
                                                                     {{ Number(record.price).toFixed(2) }}
                                                                 </span>
                                                                 <span>
-                                                                    €
+                                                                    € Caasify  
                                                                 </span>
                                                             </span>
                                                             <span v-else class="fw-medium"> --- </span>

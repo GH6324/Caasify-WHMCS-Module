@@ -14,7 +14,7 @@
                 <div class="">        
                     <span v-if="user.balance != null && CurrenciesRatioCloudToWhmcs != null" class="text-primary fw-medium ps-2">
                         <span class="">
-                            {{ showBalanceWhmcsUnit(ConvertFromCaasifyToWhmcs(user.balance)) }}
+                            {{ showBalanceWhmcsUnit(ConvertFromCaasifyToWhmcs(addCommision(user.balance))) }}
                         </span>
                         <span v-if="userCurrencySymbolFromWhmcs != null" class="px-1">
                             {{ userCurrencySymbolFromWhmcs }}
@@ -29,7 +29,7 @@
             <div class="row d-block d-md-none">
                 <div class="">        
                     <span v-if="user.balance != null && CurrenciesRatioCloudToWhmcs != null" class="text-primary fw-medium">
-                        <span class="px-1">{{ showBalanceWhmcsUnit(ConvertFromCaasifyToWhmcs(user.balance)) }}</span> 
+                        <span class="px-1">{{ showBalanceWhmcsUnit(ConvertFromCaasifyToWhmcs(addCommision(user.balance))) }}</span> 
                         <span v-if="userCurrencySymbolFromWhmcs">
                             {{ userCurrencySymbolFromWhmcs }}
                         </span>
@@ -49,7 +49,7 @@
             <div class="m-0 p-0 order-2" v-if="CaasifyDefaultCurrencyID != userCurrencyIdFromWhmcs">
                 <div v-if="user.balance != null" class="btn btn-secondary px-4 ms-2 rounded-5 order-2">
                     <span v-if="user.balance != null" class="p-0 m-0 fw-medium">
-                        <span class="px-1">{{ showBalanceCloudUnit(user.balance) }}</span>
+                        <span class="px-1">{{ showBalanceCloudUnit(addCommision(user.balance)) }}</span>
                         <span v-if="CaasifyDefaultCurrencySymbol != null">
                             {{ CaasifyDefaultCurrencySymbol }}
                         </span>

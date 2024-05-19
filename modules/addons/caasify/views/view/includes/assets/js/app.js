@@ -25,6 +25,7 @@ app = createApp({
                 HourlyCostDecimal: null,
                 BalanceDecimal: null,
                 DemoMode: null,
+                Commission: null,
             },
 
             // views
@@ -217,13 +218,16 @@ app = createApp({
         },
 
         CaasifyConfigs(NewCaasifyConfigs) {
-            this.config.MinimumCharge = NewCaasifyConfigs.MinimumCharge
-            this.config.MaximumCharge = NewCaasifyConfigs.MaximumCharge
-            this.config.MinBalanceAllowToCreate = NewCaasifyConfigs.MinBalanceAllowToCreate
-            this.config.MonthlyCostDecimal = NewCaasifyConfigs.MonthlyCostDecimal
-            this.config.HourlyCostDecimal = NewCaasifyConfigs.HourlyCostDecimal
-            this.config.BalanceDecimal = NewCaasifyConfigs.BalanceDecimal
+            this.config.MinimumCharge = parseFloat(NewCaasifyConfigs.MinimumCharge)
+            this.config.MaximumCharge = parseFloat(NewCaasifyConfigs.MaximumCharge)
+            this.config.MinBalanceAllowToCreate = parseFloat(NewCaasifyConfigs.MinBalanceAllowToCreate)
+            this.config.MonthlyCostDecimal = parseFloat(NewCaasifyConfigs.MonthlyCostDecimal)
+            this.config.HourlyCostDecimal = parseFloat(NewCaasifyConfigs.HourlyCostDecimal)
+            this.config.BalanceDecimal = parseFloat(NewCaasifyConfigs.BalanceDecimal)
             this.config.DemoMode = NewCaasifyConfigs.DemoMode
+            this.config.Commission = parseFloat(NewCaasifyConfigs.Commission)
+
+            
         },
 
         orderID(neworderID) {
@@ -440,6 +444,20 @@ app = createApp({
 
     methods: {
 
+        addCommision(value){
+            if (this.config.Commission !== null && this.config.Commission !== undefined) {
+                let Commission = parseFloat(this.config.Commission);
+                if (!isNaN(Commission)) {
+                    return ((100 + Commission)/100) * value;
+                } else {
+                    console.error('Commission is not a valid number');
+                    return -1
+                }
+            } else {
+                console.error('Commission is null or undefined');
+                return -1
+            }
+        },
 
         RunDemoModal() {
             $('#DemotModalCreateSuccess').modal('show');
@@ -468,7 +486,6 @@ app = createApp({
             }
         },
 
-        // Commons
         loadUrl() {
             let url = window.location.href;
             let pathname = new URL(url).pathname;
@@ -482,15 +499,18 @@ app = createApp({
                 .then(response => response.json())
                 .then(data => {
                     this.CaasifyConfigs = data.configs;
-
-                    this.systemUrl = data.configs.systemUrl;
-                    if (this.systemUrl.endsWith('/')) {
-                        this.systemUrl = this.systemUrl.slice(0, -1);
-                    }
-
-                    this.BackendUrl = data.configs.BackendUrl;
-                    if (this.systemUrl == '') {
-                        console.error('systemUrl is empty');
+                    if(this.CaasifyConfigs['errorMessage'] == null){
+                        this.systemUrl = data.configs.systemUrl;
+                        if (this.systemUrl.endsWith('/')) {
+                            this.systemUrl = this.systemUrl.slice(0, -1);
+                        }
+    
+                        this.BackendUrl = data.configs.BackendUrl;
+                        if (this.systemUrl == '') {
+                            console.error('systemUrl is empty');
+                        }
+                    } else {
+                        console.error('Error Config: ' + this.CaasifyConfigs['errorMessage']);
                     }
                 })
                 .catch(error => {
@@ -638,25 +658,6 @@ app = createApp({
             }
         },
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        // index
         isIntOrFloat(value) {
             if (typeof value === 'number' && !Number.isNaN(value)) {
                 return true
@@ -808,7 +809,6 @@ app = createApp({
             }
         },
 
-
         isActive(status) {
 
             if (status == 'active') {
@@ -934,7 +934,7 @@ app = createApp({
 
         async chargeCaasify() {
             const id = this.ConstUserId.value;
-            const chargeamountInAutovm = this.convertFromWhmcsToCloud(this.ConstChargeamountInWhmcs.value);
+            const chargeamountInAutovm = (this.convertFromWhmcsToCloud(this.ConstChargeamountInWhmcs.value)) / ((1 + this.config.Commission/100));
             const invoiceid = this.ConstantInvoiceId.value
 
             this.theChargingSteps = 2;
@@ -982,9 +982,9 @@ app = createApp({
             RequestLink = this.CreateRequestLink(action = 'markCancelInvoice');
             let response = await axios.post(RequestLink, params);
             if (response?.data.result == 'success') {
-                console.log('Invoice is marked cancelled successfully');
+                console.error('Invoice is marked cancelled successfully');
             } else {
-                console.log('can not able to clear invoice');
+                console.error('can not able to clear invoice');
             }
         },
 
@@ -1023,17 +1023,6 @@ app = createApp({
             }
         },
 
-
-
-
-
-
-
-
-
-
-
-        // Create
         showImage(imageAddress = null) {
             let BackendUrl = this.BackendUrl
             if (imageAddress != null && BackendUrl != null) {
@@ -1357,7 +1346,6 @@ app = createApp({
             }
         },
 
-        // view
         orderId() {
             let params = new URLSearchParams(window.location.search)
             this.orderID = params.get('id')
@@ -1672,35 +1660,6 @@ app = createApp({
             this.PassVisible = !this.PassVisible
         },
 
-        // MachineSpendTime(timeVariable) {
-        //     const creationDate = new Date(timeVariable);
-        //     const currentDate = new Date();
-        //     const timeDifference = currentDate - creationDate;
-        //     const totalSeconds = Math.floor(timeDifference / 1000);
-        //     const totalMinutes = Math.floor(totalSeconds / 60);
-        //     const totalHours = Math.floor(totalMinutes / 60);
-        //     const totalDays = Math.floor(totalHours / 24);
-        //     const totalMonths = Math.floor(totalDays / 30);
-
-        //     const days = totalDays % 30;
-        //     const hours = totalHours % 24;
-        //     const minutes = totalMinutes % 60;
-
-        //     let duration = '1' + this.lang('minutes');
-
-        //     if (totalMonths > 0) {
-        //         duration = `${totalDays} ${this.lang('days')}${totalDays > 1 ? 's' : ''} ${hours} ${this.lang('hours')}${hours > 1 ? 's' : ''}`;
-        //     } else if (totalDays > 0) {
-        //         duration = `${totalDays} ${this.lang('days')}${totalDays > 1 ? 's' : ''} ${hours} ${this.lang('hours')}${hours > 1 ? 's' : ''}`;
-        //     } else if (totalHours > 0) {
-        //         duration = `${totalHours} ${this.lang('hours')}${totalHours > 1 ? 's' : ''} ${minutes} ${this.lang('minutes')}`;
-        //     } else {
-        //         duration = `${totalMinutes} ${this.lang('minutes')}`;
-        //     }
-
-        //     return duration;
-        // },
-
         Is40SecondPassed(timeVariable) {
             const creationDate = new Date(timeVariable);
             const currentDate = new Date();
@@ -1769,7 +1728,6 @@ app = createApp({
             var chart = new ApexCharts(element, options);
             chart.render();
         },
-
 
         createoption(chartname, data, colors, text) {
             let options = {
