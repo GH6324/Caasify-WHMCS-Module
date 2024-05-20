@@ -5,6 +5,7 @@ app = createApp({
     data() {
         return {
             ChargeMSG: '',
+            configIsLoaded: false,
 
             thisOrderTraffic: null,
             trafficsIsLoaded: false,
@@ -255,6 +256,21 @@ app = createApp({
 
     computed: {
 
+        CommissionIsValid(){
+            if(this.configIsLoaded == false){
+                return true
+            }
+
+            if(this.config != null){
+                if(this.config?.Commission != null){
+                    if(typeof this.config.Commission == 'number' && isFinite(this.config.Commission)){
+                        return true
+                    } 
+                }
+            }
+            return false
+        },
+
         userCurrencySymbolFromWhmcs() {
             if (this.WhmcsCurrencies != null && this.userCurrencyIdFromWhmcs != null) {
                 let CurrencyArr = this.WhmcsCurrencies.currency
@@ -495,9 +511,11 @@ app = createApp({
         },
 
         fetchModuleConfig() {
+            this.configIsLoaded = false
             fetch('configApi.php')  // Use a relative path to reference the PHP file
                 .then(response => response.json())
                 .then(data => {
+                    this.configIsLoaded = true
                     this.CaasifyConfigs = data.configs;
                     if(this.CaasifyConfigs['errorMessage'] == null){
                         this.systemUrl = data.configs.systemUrl;
@@ -514,6 +532,7 @@ app = createApp({
                     }
                 })
                 .catch(error => {
+                    this.configIsLoaded = true
                     console.error('Error fetching root directory address:');
                 });
         },
@@ -1114,6 +1133,14 @@ app = createApp({
 
         formatCostMonthly(value) {
             let decimal = this.config.MonthlyCostDecimal
+
+            if(/^-?\d+(\.\d+)?$/.test(value)){
+                let value = parseFloat(value);
+            } else {
+                console.error('Value is not a number');
+                return 0
+            }
+
             if (value < 99999999999999 && value != null) {
                 if (value > 1) {
                     return value.toLocaleString('en-US', { minimumFractionDigits: decimal, maximumFractionDigits: decimal })

@@ -13,9 +13,14 @@
             <div class="col-12 m-0 p-0 mt-5" style="min-height: 1000px">
                 <div class="row m-0 p-0">
                     <div class="col-12 m-0 p-0">
-                        <div class="py-5 px-1">
+                        <div class="py-5 px-1" v-if="CommissionIsValid">
                             <?php include('./includes/viewparts/modalActions.php');  ?>
                             <?php include('./includes/viewparts/allViews.php');     ?>
+                        </div>
+                        <div class="py-5 px-1" v-else>
+                            <p class="h5 p-4 alert alert-danger">
+                                Error 670: call your admin
+                            </p>
                         </div>
                     </div>
                 </div>

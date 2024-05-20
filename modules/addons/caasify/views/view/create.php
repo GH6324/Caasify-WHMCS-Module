@@ -4,7 +4,7 @@
 
 <body class="container-fluid p-1 p-md-3" style="background-color: #ff000000 !important;">
     <div id="app" class="row px-1 px-md-2 py-5 mx-auto" style="max-width: 1200px;">
-        <div class="p-0 m-0" :class="{ loading: CreateIsLoading }" v-cloak >
+        <div class="p-0 m-0" :class="{ loading: CreateIsLoading }" v-cloak v-if="CommissionIsValid">
             <?php  include('./includes/baselayout/backflash.php');     ?>
             <?php  include('./includes/createparts/modalcreate.php');     ?>
             <?php if(isset($DemoMode) && $DemoMode == 'on' ): ?>
@@ -45,6 +45,11 @@
                     </div>
                 </div>
             </div>
+        </div>
+        <div class="bg-white rounded-4 border border-2 border-body-secondary p-4" v-cloak v-else>
+            <p class="h5 p-4 alert alert-danger">
+                Error 670: call your admin
+            </p>
         </div>
     </div>
     <?php include('./includes/baselayout/footer.php'); ?>

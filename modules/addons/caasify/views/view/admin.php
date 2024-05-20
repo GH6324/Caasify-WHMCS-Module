@@ -11,9 +11,9 @@
                     <!-- User info -->
                     <div class="col-12 mb-3 mb-xxl-0">
                         <div class="">
-                            <div class="row">
+                            <div class="row" v-if="CommissionIsValid">
                                 <!-- UserInfo -->
-                                <div class="col-12 col-lg-6 mt-lg-0">
+                                <div class="col-12 col-lg-6 mt-lg-0" v-if="CommissionIsValid">
                                     <div class="row">
                                         <!-- Admin Finance -->
                                         <div class="row pb-3">
@@ -26,7 +26,7 @@
                                                 </p>
                                             </div>
                                         </div>
-                                        <div class="" v-if="UserInfoIsLoaded && ResellerInfoIsLoaded && config?.Commission != null">
+                                        <div class="" v-if="UserInfoIsLoaded && ResellerInfoIsLoaded">
                                             <div class="lh-sm">
                                                 <div class="input-group my-2" style="width: 260px;">
                                                     <span class="input-group-text text-start bg-body-secondary text-dark p-0 m-0 px-3" style="--bs-bg-opacity: 0.1; width: 140px;">
@@ -73,6 +73,7 @@
                                                 </p>
                                             </div>
                                         </div>
+
                                         <!-- User Balance -->
                                         <div class="" v-if="UserInfoIsLoaded && ResellerInfoIsLoaded && config?.Commission != null">
                                             <div class="lh-sm">
@@ -126,7 +127,7 @@
                                                         <span class="input-group-text text-start bg-primary text-primary p-0 m-0 px-3 fw-medium" style="--bs-bg-opacity: 0.1; width: 140px;">
                                                             Amount to charge
                                                         </span>
-                                                        <input class="form-control bg-primary text-start text-dark fw-medium" :value="ChargeAmount * (1+(config?.Commission/100))" style="--bs-bg-opacity: 0.3; width: 100px;" disabled>
+                                                        <input class="form-control bg-primary text-start text-dark fw-medium" :value="Number(ChargeAmount * (1+(config?.Commission/100))).toFixed(2)" style="--bs-bg-opacity: 0.3; width: 100px;" disabled>
                                                         <span class="input-group-text text-start bg-primary text-primary p-0 m-0 px-3" style="--bs-bg-opacity: 0.1; width: 220px;">
                                                             € Euro (with Commission)
                                                         </span>
@@ -144,14 +145,17 @@
                                             </div>
                                         </div>
                                         <div v-if="!UserInfoIsLoaded || !ResellerInfoIsLoaded" class="lh-sm ms-2 text-primary fw-medium fs-5">
-                                        <span class="">
-                                            Loading
-                                        </span>
-                                        <span class="m-0 p-0 ps-2">
-                                            <?php include('./includes/baselayout/threespinner.php'); ?>
-                                        </span>
+                                            <span class="">
+                                                Loading
+                                            </span>
+                                            <span class="m-0 p-0 ps-2">
+                                                <?php include('./includes/baselayout/threespinner.php'); ?>
+                                            </span>
+                                        </div>
                                     </div>
-                                    </div>
+                                </div>
+                                <div class="col-12 col-lg-6 mt-lg-0" v-else>
+                                    Commission is Wrong
                                 </div>
                                 <!-- Orders -->
                                 <div class="col-12 col-lg-6 mt-5 mt-lg-0">
@@ -204,10 +208,15 @@
                                                         <span v-for="record in order.records" class="m-0 p-0">
                                                             <span v-if="record.price" class="ms-2 text-primary">
                                                                 <span>
-                                                                    {{ Number(record.price).toFixed(2) }}
+                                                                    <span>
+                                                                        {{ Number(addCommision(record.price)).toFixed(2) }}
+                                                                    </span>
+                                                                    <span>
+                                                                        € Euro  
+                                                                    </span>
                                                                 </span>
                                                                 <span>
-                                                                    € Caasify  
+                                                                    Nan
                                                                 </span>
                                                             </span>
                                                             <span v-else class="fw-medium"> --- </span>
@@ -229,6 +238,11 @@
                                         </span>
                                     </div>
                                 </div>
+                            </div>
+                            <div class="row" v-else>
+                                <p class="h5 p-4 alert alert-danger">
+                                    Error 670: call your admin
+                                </p>
                             </div>
                         </div>
                     </div><!-- User Details -->

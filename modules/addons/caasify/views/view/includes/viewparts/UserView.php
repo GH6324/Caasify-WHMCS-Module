@@ -52,11 +52,16 @@
                             </div>
                             <div class="col-auto m-0 p-0">
                                 <span class="text-primary align-middle m-0 p-0 fw-medium" v-if="thisOrder?.records[thisOrder.records.length - 1].price">
-                                    <span>
-                                        {{ showBalanceWhmcsUnit(ConvertFromCaasifyToWhmcs(addCommision(thisOrder.records[thisOrder.records.length - 1].price))) }}
+                                    <span v-if="CommissionIsValid">
+                                        <span>
+                                            {{ showBalanceWhmcsUnit(ConvertFromCaasifyToWhmcs(addCommision(thisOrder.records[thisOrder.records.length - 1].price))) }}
+                                        </span>
+                                        <span v-if="userCurrencySymbolFromWhmcs" class="ms-1">
+                                            {{ userCurrencySymbolFromWhmcs }}
+                                        </span>
                                     </span>
-                                    <span v-if="userCurrencySymbolFromWhmcs" class="ms-1">
-                                        {{ userCurrencySymbolFromWhmcs }}
+                                    <span v-else>
+                                        NAN
                                     </span>
                                 </span>
                                 <span v-if="userCurrencySymbolFromWhmcs" class="text-secondary align-middle m-0 p-0 fw-light ps-3">
@@ -82,11 +87,16 @@
                             </div>
                             <div class="col-auto m-0 p-0">
                                 <span class="text-primary align-middle m-0 p-0 fw-medium" v-if="balance">
-                                    <span>
-                                        {{ showBalanceWhmcsUnit(ConvertFromCaasifyToWhmcs(addCommision(balance))) }}
+                                    <span v-if="CommissionIsValid">
+                                        <span>
+                                            {{ showBalanceWhmcsUnit(ConvertFromCaasifyToWhmcs(addCommision(balance))) }}
+                                        </span>
+                                        <span v-if="userCurrencySymbolFromWhmcs" class="ms-1">
+                                            {{ userCurrencySymbolFromWhmcs }}
+                                        </span>
                                     </span>
-                                    <span v-if="userCurrencySymbolFromWhmcs" class="ms-1">
-                                        {{ userCurrencySymbolFromWhmcs }}
+                                    <span v-else>
+                                        Nan
                                     </span>
                                 </span>
                                 <span class="text-secondary align-middle m-0 p-0 fw-medium" v-else>

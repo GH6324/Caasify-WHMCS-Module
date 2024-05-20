@@ -8,6 +8,7 @@ app = createApp({
             WhUserId: null,
             
             CaasifyConfigs: [],
+            configIsLoaded: null,
             config: {
                 BackendUrl: null,
                 DefLang: null,
@@ -81,6 +82,7 @@ app = createApp({
             this.config.errorMessage = NewCaasifyConfigs.errorMessage
             this.config.systemUrl = NewCaasifyConfigs.systemUrl
             
+                      
             this.checkReadyToLoad();
         },
 
@@ -98,17 +100,34 @@ app = createApp({
     },
 
     computed: {
-        
+        CommissionIsValid(){
+            if(this.configIsLoaded == false){
+                return true
+            }
+
+            if(this.CaasifyConfigs != null){
+                if(this.config?.Commission != null){
+                    if(typeof this.config.Commission == 'number' && isFinite(this.config.Commission)){
+                        return true
+                    } 
+                }
+            }
+            return false
+        },
     },
 
     methods: {
+
         fetchModuleConfig() {
+            this.configIsLoaded = false
             fetch('configApi.php')  // Use a relative path to reference the PHP file
                 .then(response => response.json())
                 .then(data => {
+                    this.configIsLoaded = true
                     this.CaasifyConfigs = data.configs;
                 })
                 .catch(error => {
+                    this.configIsLoaded = true
                     console.error('Error fetching Config API');
                 });
         },
@@ -246,6 +265,21 @@ app = createApp({
                 console.error('CaasifyResellerInfo: ' + response.data.message);
             } else {
                 console.error('CaasifyResellerInfo returns NULL');
+            }
+        },
+
+        addCommision(value){
+            if (this.config.Commission !== null && this.config.Commission !== undefined) {
+                let Commission = parseFloat(this.config.Commission);
+                if (!isNaN(Commission)) {
+                    return ((100 + Commission)/100) * value;
+                } else {
+                    console.error('Commission is not a valid number');
+                    return -1
+                }
+            } else {
+                console.error('Commission is null or undefined');
+                return -1
             }
         },
 

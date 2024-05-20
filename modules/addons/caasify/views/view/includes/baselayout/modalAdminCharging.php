@@ -10,7 +10,7 @@
             <div class="modal-body" v-if="ChargeAmount != null && ChargingIsInProcess != true">
                 <div class="">
                     <div class="my-5 fw-medium text-dark">
-                        <p class="fs-5">
+                        <p class="fs-5" v-if="CommissionIsValid">
                             <span>
                                 Your are goting to charge this user for : 
                             </span>
@@ -18,8 +18,12 @@
                                 {{ ChargeAmount * (1+(config.Commission/100)) }} €
                             </span>
                         </p>
-                        <p class="h4">
+                        <p class="h4" v-if="CommissionIsValid">
                             Are you sure ?
+                        </p>
+
+                        <p class="fs-5" v-if="!CommissionIsValid">
+                            Nan
                         </p>
                     </div>
                 </div>
@@ -28,7 +32,7 @@
             <div class="modal-body" v-if="ChargingIsInProcess == true">
                 <div class="">
                     <div class="my-5 fw-medium h5 text-dark">
-                        <p class="text-primary">
+                        <p class="text-primary" v-if="CommissionIsValid">
                             <span class="">
                                 Charging user for ( {{ ChargeAmount * (1+(config.Commission/100)) }} € Euro)
                             </span>
@@ -76,7 +80,7 @@
                         <button type="button" class="btn btn-secondary px-4 border-0" data-bs-dismiss="modal" :disabled="ChargingIsInProcess">
                             Close
                         </button>
-                        <button v-if="ChargeAmount != null" class="btn btn-primary px-4 ms-2 border-0" @click="chargeCaasify" :disabled="ChargingIsInProcess">
+                        <button v-if="ChargeAmount != null && CommissionIsValid" class="btn btn-primary px-4 ms-2 border-0" @click="chargeCaasify" :disabled="ChargingIsInProcess">
                             Charge User for {{ ChargeAmount  * (1+(config.Commission/100)) }} € Euro
                         </button>
                     </div>
