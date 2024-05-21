@@ -1133,14 +1133,6 @@ app = createApp({
 
         formatCostMonthly(value) {
             let decimal = this.config.MonthlyCostDecimal
-
-            if(/^-?\d+(\.\d+)?$/.test(value)){
-                let value = parseFloat(value);
-            } else {
-                console.error('Value is not a number');
-                return 0
-            }
-
             if (value < 99999999999999 && value != null) {
                 if (value > 1) {
                     return value.toLocaleString('en-US', { minimumFractionDigits: decimal, maximumFractionDigits: decimal })
