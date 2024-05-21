@@ -467,11 +467,11 @@ app = createApp({
                     return ((100 + Commission)/100) * value;
                 } else {
                     console.error('Commission is not a valid number');
-                    return -1
+                    return NaN
                 }
             } else {
                 console.error('Commission is null or undefined');
-                return -1
+                return null
             }
         },
 
@@ -1131,41 +1131,56 @@ app = createApp({
             return Number(price).toFixed(decimal)
         },
 
-        formatCostMonthly(value) {
-            let decimal = this.config.MonthlyCostDecimal
-            if (value < 99999999999999 && value != null) {
-                if (value > 1) {
-                    return value.toLocaleString('en-US', { minimumFractionDigits: decimal, maximumFractionDigits: decimal })
-                } else if (value > 0.1) {
-                    return value.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
-                } else if (value > 0.01) {
-                    return value.toLocaleString('en-US', { minimumFractionDigits: 3, maximumFractionDigits: 3 })
-                } else if (value > 0.001) {
-                    return value.toLocaleString('en-US', { minimumFractionDigits: 4, maximumFractionDigits: 4 })
-                } else if (value > 0.0001) {
-                    return value.toLocaleString('en-US', { minimumFractionDigits: 5, maximumFractionDigits: 5 })
-                } else if (value > 0.00001) {
-                    return value.toLocaleString('en-US', { minimumFractionDigits: 6, maximumFractionDigits: 6 })
-                } else if (value > 0.000001) {
-                    return value.toLocaleString('en-US', { minimumFractionDigits: 7, maximumFractionDigits: 7 })
-                } else if (value > 0.0000001) {
-                    return value.toLocaleString('en-US', { minimumFractionDigits: 8, maximumFractionDigits: 8 })
-                } else if (value > 0.00000001) {
-                    return value.toLocaleString('en-US', { minimumFractionDigits: 9, maximumFractionDigits: 9 })
-                } else if (value > 0.000000001) {
-                    return value.toLocaleString('en-US', { minimumFractionDigits: 10, maximumFractionDigits: 10 })
-                } else {
-                    return valuetoLocaleString('en-US')
-                }
-            } else {
+        formatPlanPrice(price) {
+            if(isNaN(price) || price == null){
+                console.error('Price in formatPlanPrice is null')
                 return null
             }
+
+            let FloatPrice = parseFloat(price);
+            if(isNaN(FloatPrice) || FloatPrice == null){
+                console.error('FloatPrice in formatPlanPrice is not Float')
+                return null
+            }
+
+            let PriceWithCommission = this.addCommision(price)
+            if(isNaN(PriceWithCommission) || PriceWithCommission == null){
+                console.error('PriceWithCommission is null')
+                return null
+            }
+            
+            let PriceInWhCurrency = this.ConvertFromCaasifyToWhmcs(PriceWithCommission)
+            if(isNaN(PriceInWhCurrency) || PriceInWhCurrency == null){
+                console.error('PriceInWhCurrency is null')
+                return null
+            }
+            
+            let FormattedPrice = this.formatCostMonthly(PriceInWhCurrency)
+            if(isNaN(FormattedPrice) || FormattedPrice == null){
+                console.error('FormattedPrice is null')
+                return NaN
+            }
+
+            return FormattedPrice
+
         },
 
-        formatCostHourly(value) {
-            let decimal = this.config.HourlyCostDecimal
+        formatCostMonthly(value) {
+            if(value == null || value == NaN){
+                console.error('Value is null in formatCostMonthly');
+                return NaN
+            }
+
+            if(/^-?\d+(\.\d+)?$/.test(value)){
+                value = parseFloat(value);
+            } else {
+                console.error('Value is not a number');
+                return NaN
+            }
+
+            let decimal = this.config.MonthlyCostDecimal
+            
             if (value < 99999999999999 && value != null) {
-                value = value / (30 * 24)
                 if (value > 1) {
                     return value.toLocaleString('en-US', { minimumFractionDigits: decimal, maximumFractionDigits: decimal })
                 } else if (value > 0.1) {
@@ -1465,7 +1480,7 @@ app = createApp({
                     this.thisOrderTraffic = response.data
 
                     if (thisOrderTraffic?.inbound) {
-                        inbound = (response.data?.inbound) / 1024 / 1024 / 1024
+                        inbound = (response.data?.inbound) / 1000 / 1000 / 1000
                         if (inbound > 1) {
                             this.TrafficInbound = inbound.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' GB'
                         } else {
@@ -1474,7 +1489,7 @@ app = createApp({
                     }
 
                     if (thisOrderTraffic?.outbound) {
-                        outbound = (response.data?.outbound) / 1024 / 1024 / 1024
+                        outbound = (response.data?.outbound) / 1000 / 1000 / 1000
                         if (outbound > 1) {
                             this.TrafficOutbound = outbound.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' GB'
                         } else {

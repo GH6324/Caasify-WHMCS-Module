@@ -275,11 +275,11 @@ app = createApp({
                     return ((100 + Commission)/100) * value;
                 } else {
                     console.error('Commission is not a valid number');
-                    return -1
+                    return NaN
                 }
             } else {
                 console.error('Commission is null or undefined');
-                return -1
+                return NaN
             }
         },
 
