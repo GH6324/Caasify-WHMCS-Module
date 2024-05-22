@@ -437,8 +437,8 @@ app = createApp({
             return CaasifyDefaultCurrencyID
         },
 
-        NewMachinePrice() {
-            let NewMachinePrice = null
+        TotalMachinePrice() {
+            let TotalMachinePrice = null
             let decimal = this.config.MonthlyCostDecimal
 
             if (this.SelectedPlan?.price != null && this.SumConfigPrice() != null) {
@@ -449,11 +449,11 @@ app = createApp({
                 let ConfigPriceFloat = parseFloat(ConfigPrice);
 
                 if (!isNaN(planPriceFloat) && !isNaN(ConfigPriceFloat)) {
-                    NewMachinePrice = planPriceFloat + ConfigPriceFloat;
+                    TotalMachinePrice = planPriceFloat + ConfigPriceFloat;
+                    return TotalMachinePrice
                 }
             }
-
-            return NewMachinePrice
+            return NaN
         },
 
     },
@@ -703,43 +703,39 @@ app = createApp({
             }
         },
 
-        formatNumbers(number, decimal) {
-            const formatter = new Intl.NumberFormat('en-US', {
-                style: 'decimal',
-                minimumFractionDigits: decimal,
-                maximumFractionDigits: decimal,
-            });
-            return formatter.format(number);
+        formatNumbers(number, decimal = 2) {
+            number = parseFloat(number);
+            return Number(number).toFixed(decimal);
         },
 
         showBalanceWhmcsUnit(value) {
             decimal = this.config.BalanceDecimal
-            return this.formatNumbers(value, decimal)
+            return Number(value).toFixed(decimal)
         },
 
         showBalanceCloudUnit(value) {
             decimal = this.config.BalanceDecimal
-            return this.formatNumbers(value, decimal)
+            return Number(value).toFixed(decimal)
         },
 
         showChargeAmountWhmcsUnit(value) {
             decimal = this.config.BalanceDecimal
-            return this.formatNumbers(value, decimal)
+            return Number(value).toFixed(decimal)
         },
 
         showChargeAmountCloudUnit(value) {
             decimal = this.config.BalanceDecimal
-            return this.formatNumbers(value, decimal)
+            return Number(value).toFixed(decimal)
         },
 
         showCreditWhmcsUnit(value) {
             decimal = this.config.BalanceDecimal
-            return this.formatNumbers(value, decimal)
+            return Number(value).toFixed(decimal)
         },
 
         showCreditCloudUnit(value) {
             decimal = this.config.BalanceDecimal
-            return this.formatNumbers(value, decimal)
+            return Number(value).toFixed(decimal)
         },
 
         showRatio(value) {
@@ -796,7 +792,8 @@ app = createApp({
         },
 
         reloadpage() {
-            location.reload()
+            window.location.reload()
+            this.scrollToTop();
         },
 
         isEmpty(value) {
@@ -1131,31 +1128,134 @@ app = createApp({
             return Number(price).toFixed(decimal)
         },
 
+        formatUserBalance(UserBalnce) {
+            if(isNaN(UserBalnce) || UserBalnce == null){
+                console.error('UserBalnce is null')
+                return NaN
+            }
+
+            let FloatUserBalnce = parseFloat(UserBalnce);
+            if(isNaN(FloatUserBalnce) || FloatUserBalnce == null){
+                console.error('FloatUserBalnce is not Float')
+                return NaN
+            }
+
+            let UserBalnceWithCommission = this.addCommision(FloatUserBalnce)
+            if(isNaN(UserBalnceWithCommission) || UserBalnceWithCommission == null){
+                console.error('UserBalnceWithCommission is null')
+                return NaN
+            }
+
+            let UserBalanceInWhCurrency = this.ConvertFromCaasifyToWhmcs(UserBalnceWithCommission)
+            if(isNaN(UserBalanceInWhCurrency) || UserBalanceInWhCurrency == null){
+                console.error('UserBalanceInWhCurrency is null')
+                return NaN
+            }
+
+            let FormattedUserBalance = this.showBalanceWhmcsUnit(UserBalanceInWhCurrency)
+            if(isNaN(FormattedUserBalance) || FormattedUserBalance == null){
+                console.error('FormattedUserBalance is null')
+                return NaN
+            }
+
+            return FormattedUserBalance
+
+        },
+        
+        formatTotalMachinePrice(TotalMachinePrice) {
+            if(isNaN(TotalMachinePrice) || TotalMachinePrice == null){
+                console.error('TotalMachinePrice is null')
+                return NaN
+            }
+
+            let FloatTotalMachinePrice = parseFloat(TotalMachinePrice);
+            if(isNaN(FloatTotalMachinePrice) || FloatTotalMachinePrice == null){
+                console.error('FloatTotalMachinePrice is not Float')
+                return NaN
+            }
+
+            let TotalMachinePriceWithCommission = this.addCommision(FloatTotalMachinePrice)
+            if(isNaN(TotalMachinePriceWithCommission) || TotalMachinePriceWithCommission == null){
+                console.error('TotalMachinePriceWithCommission is null')
+                return NaN
+            }
+            
+            let TotalPriceInWhCurrency = this.ConvertFromCaasifyToWhmcs(TotalMachinePriceWithCommission)
+            if(isNaN(TotalPriceInWhCurrency) || TotalPriceInWhCurrency == null){
+                console.error('TotalPriceInWhCurrency is null')
+                return NaN
+            }
+            
+            let FormattedTotalPrice = this.formatCostMonthly(TotalPriceInWhCurrency)
+            if(isNaN(FormattedTotalPrice) || FormattedTotalPrice == null){
+                console.error('FormattedTotalPrice is null')
+                return NaN
+            }
+
+            return FormattedTotalPrice
+
+        },
+        
+        formatConfigPrice(ConfigPrice) {
+            if(isNaN(ConfigPrice) || ConfigPrice == null){
+                console.error('ConfigPrice is null')
+                return NaN
+            }
+
+            let FloatConfigPrice = parseFloat(ConfigPrice);
+            if(isNaN(FloatConfigPrice) || FloatConfigPrice == null){
+                console.error('FloatConfigPrice is not Float')
+                return NaN
+            }
+
+            let ConfigPriceWithCommission = this.addCommision(FloatConfigPrice)
+            if(isNaN(ConfigPriceWithCommission) || ConfigPriceWithCommission == null){
+                console.error('ConfigPriceWithCommission is null')
+                return NaN
+            }
+            
+            let ConfigPriceInWhCurrency = this.ConvertFromCaasifyToWhmcs(ConfigPriceWithCommission)
+            if(isNaN(ConfigPriceInWhCurrency) || ConfigPriceInWhCurrency == null){
+                console.error('ConfigPriceInWhCurrency is null')
+                return NaN
+            }
+            
+            let FormattedConfigePrice = this.formatCostMonthly(ConfigPriceInWhCurrency)
+            if(isNaN(FormattedConfigePrice) || FormattedConfigePrice == null){
+                console.error('FormattedConfigePrice is null')
+                return NaN
+            }
+
+            return FormattedConfigePrice
+
+        },
+        
         formatPlanPrice(price) {
             if(isNaN(price) || price == null){
                 console.error('Price in formatPlanPrice is null')
-                return null
+                return NaN
             }
 
             let FloatPrice = parseFloat(price);
             if(isNaN(FloatPrice) || FloatPrice == null){
                 console.error('FloatPrice in formatPlanPrice is not Float')
-                return null
+                return NaN
             }
 
             let PriceWithCommission = this.addCommision(price)
             if(isNaN(PriceWithCommission) || PriceWithCommission == null){
                 console.error('PriceWithCommission is null')
-                return null
+                return NaN
             }
             
             let PriceInWhCurrency = this.ConvertFromCaasifyToWhmcs(PriceWithCommission)
             if(isNaN(PriceInWhCurrency) || PriceInWhCurrency == null){
                 console.error('PriceInWhCurrency is null')
-                return null
+                return NaN
             }
             
             let FormattedPrice = this.formatCostMonthly(PriceInWhCurrency)
+
             if(isNaN(FormattedPrice) || FormattedPrice == null){
                 console.error('FormattedPrice is null')
                 return NaN
@@ -1166,43 +1266,24 @@ app = createApp({
         },
 
         formatCostMonthly(value) {
-            if(value == null || value == NaN){
-                console.error('Value is null in formatCostMonthly');
-                return NaN
-            }
-
-            if(/^-?\d+(\.\d+)?$/.test(value)){
-                value = parseFloat(value);
-            } else {
-                console.error('Value is not a number');
-                return NaN
-            }
-
             let decimal = this.config.MonthlyCostDecimal
-            
             if (value < 99999999999999 && value != null) {
                 if (value > 1) {
-                    return value.toLocaleString('en-US', { minimumFractionDigits: decimal, maximumFractionDigits: decimal })
+                    return Number(value).toFixed(decimal)
                 } else if (value > 0.1) {
-                    return value.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+                    return Number(value).toFixed(decimal+1)
                 } else if (value > 0.01) {
-                    return value.toLocaleString('en-US', { minimumFractionDigits: 3, maximumFractionDigits: 3 })
+                    return Number(value).toFixed(decimal+2)
                 } else if (value > 0.001) {
-                    return value.toLocaleString('en-US', { minimumFractionDigits: 4, maximumFractionDigits: 4 })
+                    return Number(value).toFixed(decimal+3)
                 } else if (value > 0.0001) {
-                    return value.toLocaleString('en-US', { minimumFractionDigits: 5, maximumFractionDigits: 5 })
+                    return Number(value).toFixed(decimal+4)
                 } else if (value > 0.00001) {
-                    return value.toLocaleString('en-US', { minimumFractionDigits: 6, maximumFractionDigits: 6 })
+                    return Number(value).toFixed(decimal+5)
                 } else if (value > 0.000001) {
-                    return value.toLocaleString('en-US', { minimumFractionDigits: 7, maximumFractionDigits: 7 })
-                } else if (value > 0.0000001) {
-                    return value.toLocaleString('en-US', { minimumFractionDigits: 8, maximumFractionDigits: 8 })
-                } else if (value > 0.00000001) {
-                    return value.toLocaleString('en-US', { minimumFractionDigits: 9, maximumFractionDigits: 9 })
-                } else if (value > 0.000000001) {
-                    return value.toLocaleString('en-US', { minimumFractionDigits: 10, maximumFractionDigits: 10 })
+                    return Number(value).toFixed(decimal+6)
                 } else {
-                    return valuetoLocaleString('en-US')
+                    return Number(value).toFixed(decimal+10)
                 }
             } else {
                 return null
@@ -1482,18 +1563,18 @@ app = createApp({
                     if (thisOrderTraffic?.inbound) {
                         inbound = (response.data?.inbound) / 1000 / 1000 / 1000
                         if (inbound > 1) {
-                            this.TrafficInbound = inbound.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' GB'
+                            this.TrafficInbound = Number(inbound).toFixed(2) + ' GB'
                         } else {
-                            this.TrafficInbound = (inbound * 1000).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' MB'
+                            this.TrafficInbound = Number(inbound * 1000).toFixed(2) + ' MB'
                         }
                     }
 
                     if (thisOrderTraffic?.outbound) {
                         outbound = (response.data?.outbound) / 1000 / 1000 / 1000
                         if (outbound > 1) {
-                            this.TrafficOutbound = outbound.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' GB'
+                            this.TrafficOutbound = Number(outbound).toFixed(2) + ' GB'
                         } else {
-                            this.TrafficOutbound = (outbound * 1000).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+                            this.TrafficOutbound = Number(outbound * 1000).toFixed(2) + ' MB'
                         }
                     }
 
@@ -1503,9 +1584,9 @@ app = createApp({
                         this.TrafficTotal = '0 MB'
                     }
                     else if (total > 1) {
-                        this.TrafficTotal = total.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' GB'
+                        this.TrafficTotal = Number(total).toFixed(2) + ' GB'
                     } else {
-                        this.TrafficTotal = (total * 1000).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' MB'
+                        this.TrafficTotal = Number(total * 1000).toFixed(2) + ' MB'
                     }
 
 

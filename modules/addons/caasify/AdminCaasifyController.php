@@ -115,7 +115,7 @@ class AdminCaasifyController
         return Request::instance()->setAddress($address)->setHeaders($headers)->getResponse()->asObject();
     }
 
-    public function admin_chargeCaasify()
+    public function admin_increaseChargeCaasify()
     {
         $requestData = json_decode(file_get_contents("php://input"), true);        
         if($requestData['ChargeAmount']){
@@ -132,7 +132,7 @@ class AdminCaasifyController
         }
 
         if(!empty($CaasifyUserId) && !empty($ChargeAmount)){
-            $response = $this->admin_sendChargeCaasifyRequest($CaasifyUserId, $ChargeAmount);
+            $response = $this->admin_sendIncreaseChargeCaasifyRequest($CaasifyUserId, $ChargeAmount);
         } else {
             return false;
         }
@@ -140,7 +140,7 @@ class AdminCaasifyController
         $this->response($response);
     }
 
-    public function admin_sendChargeCaasifyRequest($CaasifyUserId, $ChargeAmount)
+    public function admin_sendIncreaseChargeCaasifyRequest($CaasifyUserId, $ChargeAmount)
     {
         $ResellerToken = $this->ResellerToken;
         $BackendUrl = $this->BackendUrl;
@@ -157,7 +157,55 @@ class AdminCaasifyController
         ];
 
         $address = [
-            $BackendUrl, 'api', 'users', $CaasifyUserId, 'transactions', 'create'
+            $BackendUrl, 'api', 'users', $CaasifyUserId, 'transactions', 'increase'
+        ];
+        
+        return Request::instance()->setAddress($address)->setHeaders($headers)->setParams($params)->getResponse()->asObject();
+    }
+    
+    public function admin_DecreaseChargeCaasify()
+    {
+        $requestData = json_decode(file_get_contents("php://input"), true);        
+        if($requestData['ChargeAmount']){
+            $ChargeAmount = $requestData['ChargeAmount'];
+        } else {
+            echo 'can not access charge amount in admin controller <br>';
+            return false;
+        }
+
+        $CaasifyUserId = $this->CaasifyUserId;
+        if(empty($CaasifyUserId)){
+            echo 'can not find CaasifyUserId in admin controller <br>';
+            return false;
+        }
+
+        if(!empty($CaasifyUserId) && !empty($ChargeAmount)){
+            $response = $this->admin_sendDecreaseChargeCaasifyRequest($CaasifyUserId, $ChargeAmount);
+        } else {
+            return false;
+        }
+
+        $this->response($response);
+    }
+
+    public function admin_sendDecreaseChargeCaasifyRequest($CaasifyUserId, $ChargeAmount)
+    {
+        $ResellerToken = $this->ResellerToken;
+        $BackendUrl = $this->BackendUrl;
+        $headers = [
+            'Accept' => 'application/json',
+            'Authorization' => 'Bearer ' . $ResellerToken
+        ];
+
+        $params = [
+            'amount' => $ChargeAmount,
+            'type' => 'balance',
+            'invoiceid' => 'admin',
+            'status' => 'paid'
+        ];
+
+        $address = [
+            $BackendUrl, 'api', 'users', $CaasifyUserId, 'transactions', 'decrease'
         ];
         
         return Request::instance()->setAddress($address)->setHeaders($headers)->setParams($params)->getResponse()->asObject();

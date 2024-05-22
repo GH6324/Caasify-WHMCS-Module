@@ -101,7 +101,7 @@
                                     <hr>
 
                                     <!-- Total Price -->
-                                    <div v-if="NewMachinePrice" class="float-end text-primary fw-medium">
+                                    <div v-if="TotalMachinePrice" class="float-end text-primary fw-medium">
                                         <p>
                                             <span>
                                                 {{ lang('totalcost') }}
@@ -109,8 +109,7 @@
                                             <span class="px-1">
                                                 :
                                             </span>
-                                            {{ showMachinePriceInWhmcsUnit(ConvertFromCaasifyToWhmcs(addCommision(NewMachinePrice))) }}
-                                            {{ userCurrencySymbolFromWhmcs }}
+                                            {{ formatTotalMachinePrice(TotalMachinePrice) }} {{ userCurrencySymbolFromWhmcs }}
                                         </p>
                                     </div>
                                 </div>
@@ -205,10 +204,9 @@
                     <span class="fw-medium me-2" :class="CreateIsLoading ? 'text-secondary' : 'text-dark'">
                         {{ lang('balance') }} : 
                     </span>
-                    <span v-if="user.balance" class="fw-medium" :class="CreateIsLoading ? 'text-secondary' : 'text-primary'">
+                    <span v-if="user?.balance" class="fw-medium" :class="CreateIsLoading ? 'text-secondary' : 'text-primary'">
                         <span v-if="CurrenciesRatioCloudToWhmcs != null">
-                            {{ showBalanceWhmcsUnit(ConvertFromCaasifyToWhmcs(addCommision(user.balance))) }}
-                            {{ userCurrencySymbolFromWhmcs }}
+                            {{ formatUserBalance(user.balance) }} {{ userCurrencySymbolFromWhmcs }}
                         </span>
                         <span v-else>
                             <?php include('./includes/baselayout/threespinner.php'); ?>
@@ -222,7 +220,7 @@
                     <!-- Close BTN ( two typ: 1-[normal close] , 2-[close+relaod] )-->
 
                     <!-- 1- Normal close, before click -->
-                    <div v-if="!userClickedCreationBtn || createActionFailed" class="m-0 p-0">
+                    <div v-if="!userClickedCreationBtn" class="m-0 p-0">
                         <button @click="closeConfirmDialog" type="button" class="btn btn-secondary px-4 mx-2 border-0"
                             style="background-color: #515151" data-bs-dismiss="modal" :disabled="CreateIsLoading">
                             <div>
@@ -240,6 +238,15 @@
                             </div>
                         </a>
                     </div>
+                    
+                    <div v-if="userClickedCreationBtn && createActionFailed" class="m-0 p-0">
+                        <a @click="reloadpage" type="button" class="btn btn-secondary px-4 mx-2 border-0"
+                            style="background-color: #515151" data-bs-dismiss="modal" :disabled="CreateIsLoading">
+                            <div>
+                                {{ lang('close') }}
+                            </div>
+                        </a>
+                    </div>
 
                     <?php 
                         $DemoMode == 'off' ;
@@ -247,7 +254,7 @@
                     <!-- Create BTN -->
                     <?php if(isset($DemoMode) && $DemoMode == 'on' ): ?>
                         <div v-if="!userClickedCreationBtn">
-                            <div class="m-0 p-0" v-if="themachinename && SelectedRegion && SelectedPlan && NewMachinePrice != null">
+                            <div class="m-0 p-0" v-if="themachinename && SelectedRegion && SelectedPlan && TotalMachinePrice != null">
                                 <button v-if="checkboxconfirmation" @click="RunDemoModal" type="button" class="btn btn-primary px-5 mx-2">
                                     <span>{{ lang('Create Machine') }}</span>
                                     <div v-if="CreateIsLoading" class="spinner-border spinner-border-sm text-light small p-0 m-0 ms-3" role="status"></div>
@@ -256,7 +263,7 @@
                         </div>
                     <?php else: ?>
                         <div v-if="!userClickedCreationBtn">
-                            <div class="m-0 p-0" v-if="themachinename && SelectedRegion && SelectedPlan && NewMachinePrice != null">
+                            <div class="m-0 p-0" v-if="themachinename && SelectedRegion && SelectedPlan && TotalMachinePrice != null">
                                 <button v-if="checkboxconfirmation" @click="acceptConfirmDialog" type="button" class="btn btn-primary px-5 mx-2" :disabled="CreateIsLoading">
                                     <span>{{ lang('Create Machine') }}</span>
                                     <div v-if="CreateIsLoading" class="spinner-border spinner-border-sm text-light small p-0 m-0 ms-3" role="status"></div>

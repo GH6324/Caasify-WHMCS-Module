@@ -54,7 +54,7 @@
                                 <span class="text-primary align-middle m-0 p-0 fw-medium" v-if="thisOrder?.records[thisOrder.records.length - 1].price">
                                     <span v-if="CommissionIsValid">
                                         <span>
-                                            {{ showBalanceWhmcsUnit(ConvertFromCaasifyToWhmcs(addCommision(thisOrder.records[thisOrder.records.length - 1].price))) }}
+                                            {{ formatUserBalance(thisOrder.records[thisOrder.records.length - 1].price) }}
                                         </span>
                                         <span v-if="userCurrencySymbolFromWhmcs" class="ms-1">
                                             {{ userCurrencySymbolFromWhmcs }}
@@ -89,7 +89,7 @@
                                 <span class="text-primary align-middle m-0 p-0 fw-medium" v-if="balance">
                                     <span v-if="CommissionIsValid">
                                         <span>
-                                            {{ showBalanceWhmcsUnit(ConvertFromCaasifyToWhmcs(addCommision(balance))) }}
+                                            {{ formatUserBalance(balance) }}
                                         </span>
                                         <span v-if="userCurrencySymbolFromWhmcs" class="ms-1">
                                             {{ userCurrencySymbolFromWhmcs }}

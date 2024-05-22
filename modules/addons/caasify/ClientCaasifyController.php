@@ -492,7 +492,7 @@ class ClientCaasifyController
         ];
 
         $address = [
-            $BackendUrl, 'api', 'users', $CaasifyUserId, 'transactions', 'create'
+            $BackendUrl, 'api', 'users', $CaasifyUserId, 'transactions', 'increase'
         ];
         
         return Request::instance()->setAddress($address)->setHeaders($headers)->setParams($params)->getResponse()->asObject();

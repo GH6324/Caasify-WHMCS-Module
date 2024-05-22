@@ -6,6 +6,7 @@ app = createApp({
         return {
             readyToLoad: null,
             WhUserId: null,
+            ChargeBtnClass: 'bg-primary text-primary',
             
             CaasifyConfigs: [],
             configIsLoaded: null,
@@ -45,7 +46,7 @@ app = createApp({
 
 
 
-            ChargeAmount: null,
+            ChargeAmount: 0,
             ChargingIsInProcess: false,
             ChargingResponse: {
                 data: null,
@@ -97,6 +98,16 @@ app = createApp({
                 this.LoadUserOrders();
             }
         },
+        
+        ChargeAmount(newChargeAmount){
+            if(this.ChargeAmount < 0){
+                this.ChargeBtnClass = 'bg-danger  text-danger';
+            } else {
+                this.ChargeBtnClass = 'bg-primary  text-primary';
+            }
+
+        },
+
     },
 
     computed: {
@@ -222,14 +233,41 @@ app = createApp({
             }
         },
 
-        async chargeCaasify() {
+        async IncreaseChargeCaasify() {
             const ChargeAmount = this.ChargeAmount;
             const params = {
                 ChargeAmount: ChargeAmount,
             };
 
             this.ChargingIsInProcess = true
-            RequestLink = this.CreateRequestLink(action = 'admin_chargeCaasify');
+            RequestLink = this.CreateRequestLink(action = 'admin_increaseChargeCaasify');
+            let response = await axios.post(RequestLink, params);
+
+            if(response) {
+                this.ChargeAmount = null
+                this.ChargingIsInProcess = false
+            }
+            
+            if (response?.data?.data) {
+                this.ChargingResponse.data = response?.data?.data
+            } else {
+                if (response?.data?.message) {
+                    this.ChargingResponse.message = response?.data?.message
+                } else {
+                    this.ChargingResponse.message = 'unknown'
+                    console.error('unknown');
+                }
+            }
+        },
+        
+        async DecreaseChargeCaasify() {
+            const ChargeAmount = - this.ChargeAmount;
+            const params = {
+                ChargeAmount: ChargeAmount,
+            };
+
+            this.ChargingIsInProcess = true
+            RequestLink = this.CreateRequestLink(action = 'admin_decreaseChargeCaasify');
             let response = await axios.post(RequestLink, params);
 
             if(response) {

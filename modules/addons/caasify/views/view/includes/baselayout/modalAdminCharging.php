@@ -9,13 +9,23 @@
             <!-- ChargeAmount -->
             <div class="modal-body" v-if="ChargeAmount != null && ChargingIsInProcess != true">
                 <div class="">
-                    <div class="my-5 fw-medium text-dark">
+                    <div class="my-5 fw-medium text-dark" v-if="ChargeAmount != null && ChargeAmount != 0">
                         <p class="fs-5" v-if="CommissionIsValid">
-                            <span>
-                                Your are goting to charge this user for : 
+                            <span v-if="ChargeAmount != null && CommissionIsValid && ChargeAmount > 0">
+                                <span>
+                                    Your are goting to <b>Increase</b> charge this user for : 
+                                </span>
+                                <span class="text-primary ms-3">
+                                    {{ ChargeAmount * (1+(config.Commission/100)) }} €
+                                </span>
                             </span>
-                            <span class="text-primary">
-                                {{ ChargeAmount * (1+(config.Commission/100)) }} €
+                            <span v-if="ChargeAmount != null && CommissionIsValid && ChargeAmount < 0">
+                                <span>
+                                    Your are goting to <b>Decrease</b> charge this user for : 
+                                </span>
+                                <span class="text-danger ms-3">
+                                    {{ ChargeAmount * (1+(config.Commission/100)) }} €
+                                </span>
                             </span>
                         </p>
                         <p class="h4" v-if="CommissionIsValid">
@@ -23,7 +33,12 @@
                         </p>
 
                         <p class="fs-5" v-if="!CommissionIsValid">
-                            Nan
+                            Error: NaN
+                        </p>
+                    </div>
+                    <div class="my-5 fw-medium text-dark" v-else>
+                        <p class="fs-5">
+                            It is not valid number
                         </p>
                     </div>
                 </div>
@@ -80,8 +95,11 @@
                         <button type="button" class="btn btn-secondary px-4 border-0" data-bs-dismiss="modal" :disabled="ChargingIsInProcess">
                             Close
                         </button>
-                        <button v-if="ChargeAmount != null && CommissionIsValid" class="btn btn-primary px-4 ms-2 border-0" @click="chargeCaasify" :disabled="ChargingIsInProcess">
-                            Charge User for {{ ChargeAmount  * (1+(config.Commission/100)) }} € Euro
+                        <button v-if="ChargeAmount != null && CommissionIsValid && ChargeAmount > 0" class="btn px-4 ms-2 border-0" @click="IncreaseChargeCaasify" :disabled="ChargingIsInProcess" :class="ChargeBtnClass" style="--bs-bg-opacity: 0.2;">
+                            Increase for {{ ChargeAmount  * (1+(config.Commission/100)) }} € Caasify
+                        </button>
+                        <button v-if="ChargeAmount != null && CommissionIsValid && ChargeAmount < 0" class="btn px-4 ms-2 border-0" @click="DecreaseChargeCaasify" :disabled="ChargingIsInProcess" :class="ChargeBtnClass" style="--bs-bg-opacity: 0.2;">
+                            Decrease for {{ ChargeAmount  * (1+(config.Commission/100)) }} € Caasify
                         </button>
                     </div>
                 </div>

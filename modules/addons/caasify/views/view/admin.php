@@ -106,7 +106,7 @@
                                             <div class="col-12">
                                                 <p class="h5 text-secondary">
                                                     <span class="m-0 p-0 ps-2">
-                                                         Charge Balance
+                                                        ± Charge Balance
                                                     </span>
                                                 </p>
                                             </div>
@@ -115,29 +115,36 @@
                                             <div class="lh-sm d-flex flex-column justify-content-center align-items-start">
                                                 <div class="">
                                                     <div class="input-group my-2" style="width: 480px;">
-                                                        <span class="input-group-text text-start bg-primary text-primary p-0 m-0 px-3 fw-medium" style="--bs-bg-opacity: 0.1; width: 140px;">
+                                                        <span class="input-group-text text-start p-0 m-0 px-3 fw-medium" style="--bs-bg-opacity: 0.1; width: 140px;" :class="ChargeBtnClass">
                                                             Amount to charge
                                                         </span>
-                                                        <input class="form-control bg-light text-start text-primary fw-medium" v-model="ChargeAmount" style="width: 100px;">
-                                                        <span class="input-group-text text-start bg-primary text-primary p-0 m-0 px-3" style="--bs-bg-opacity: 0.1; width: 220px;">
+                                                        <input class="form-control bg-light text-start text-dark fw-medium" v-model="ChargeAmount" style="width: 100px;">
+                                                        <span class="input-group-text text-start p-0 m-0 px-3" style="--bs-bg-opacity: 0.1; width: 220px;" :class="ChargeBtnClass">
                                                             € Caasify (without Commission)
                                                         </span>
                                                     </div>
                                                     <div class="input-group my-2" style="width: 480px;">
-                                                        <span class="input-group-text text-start bg-primary text-primary p-0 m-0 px-3 fw-medium" style="--bs-bg-opacity: 0.1; width: 140px;">
+                                                        <span class="input-group-text text-start p-0 m-0 px-3 fw-medium" style="--bs-bg-opacity: 0.1; width: 140px;" :class="ChargeBtnClass">
                                                             Amount to charge
                                                         </span>
-                                                        <input class="form-control bg-primary text-start text-dark fw-medium" :value="Number(ChargeAmount * (1+(config?.Commission/100))).toFixed(2)" style="--bs-bg-opacity: 0.3; width: 100px;" disabled>
-                                                        <span class="input-group-text text-start bg-primary text-primary p-0 m-0 px-3" style="--bs-bg-opacity: 0.1; width: 220px;">
+                                                        <input class="form-control text-start text-dark fw-medium" :value="Number(ChargeAmount * (1+(config?.Commission/100))).toFixed(2)" style="--bs-bg-opacity: 0.3; width: 100px;" disabled :class="ChargeBtnClass">
+                                                        <span class="input-group-text text-start p-0 m-0 px-3" style="--bs-bg-opacity: 0.1; width: 220px;" :class="ChargeBtnClass">
                                                             € Euro (with Commission)
                                                         </span>
                                                     </div>
                                                 </div>
                                                 <div class="d-flex flex-row justify-content-cenetr">
                                                     <div v-if="ChargeAmount != null">
-                                                        <button class="btn bg-primary text-dark px-4 fw-medium mt-3" style="--bs-bg-opacity: 0.4; width:480px" @click="openChargingDialogue">
+
+                                                        <button class="btn bg-primary text-dark px-4 fw-medium mt-3" style="--bs-bg-opacity: 0.4; width:480px" @click="openChargingDialogue" v-if="ChargeAmount > 0">
                                                             <span>
-                                                                Charge Cloud Account
+                                                                Increase User Balance
+                                                            </span>
+                                                        </button>
+                                                        
+                                                        <button class="btn bg-danger text-dark px-4 fw-medium mt-3" style="--bs-bg-opacity: 0.4; width:480px" @click="openChargingDialogue" v-if="ChargeAmount < 0">
+                                                            <span>
+                                                                Decrease User Balance
                                                             </span>
                                                         </button>
                                                     </div>
