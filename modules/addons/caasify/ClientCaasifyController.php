@@ -108,26 +108,26 @@ class ClientCaasifyController
 
     public function CaasifyGetDataCenters()
     {
-        $UserToken = $this->UserToken;
+        $ResellerToken = $this->ResellerToken;
         $response = null;
 
-        if($UserToken){
-            $response = $this->sendCaasifyGetDataCentersRequest($UserToken);
+        if($ResellerToken){
+            $response = $this->sendCaasifyGetDataCentersRequest($ResellerToken);
         }
         $this->response($response);
     }
 
-    public function sendCaasifyGetDataCentersRequest($UserToken)
+    public function sendCaasifyGetDataCentersRequest($ResellerToken)
     {
         $BackendUrl = $this->BackendUrl;
 
         $headers = [
             'Accept' => 'application/json',
-            'Authorization' => 'Bearer ' . $UserToken
+            'Authorization' => 'Bearer ' . $ResellerToken
         ];
-        
+
         $address = [
-            $BackendUrl, 'api', 'common', 'categories'
+            $BackendUrl, 'api', 'reseller', 'common', 'categories'
         ];
 
         return Request::instance()->setAddress($address)->setHeaders($headers)->getResponse()->asObject();
@@ -135,32 +135,32 @@ class ClientCaasifyController
     
     public function CaasifyGetPlans()
     {
-        $UserToken = $this->UserToken;
+        $ResellerToken = $this->ResellerToken;
         $response = null;
 
         $CategoryID = caasify_get_post('CategoryID');
         
-        if($UserToken && $CategoryID){
-            $response = $this->sendCaasifyGetPlansRequest($UserToken, $CategoryID);
+        if($ResellerToken && $CategoryID){
+            $response = $this->sendCaasifyGetPlansRequest($ResellerToken, $CategoryID);
             $this->response($response);
         }
     }
 
-    public function sendCaasifyGetPlansRequest($UserToken, $CategoryID)
+    public function sendCaasifyGetPlansRequest($ResellerToken, $CategoryID)
     {
         $BackendUrl = $this->BackendUrl;
-
+        
         $headers = [
             'Accept' => 'application/json',
-            'Authorization' => 'Bearer ' . $UserToken
+            'Authorization' => 'Bearer ' . $ResellerToken
         ];
         
         $params = http_build_query([
             'category' => $CategoryID,
         ]);
-
+        
         $address = [
-            $BackendUrl, 'api', 'common', 'products', "?{$params}"
+            $BackendUrl, 'api', 'reseller', 'common', 'products', "?{$params}"
         ];
         
         return Request::instance()->setAddress($address)->setHeaders($headers)->getResponse()->asObject();
