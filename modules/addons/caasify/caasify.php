@@ -8,7 +8,8 @@ require_once $path . '/ClientCaasifyController.php';
 require_once $path . '/basics.php';
 
 // Create Table user and order
-function caasify_activate(){    
+function caasify_activate(){  
+
     $hasTable = Capsule::schema()->hasTable('tblcaasify_user');
     if (empty($hasTable)) {
         Capsule::schema()->create('tblcaasify_user', function ($table) {
@@ -20,6 +21,15 @@ function caasify_activate(){
             $table->string('password')->nullable();
         });
     }
+
+    // Change currency ratio decimals
+    try {
+        $pdo = Capsule::connection()->getPdo();
+        $pdo->exec('ALTER TABLE tblcurrencies MODIFY rate decimal(30, 10)');
+    } catch (PDOException $e) {
+
+    }
+    
 }
 
 // Module Config
@@ -81,7 +91,7 @@ function caasify_config(){
     $configarray = array(
         "name" => "Caasify",
         "description" => "This addon utility allows you to easily connect to Caasify Marketpalce to sell almost everything",
-        "version" => "1.0.4",
+        "version" => "1.0.5",
         "author" => "Caasify",
         "fields" => array(
             "BackendUrl" => array ("FriendlyName" => "Backend URL", "Type" => "dropdown", "Options" => 'https://api.caasify.com', "Description" => $BackendUrlLabel, "Default" => 'https://api.caasify.com'),
@@ -117,7 +127,7 @@ function caasify_output($vars) {
     }
 
     $text = '
-            <p style="padding: 50px 0px 0px 0px; !important">
+            <p>
                 <span style="font-weight: 800 !important;">Caasify</span> is an unique solution for Data Centers and Hosting companies to meet in unified hosting marketplace.
             </p>
         ';
@@ -125,7 +135,11 @@ function caasify_output($vars) {
     
     $text = '
             <p>You can always get the latest version from the <a href="https://github.com/caasify/Caasify-WHMCS-Module" style="font-weight: 800 !important;" target="_blank">Caasify git repository</a></p>
-            <p>To learn how to use Caasify modules, please check out the <a href="https://caasify.com/documentation?topic=3#topic" style="font-weight: 800 !important;" target="_blank"> Caasify documentation page</a></p>
+            <p>To learn how to use Caasify modules, please check out the 
+                <a href="https://caasify.com/documentation?topic=3#topic" style="font-weight: 800 !important;" target="_blank"> Caasify documentation page</a> 
+                or download
+                <a href="https://update.caasify.com/whmcs/howtoinstall.pdf" style="font-weight: 800 !important;" target="_blank">installation document</a>
+            </p>
             ';
     echo($text);
 

@@ -3,12 +3,28 @@
     <div class="col-12 col-xl-6 p-0 m-0 mb-2 flex-grow-1 pe-xl-1">
         <div class="border border-2 rounded-4 bg-white m-0 p-0 py-4 px-4 mx-0 me-xl-1 pb-5 h-100">
             <div class="m-0 p-0">
-                <p class="text-secondary fs-5">
-                    <img src="<?php echo($systemUrl); ?>/modules/addons/caasify/views/view/includes/assets/img/osicon.svg" width="18">
-                    <span class="text-secondary m-0 p-0 ps-4">
-                        {{ lang('Machine Info') }}
-                    </span>
-                </p>
+                <div class="d-flex flex-row justify-content-between align-items-center">
+                    <div class="">
+                        <p class="text-secondary fs-5 m-0 p-0">
+                            <img src="<?php echo($systemUrl); ?>/modules/addons/caasify/views/view/includes/assets/img/osicon.svg" width="18">
+                            <span class="text-secondary m-0 p-0 ps-4">
+                                {{ lang('Machine Info') }}
+                            </span>
+                        </p>
+                    </div>
+                    <!-- Datacenter and city -->
+                     <div class="d-none d-md-block">
+                        <div class="d-flex flex-row justify-content-end align-items-center flex-wrap pe-0" v-if="thisOrder?.records[thisOrder.records.length-1]?.product?.categories">
+                            <div class="d-flex flex-row justify-content-start align-items-center bg-secondary rounded-3 py-2 ms-2 px-3 mb-1" v-for="item in thisOrder.records[thisOrder.records.length-1].product.categories" style="max-width: 180px; --bs-bg-opacity: 0.1;">
+                                <img :src="showImage(item?.image)" alt="" style="height: 20px;" class="rounded-1">
+                                <span class="text-secondary ps-2" v-if="item?.name">
+                                    {{ item?.name }}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="input-group mt-5 mb-2">
                     <span class="input-group-text" id="basic-addon1" style="width: 100px;">
                         {{ lang('username') }}

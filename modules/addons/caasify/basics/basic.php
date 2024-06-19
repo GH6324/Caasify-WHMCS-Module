@@ -325,9 +325,9 @@ function caasify_create_user($BackendUrl, $ResellerToken, $UserFullName, $UserEm
         'Accept' =>  'application/json',
         'Authorization' => 'Bearer ' . $ResellerToken
     ];
-
+    
     $address = [
-        $BackendUrl, 'api', 'users', 'create'
+        $BackendUrl, 'api', 'reseller', 'users', 'create'
     ];
     
     return Request::instance()->setAddress($address)->setHeaders($headers)->setParams($params)->getResponse()->asObject();
@@ -395,7 +395,6 @@ function caasify_get_Whmcs_Currencies()
     return $results; 
 }
 
-// TODO: func token
 function caasify_get_token_by_handling($ResellerToken, $BackendUrl, $WhUserId)
 {
     $client = Client::find($WhUserId);
@@ -405,7 +404,7 @@ function caasify_get_token_by_handling($ResellerToken, $BackendUrl, $WhUserId)
     }
     
     $token = caasify_get_user_token_from_db($WhUserId);
-    // if has no teken in DB, then register on caasify
+    
     if(empty($token)) {
         $UserEmail = $client->email;
         $UserFullName = $client->firstname . ' ' . $client->lastname;
@@ -438,7 +437,7 @@ function caasify_get_token_by_handling($ResellerToken, $BackendUrl, $WhUserId)
             echo($CreateResponse->message);
             return false;
         }  
-
+            
         $wh_user_id = caasify_get_userInfo_from_db_if_exist($WhUserId);
         if(empty($wh_user_id)){
             $params = [
@@ -457,23 +456,25 @@ function caasify_get_token_by_handling($ResellerToken, $BackendUrl, $WhUserId)
             }
         } 
 
-        // Get Token from API TO RECORD INTO DATABASE
-        $requestTokenResponse = caasify_get_user_token_from_api($BackendUrl, $UserEmail, $password);
-        if(empty($requestTokenResponse)) {
-            echo 'can not get the token while login in token handling  <br>' ;
-            return false;
-        }
+        $token = $CreateResponse->token;
+        if (empty($token)) {
+            $requestTokenResponse = caasify_get_user_token_from_api($BackendUrl, $UserEmail, $password);
+            if(empty($requestTokenResponse)) {
+                echo 'can not get the token while login in token handling  <br>' ;
+                return false;
+            }
 
-        $message = property_exists($requestTokenResponse, 'message');
-        if(!empty($message)) {  
-            echo($requestTokenResponse->message);
-            return false;
-        }
+            $message = property_exists($requestTokenResponse, 'message');
+            if(!empty($message)) {  
+                echo($requestTokenResponse->message);
+                return false;
+            }
 
-        $token = $requestTokenResponse->data->token;
-        if(empty($token)){
-            echo('token received is empty');
-            return false;
+            $token = $requestTokenResponse->data->token;
+            if(empty($token)){
+                echo('token received is empty');
+                return false;
+            }
         }
 
         $CaasifyUserId = $CreateResponse->data->id;

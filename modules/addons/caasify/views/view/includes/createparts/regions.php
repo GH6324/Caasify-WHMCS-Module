@@ -1,4 +1,36 @@
-<!-- Data Centers -->
+<!-- SPOT Alarm -->
+<div v-if="SelectedDataCenter?.type?.toLowerCase() == 'spot'" class="row m-0 p-0 mt-5 px-1 px-md-2 px-lg-4">
+    <div class="col-12 m-0 p-0" style="--bs-bg-opacity: 0.1;">
+        <div class="row">
+            <div class="col-12 border border-2 border-danger rounded-4 p-4">
+                <p class="alert alert-danger h5 bg-danger text-light">
+                    Attention: Spot VMs are designed for temporary, flexible workloads and should not be used for critical or production environments.
+                </p>
+                <p class="pt-4">
+                    <span class="h5">
+                        Key Points to Consider:
+                    </span>
+                    <ul class="h6 lh-lg">
+                        <li>
+                            <b>Preemption Risk:</b> Spot VMs can be preempted (terminated) by the cloud provider at any time when the capacity is needed elsewhere.
+                        </li>
+                        <li>
+                            <b>No Guarantees:</b> There is no guarantee of availability or uptime for Spot VMs.
+                        </li>
+                        <li>
+                            <b>Best Use Cases:</b> Suitable for batch processing, development, testing, and other non-critical workloads.
+                        </li>
+                    </ul>
+                    <p class="h6 mt-4">
+                        For stable, reliable, and guaranteed performance, we recommend choosing the standard VM offerings.
+                    </p>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Cities -->
 <div v-if="SelectedDataCenter != null" class="row m-0 p-0 mt-5 py-5 px-1 px-md-2 px-lg-4">
     <div class="col-12 m-0 p-0" style="--bs-bg-opacity: 0.1;">
         <div class="row">
