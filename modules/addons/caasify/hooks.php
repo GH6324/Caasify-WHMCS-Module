@@ -11,93 +11,16 @@ require_once $path . '/basics.php';
 add_hook('ClientAreaPrimaryNavbar', 1, function($primaryNavbar) {
     /** @var \WHMCS\View\Menu\Item $primaryNavbar */
    
-    $config = caasify_get_config();
-    $DemoMode = $config['DemoMode'];
-
-    if(isset($DemoMode) && $DemoMode == 'on'){
-        $newMenu = $primaryNavbar->addChild(
-            'uniqueMenuItemName',
-            array(
-                'name' => 'Caasify Marketplace DEMO',
-                'label' => 'Caasify Marketplace DEMO',
-                'uri' => '/index.php?m=caasify&action=pageIndex',
-                'order' => 99,
-                'icon' => '',
-            )
-        );
-    } else {
-        $newMenu = $primaryNavbar->addChild(
-            'uniqueMenuItemName',
-            array(
-                'name' => 'Marketplace',
-                'label' => 'Marketplace',
-                'uri' => '/index.php?m=caasify&action=pageIndex',
-                'order' => 99,
-                'icon' => '',
-            )
-        );
-    }
-});
-
-// Remove extra menu in demo
-add_hook('ClientAreaPrimaryNavbar', 1, function($primaryNavbar) {
-    /** @var \WHMCS\View\Menu\Item $primaryNavbar */
-    
-
-    $config = caasify_get_config();
-    $DemoMode = $config['DemoMode'];  
-    
-    if(isset($DemoMode) && $DemoMode == 'on'){
-
-        if (!is_null($primaryNavbar->getChild('Store'))){
-            $primaryNavbar->removeChild('Store');
-        }
-        
-        if (!is_null($primaryNavbar->getChild('Announcements'))){
-            $primaryNavbar->removeChild('Announcements');
-        }
-        
-        if (!is_null($primaryNavbar->getChild('Knowledgebase'))){
-            $primaryNavbar->removeChild('Knowledgebase');
-        }
-        
-        if (!is_null($primaryNavbar->getChild('Network Status'))){
-            $primaryNavbar->removeChild('Network Status');
-        }
-        
-        if (!is_null($primaryNavbar->getChild('Marketplace'))){
-            $primaryNavbar->removeChild('Marketplace');
-        }
-        
-        if (!is_null($primaryNavbar->getChild('Services'))){
-            $primaryNavbar->removeChild('Services');
-        }
-        
-        if (!is_null($primaryNavbar->getChild('Domains'))){
-            $primaryNavbar->removeChild('Domains');
-        }
-        
-        if (!is_null($primaryNavbar->getChild('Home'))){
-            $primaryNavbar->removeChild('Home');
-        }
-        
-        if (!is_null($primaryNavbar->getChild('Contact Us'))){
-            $primaryNavbar->removeChild('Contact Us');
-        }
-        
-        if (!is_null($primaryNavbar->getChild('Open Ticket'))){
-            $primaryNavbar->removeChild('Open Ticket');
-        }
-       
-        if (!is_null($primaryNavbar->getChild('Support'))){
-            $primaryNavbar->removeChild('Support');
-        }
-       
-        if (!is_null($primaryNavbar->getChild('Billing'))){
-            $primaryNavbar->removeChild('Billing');
-        }
-
-    }
+    $newMenu = $primaryNavbar->addChild(
+        'uniqueMenuItemName',
+        array(
+            'name' => 'Marketplace',
+            'label' => 'Marketplace',
+            'uri' => '/index.php?m=caasify&action=pageIndex',
+            'order' => 99,
+            'icon' => '',
+        )
+    );
 
 });
 
