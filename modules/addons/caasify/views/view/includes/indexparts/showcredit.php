@@ -18,4 +18,4 @@
     <span v-else class="text-primary fw-medium ps-2">
         --- 
     </span>
-</span>
+</span> 

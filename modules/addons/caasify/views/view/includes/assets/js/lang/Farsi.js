@@ -208,7 +208,7 @@ let common = {
     "chargecloudaccount" : "شارژ حساب ابری",
     "youcantransfercredit" : "شما می‌توانید از اعتبار حساب خود برای شارژ حساب ابری خود استفاده کنید. با این عملیات، شما اعتبار حساب خود را به موجودی ابری خود منتقل می‌کنید",
     "pleaseinputamountmoney" : "لطفاً مقداری که می‌خواهید حساب ابری خود را شارژ کنید وارد کنید، به خاطر داشته باشید که حداکثر مقدار مجاز اعتبار شماست",
-    "amounttocharge" : "مقدار برای شارژ",
+    "amounttocharge" : "مبلغ شارژ",
     "donthaveenoughcredit" : "شما اعتبار کافی ندارید، لطفاً ابتدا کمی اعتبار اضافه کنید",
     "islessthanminimum" : "اعتبار شما کمتر از حداقل مجاز برای شارژ است. حداقل مقدار",
     "lessthanalowedminimum" : "این عدد وارد شده معتبر نیست، کمتر از حداقل مجاز برای شارژ است. حداقل مقدار",
@@ -249,7 +249,7 @@ let common = {
 
 // create order page
     "backtoorderlist" : "بازگشت به لیست ماشین‌ها",
-    "datacenters" : "مرکز داده",
+    "datacenters" : "مراکز داده",
     "locationlist" : "کشور",
     "chooseregion" : "انتخاب منطقه جغرافیایی قرارگیری مرکز داده",
     "products" : "پلن های",
@@ -309,7 +309,7 @@ let common = {
     "costonegigtraffic" : "هزینه هر گیگ ترافیک",
     "freeprice" : "رایگان",
     "pricestartsfrom" : "شروع قیمت از ",
-    "confirmationtext" : "قوانین را مطالعه کرده و با شرایط و قوانین  استفاده از کسیفای موافقت می‌کنم",
+    "confirmationtext" : "قوانین را مطالعه کرده و با شرایط و قوانین موافقت می‌کنم",
     "optional" : "اختیاری",
     "readmore" : "مطالعه بیشتر ...",
 
@@ -381,8 +381,67 @@ let common = {
     "DeleteIsNotAllowed" : "در حالت دمو، اجازه حذف ماشین را ندارید",    
     "TrafficAlert" : "ممکن است زمان زیادی طول بکشد",    
     "Machine Info" : "اطلاعات ماشین",
+    
+    
+    
+    
+    
+    
+
+    "Cloud Account" : "سرور ابری",
+    "InsertValidNumber" : "جهت افزایش موجودی، لطفا مبلغ مورد نظر را وارد کنید",
+    "Creating invoice" : "در حال صدور فاکتور",
+    "invoice created successfully" : "فاکتور با موفقیت صادر شد",
+    "Go to invoice payment" : "پرداخت فاکتور",
+    "Creating invoice Failed, try again" : "خطا در صدور فاکتور، مجدد تلاش کنید",
+    "Inbound" : "ترافیک ورودی",
+    "Outbound" : "ترافیک خروجی",
+    "Admin Finance" : "امور مالی ریسلر",
+    "AdminBalance" : "بالانس ریسلر (یورو)",
+    "Commission" : "کمیسیون",
+    "User Finance" : "امور مالی کاربر",
+    "UserBalanceReal" : "بالانس کاربر (یورو)",
+    "UserBalanceWithCommission" : "بالانس کاربر بعلاوه کمیسیون (یورو)",
+    "Charging" : "ثبت تراکنش",
+    "With Commission" : "با کمیسیون",
+    "Increase User Balance" : "افزایش موجودی",
+    "Decrease User Balance" : "کاهش موجودی",
+    "Commission is Wrong" : "کمیسیون اشتباه است",
+    "User Orders" : "سفارشات کاربر",
+    "User has no active order" : "کاربر هیچ سفارش فعالی ندارد",
+    "Error 670: call your admin" : "خطای ۶۷۰: کمیسیون اشتباه وارد شده است ",
+    "increasebalance" : " شما در حال افزایش بالانس کاربر هستید",
+    "decreasebalance" : " شما در حال کاهش بالانس کاربر هستید", 
+    "It is not valid number" : "این مقدار معتبر نیست",
+    "ChargingUserFor" : "افزایش بالانس به میزان",
+    "DeChargingUserFor" : "کاهش بالانس به میزان",
+    "Charge action has done Successfully" : "افزایش بالانس با موفقیت انجام شد",
+    "headcharge" : "تغییر بالانس کاربر",
+    "euro" : " یورو ",
+    "amounttochargewithcommission" : "مبلغ شارژ بعلاوه کمیسیون (یورو)",
+    "amounttochargereal" : "مبلغ شارژ واقعی (یورو)",
+    "doTransaction" : "ثبت تراکنش",
+
+    "BalanceIsLow" : "اعتبار اکانت کلاد شما بسیار کم است",
+    "MachienWouldDelete" : "ماشین شما ممکن است حذف شود و اطلاعات شما پاک شود",
+    "hours or less" : "(مدت باقی مانده کمتر از یک ساعت است)",
+    "an hour or less" : "(مدت باقی مانده یک ساعت یا کمتر است)",
+    "24 hours or less" : "(مدت باقی مانده، کمتر از ۲۴ ساعت است)",
+    "I am aware of the Risk" : "از ریسک این اعلان آگاهم",
+    "Confirm Alert and Close" : "تایید اعلان",
 
 
+    "SpotAlert01" : "Attention: Spot VMs are designed for temporary, flexible workloads and should not be used for critical or production environments.",
+    "SpotAlert01" : "توجه: محصولات اسپات برای مصارف کوتاه مدت، محیط توسعه مناسب است ولی برای کاربرد بلند مدت و پایدار نباید استفاده شود",
+    "SpotAlert02" : "مهمترین موارد قابل توجه:",
+    "SpotAlert03" : "ریسک پیشگیرانه:",
+    "SpotAlert04" : "ماشین‌های مجازی اسپات ممکن است در هر زمان که ظرفیت در جای دیگر نیاز باشد، توسط ارائه‌دهنده آن پیشگیری (حذف) شود",
+    "SpotAlert05" : "بدون گارانتی:",
+    "SpotAlert06" : "هیچ تضمینی برای دسترسی در لحظه یا اپتایم به ماشین‌های مجازی اسپات وجود ندارد",
+    "SpotAlert07" : "بهترین کاربرد:",
+    "SpotAlert08" : "ماشین های اسپات برای پردازش دسته‌ای، محیط توسعه، انجام تست و سایر کاری بدون نیاز به تضمین مناسب هستند",
+    "SpotAlert09" : "برای داشتن ثبات و بهترین کیفیت پیشنهاد می شود از مواری غیر اسپات استفاده کنید",
+    
 
 }
 

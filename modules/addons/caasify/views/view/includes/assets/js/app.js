@@ -4,6 +4,32 @@ app = createApp({
 
     data() {
         return {
+
+
+            // new Charging sys
+            InvoiceCreationStatus: null,
+
+            
+            // Mycaasify
+            ResellerChargeAmount: null,
+            ConstResellerChargeAmount: null,
+            userLoadStatus: null,
+            usertoken: null,
+            showToken: false,
+            maskedToken: '**********',
+            BtnCopyTokenPushed: false,
+
+
+
+
+
+
+
+            CaasifyResellerUserIsLoaded: false,
+            CaasifyResellerUserInfo: null,
+
+
+
             ChargeMSG: '',
             configIsLoaded: false,
 
@@ -88,6 +114,7 @@ app = createApp({
             ConstChargeamountInWhmcs: null,
             chargeAmountAdminInput: null,
             invoice: null,
+            invoiceId: null,
             ConstantInvoiceId: null,
 
             AdminTransSuccess: null,
@@ -151,12 +178,28 @@ app = createApp({
             userClickedCreationBtn: false,
             CreateIsLoading: false,
             showAlertModal: false,
+            
+            CLBlanaceChecked: false,
 
 
-        }
+        } 
     },
 
     watch: {
+
+        CaasifyUserInfo(){
+            let time = this.CaasifyUserInfo.balance_alarm
+            if(time != null && time < 72){
+                this.showBalanceAlertModal()
+            }
+        },
+        
+        CaasifyResellerUserInfo(){
+            let time = this.CaasifyResellerUserInfo.balance_alarm
+            if(time != null && time < 72){
+                this.showBalanceAlertModal()
+            }
+        },
 
         showAlertModal(newValue) {
             if (newValue == true) {
@@ -176,13 +219,19 @@ app = createApp({
 
         fileName(newFielName) {
             if (newFielName != null) {
-                if (newFielName == "index.php") {
+                if (newFielName == "reseller.php") {
+                    this.readLanguageFirstTime();
+                    this.LoadWhmcsUser();
+                    this.LoadCaasifyResellerUser();
+                    this.LoadGetUserToken();
+                    this.loadPollingResellerUserPage()
+
+                } else if (newFielName == "index.php") {
                     this.LoadUserOrders();
                     this.readLanguageFirstTime();
                     this.LoadCaasifyUser();
                     this.LoadWhmcsUser();
                     this.LoadWhmcsCurrencies();
-
                     this.loadPollingIndex()
 
                 } else if (newFielName == "create.php") {
@@ -192,7 +241,6 @@ app = createApp({
                     this.LoadWhmcsCurrencies();
                     this.loadDataCenters();
                     this.readLanguageFirstTime();
-
                     this.loadPollingCreate()
 
                 } else if (newFielName == "view.php") {
@@ -201,7 +249,6 @@ app = createApp({
                     this.LoadWhmcsCurrencies();
                     this.orderId();
                     this.LoadCaasifyUser();
-
                     this.LoadTheOrder();
 
                     setTimeout(() => {
@@ -226,9 +273,8 @@ app = createApp({
             this.config.HourlyCostDecimal = parseFloat(NewCaasifyConfigs.HourlyCostDecimal)
             this.config.BalanceDecimal = parseFloat(NewCaasifyConfigs.BalanceDecimal)
             this.config.DemoMode = NewCaasifyConfigs.DemoMode
-            this.config.Commission = parseFloat(NewCaasifyConfigs.Commission)
-
-            
+            this.config.Commission = parseFloat(atob(NewCaasifyConfigs.Commission)) 
+            this.config.MyCaasifyStatus = parseFloat(NewCaasifyConfigs.MyCaasifyStatus)
         },
 
         orderID(neworderID) {
@@ -251,21 +297,24 @@ app = createApp({
     mounted() {
         this.scrollToTop();
         this.fetchModuleConfig();
-
     },
 
     computed: {
 
-        CommissionIsValid(){
-            if(this.configIsLoaded == false){
+        sortedPlans() {
+            return this.plans.slice().sort((a, b) => a.price - b.price);
+        },
+
+        CommissionIsValid() {
+            if (this.configIsLoaded == false) {
                 return true
             }
 
-            if(this.config != null){
-                if(this.config?.Commission != null){
-                    if(typeof this.config.Commission == 'number' && isFinite(this.config.Commission)){
+            if (this.config != null) {
+                if (this.config?.Commission != null) {
+                    if (typeof this.config.Commission == 'number' && isFinite(this.config.Commission)) {
                         return true
-                    } 
+                    }
                 }
             }
             return false
@@ -329,6 +378,27 @@ app = createApp({
             }
         },
 
+        NewChargingValidity() {
+            let chargeAmount = this.chargeAmountInCaasifyCurrency;
+            let minimum = this.config.MinimumCharge;
+            let maximum = this.config.MaximumCharge;
+
+            if (chargeAmount == null) {
+                return null
+            } else {
+                if (chargeAmount < minimum) {
+                    return "noenoughchargeamount"
+                } else if (!this.isIntOrFloat(chargeAmount)) {
+                    return "notinteger"
+                } else if (chargeAmount > maximum) {
+                    return "MoreThanMax"
+                } else {
+                    return "fine"
+                }
+            }
+            return null
+        },
+        
         chargingValidity() {
             if (this.CurrenciesRatioWhmcsToCloud != null) {
                 let usercredit = this.UserCreditInCaasifyCurrency;
@@ -398,18 +468,7 @@ app = createApp({
                 return null
             }
         },
-        // end old
 
-
-
-
-
-
-
-
-
-
-        //   new
         CaasifyDefaultCurrencySymbol() {
             if (this.CaasifyConfigs?.CaasifyCurrency != null) {
                 return this.CaasifyConfigs.CaasifyCurrency
@@ -456,15 +515,264 @@ app = createApp({
             return NaN
         },
 
+        // Mycaasify
+        ResellerUserBalance() {
+            if (this.CaasifyResellerUserInfo?.balance) {
+                let ResellerUserBalance = Number(this.CaasifyResellerUserInfo?.balance).toFixed(2)
+                if (ResellerUserBalance) {
+                    return ResellerUserBalance
+                }
+            } else {
+                return null
+            }
+        },
+
+        ResellerUserCredit() {
+            if (this.WhmcsUserInfo?.credit) {
+                let ResellerUserCredit = Number(this.WhmcsUserInfo?.credit).toFixed(2)
+                if (ResellerUserCredit) {
+                    return ResellerUserCredit
+                }
+            } else {
+                return null
+            }
+        },
+
+        ResellerChargingValidity() {
+            if (this.ResellerUserCredit != null) {
+                let usercredit = parseFloat(this.ResellerUserCredit);
+                let chargeAmount = parseFloat(this.ResellerChargeAmount);
+                let minimum = parseFloat(this.config.MinimumCharge);
+                let maximum = parseFloat(this.config.MaximumCharge);
+
+                if (usercredit == null || chargeAmount == null) {
+                    return null
+                } else {
+                    if (usercredit == 0) {
+                        return "nocredit"
+                    } else if (usercredit < minimum) {
+                        return "noenoughcredit"
+                    } else if (chargeAmount < minimum) {
+                        return "noenoughchargeamount"
+                    } else if (!this.isIntOrFloat(chargeAmount)) {
+                        return "notinteger"
+                    } else if (chargeAmount > maximum) {
+                        return "MoreThanMax"
+                    } else if (chargeAmount > usercredit) {
+                        return "overcredit"
+                    } else {
+                        return "fine"
+                    }
+                }
+            }
+
+            return null
+        },
+
     },
 
     methods: {
 
-        addCommision(value){
+        showBalanceAlertModal() {
+            $('#BalanceAlertModal').modal('show');
+        },
+
+        // MyCaasify
+        changeVisibility() {
+            this.showToken = !this.showToken
+        },
+
+        copyUserToken(text) {
+            this.BtnCopyTokenPushed = true
+            if (text) {
+                text = this.usertoken;
+            }
+            navigator.clipboard.writeText(text).then(function () {
+            }).catch(function (error) {
+                console.error('copyUserToken failed');
+            });
+
+            setTimeout(() => {
+                this.BtnCopyTokenPushed = false
+            }, 1000);
+        },
+
+        loadPollingResellerUserPage() {
+            setInterval(this.readLanguageFirstTime, 20 * 1000)
+            setInterval(this.LoadWhmcsUser, 20 * 1000)
+            setInterval(this.LoadCaasifyUser, 20 * 1000)
+            setInterval(this.LoadGetUserToken, 20 * 1000)
+        },
+
+        async LoadGetUserToken() {
+            const params = { WhUserId: this.WhUserId };
+
+            RequestLink = this.CreateRequestLink(action = 'CaasifyGetUsertoken');
+            let response = await axios.post(RequestLink, params);
+
+            if (response?.data == 'null') {
+                console.error('GetUserToken Is Null');
+                return null;
+            }
+
+            if (response?.data?.data) {
+                this.usertoken = response.data.data
+            } else if (response?.data?.message) {
+                console.error('GetUserToken: ' + response.data.message);
+            }
+        },
+
+        async LoadCaasifyResellerUser() {
+            RequestLink = this.CreateRequestLink(action = 'CaasifyResellerUserInfo');
+            let response = await axios.get(RequestLink);
+
+            if (response?.data == null) {
+                console.error('Caasify Reseller User Is Null');
+            }
+
+            if (response?.data?.data) {
+                this.CaasifyResellerUserIsLoaded = true
+                this.CaasifyResellerUserInfo = response.data.data
+
+                this.user = response?.data.data
+                this.ConstUserId = Object.freeze({ value: response?.data?.data.id });
+            } else if (response?.data?.message) {
+                this.CaasifyResellerUserIsLoaded = true
+                // console.error('CaasifyResellerUserInfo: ' + response.data.message);
+            }
+        },
+
+        async StartTransferResellerUser() {
+            this.ConstResellerChargeAmount = Object.freeze({ value: this.ResellerChargeAmount });
+            let ChargeAmount = this.ConstResellerChargeAmount.value
+            let chargingValidity = this.ResellerChargingValidity;
+            this.theChargingSteps = 1;
+            this.theStepStatus = 11;
+
+            const params = { chargeamount: ChargeAmount };
+
+            if (chargingValidity == 'fine') {
+                RequestLink = this.CreateRequestLink(action = 'CreateUnpaidInvoice');
+                let response = await axios.post(RequestLink, params);
+                if (response?.data.result == 'success') {
+                    this.invoice = response?.data;
+                    this.ConstantInvoiceId = Object.freeze({ value: response?.data.invoiceid });
+                    setTimeout(() => {
+                        this.theStepStatus = 12;
+                        this.ResellerChargeCaasify();
+                    }, 0.1 * 1000);
+                } else {
+                    this.GlobalError = 1
+                    setTimeout(() => {
+                        this.theStepStatus = 13;
+                        this.TransactionError = 'error 1',
+                            setTimeout(() => {
+                                this.FailWindow();
+                            }, 1000);
+                    }, 1000);
+                }
+            } else {
+                return null
+            }
+        },
+
+        async ResellerChargeCaasify() {
+            const id = this.ConstUserId.value;
+            let ChargeAmount = this.ConstResellerChargeAmount.value
+            const invoiceid = this.ConstantInvoiceId.value
+
+            this.theChargingSteps = 2;
+            this.theStepStatus = 21;
+
+            const params = {
+                chargeamount: ChargeAmount,
+                id: id,
+                invoiceid: invoiceid,
+
+            };
+
+            if (id > 0) {
+                RequestLink = this.CreateRequestLink(action = 'resellerChargeCaasify');
+                let response = await axios.post(RequestLink, params);
+                if (response?.data.data) {
+                    setTimeout(() => {
+                        this.theStepStatus = 22;
+                        this.ResellerApplyTheCredit();
+                    }, 0.1 * 1000);
+                } else {
+
+                    if (response?.data?.message) {
+                        this.ChargeMSG = response?.data?.message
+                    }
+
+                    this.GlobalError = 2
+                    this.markCancelInvoice()
+                    setTimeout(() => {
+                        this.theStepStatus = 23;
+                        this.TransactionError = 'error 2',
+                            setTimeout(() => {
+                                this.FailWindow();
+                            }, 1000);
+                    }, 1000);
+                }
+            } else {
+                return null
+            }
+        },
+
+        async ResellerApplyTheCredit() {
+            const invoiceid = this.ConstantInvoiceId.value;
+            let ChargeAmount = this.ConstResellerChargeAmount.value
+
+            this.theChargingSteps = 3;
+            this.theStepStatus = 31;
+
+            const params = { invoiceid: invoiceid, chargeamount: ChargeAmount };
+
+            if (invoiceid > 0) {
+                RequestLink = this.CreateRequestLink(action = 'applyTheCredit');
+                let response = await axios.post(RequestLink, params);
+
+                if (response?.data.result == 'success') {
+                    setTimeout(() => {
+                        this.theStepStatus = 32;
+                        setTimeout(() => {
+                            this.SuccessWindow();
+                        }, 1000);
+                    }, 1000);
+                } else {
+                    this.GlobalError = 3
+                    setTimeout(() => {
+                        this.theStepStatus = 33;
+                        this.TransactionError = 'error 3',
+                            setTimeout(() => {
+                                this.FailWindow();
+                            }, 1000);
+                    }, 1000);
+                }
+            } else {
+                return null
+            }
+        },
+
+        async ResellerMarkCancelInvoice() {
+            const invoiceid = this.ConstantInvoiceId.value;
+            const params = { invoiceid: invoiceid };
+            RequestLink = this.CreateRequestLink(action = 'markCancelInvoice');
+            let response = await axios.post(RequestLink, params);
+            if (response?.data.result == 'success') {
+                console.error('Invoice is marked cancelled successfully');
+            } else {
+                console.error('can not able to clear invoice');
+            }
+        },
+
+        // Other
+        addCommision(value) {
             if (this.config.Commission !== null && this.config.Commission !== undefined) {
                 let Commission = parseFloat(this.config.Commission);
                 if (!isNaN(Commission)) {
-                    return ((100 + Commission)/100) * value;
+                    return ((100 + Commission) / 100) * value;
                 } else {
                     console.error('Commission is not a valid number');
                     return NaN
@@ -517,12 +825,12 @@ app = createApp({
                 .then(data => {
                     this.configIsLoaded = true
                     this.CaasifyConfigs = data.configs;
-                    if(this.CaasifyConfigs['errorMessage'] == null){
+                    if (this.CaasifyConfigs['errorMessage'] == null) {
                         this.systemUrl = data.configs.systemUrl;
                         if (this.systemUrl.endsWith('/')) {
                             this.systemUrl = this.systemUrl.slice(0, -1);
                         }
-    
+ 
                         this.BackendUrl = data.configs.BackendUrl;
                         if (this.systemUrl == '') {
                             console.error('systemUrl is empty');
@@ -614,7 +922,7 @@ app = createApp({
                 this.user = response?.data.data
                 this.ConstUserId = Object.freeze({ value: response?.data?.data.id });
             } else if (response?.data?.message) {
-                console.error('CaasifyUserInfo: ' + response.data.message);
+                // console.error('CaasifyUserInfo: ' + response.data.message);
             }
         },
 
@@ -715,7 +1023,7 @@ app = createApp({
 
         showBalanceCloudUnit(value) {
             decimal = this.config.BalanceDecimal
-            return Number(value).toFixed(decimal)
+            return Number(value).toFixed(2)
         },
 
         showChargeAmountWhmcsUnit(value) {
@@ -725,17 +1033,18 @@ app = createApp({
 
         showChargeAmountCloudUnit(value) {
             decimal = this.config.BalanceDecimal
-            return Number(value).toFixed(decimal)
+            return Number(value).toFixed(2)
         },
 
         showCreditWhmcsUnit(value) {
             decimal = this.config.BalanceDecimal
-            return Number(value).toFixed(decimal)
+            let credit =  Number(value).toFixed(decimal)
+            return credit.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         },
 
         showCreditCloudUnit(value) {
             decimal = this.config.BalanceDecimal
-            return Number(value).toFixed(decimal)
+            return Number(value).toFixed(2)
         },
 
         showRatio(value) {
@@ -745,12 +1054,14 @@ app = createApp({
 
         showMinimumeWhmcsUnit(value) {
             decimal = this.config.BalanceDecimal
-            return this.formatNumbers(value, decimal)
+            let min =  Number(value).toFixed(decimal)
+            return min.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
         },
 
         showMinimumeCloudUnit(value) {
             decimal = this.config.BalanceDecimal
-            return this.formatNumbers(value, decimal)
+            return this.formatNumbers(value, 2)
         },
 
         findRationFromId(id) {
@@ -855,6 +1166,21 @@ app = createApp({
             window.open([address, params].join('?'), "_top")
         },
 
+        openInvoicePage() {
+            let invoiceId = this.invoiceId
+            let base = ''
+            if (this.systemUrl != null) {
+                base = this.systemUrl
+            }
+            if(invoiceId != null){
+                let address = base + '/viewinvoice.php?id=' + invoiceId
+                window.open([address], "_top")
+            }
+            else {
+                console.error('can not find the invoice ID');
+            }
+        },
+        
         openCreatePage() {
             let base = ''
             if (this.systemUrl != null) {
@@ -914,6 +1240,39 @@ app = createApp({
             }
         },
 
+        async NewCreateUnpaidInvoice() {
+            let Chargeamount = this.chargeAmountinWhmcs;
+            let NewChargingValidity = this.NewChargingValidity;
+            this.InvoiceCreationStatus = 'start';
+
+            const params = { 
+                Chargeamount: Chargeamount,
+                R: this.CurrenciesRatioWhmcsToCloud.toFixed(8)
+             };
+
+            if (NewChargingValidity == 'fine') {
+                RequestLink = this.CreateRequestLink(action = 'CreateNewUnpaidInvoice');
+                let response = await axios.post(RequestLink, params);
+                if (response?.data.result == 'success') {
+                    this.invoiceId = response?.data?.invoiceid
+                    setTimeout(() => {
+                        this.InvoiceCreationStatus = 'success';
+                        if(this.invoiceId){
+                            setTimeout(() => {
+                                this.openInvoicePage()
+                            }, 0.2 * 1000);
+                        }
+                    }, 1 * 1000);
+                } else {
+                    setTimeout(() => {
+                        this.InvoiceCreationStatus = 'fail';
+                    }, 2000);
+                }
+            } else {
+                return null
+            }
+        },
+
         async CreateUnpaidInvoice() {
             this.ConstChargeamountInWhmcs = Object.freeze({ value: this.chargeAmountinWhmcs });
             const chargeAmountinWhmcs = this.ConstChargeamountInWhmcs.value
@@ -950,7 +1309,7 @@ app = createApp({
 
         async chargeCaasify() {
             const id = this.ConstUserId.value;
-            const chargeamountInAutovm = (this.convertFromWhmcsToCloud(this.ConstChargeamountInWhmcs.value)) / ((1 + this.config.Commission/100));
+            const chargeamountInAutovm = (this.convertFromWhmcsToCloud(this.ConstChargeamountInWhmcs.value)) / ((1 + this.config.Commission / 100));
             const invoiceid = this.ConstantInvoiceId.value
 
             this.theChargingSteps = 2;
@@ -1022,8 +1381,8 @@ app = createApp({
                         this.theStepStatus = 32;
                         setTimeout(() => {
                             this.SuccessWindow();
-                        }, 1500);
-                    }, 6000);
+                        }, 1000);
+                    }, 1000);
                 } else {
                     this.GlobalError = 3
                     setTimeout(() => {
@@ -1031,8 +1390,8 @@ app = createApp({
                         this.TransactionError = 'error 3',
                             setTimeout(() => {
                                 this.FailWindow();
-                            }, 3000);
-                    }, 3000);
+                            }, 1000);
+                    }, 1000);
                 }
             } else {
                 return null
@@ -1044,6 +1403,18 @@ app = createApp({
             if (imageAddress != null && BackendUrl != null) {
                 let FullImageAddress = null;
                 FullImageAddress = BackendUrl + '/' + imageAddress
+                return FullImageAddress
+            } else {
+                return null
+            }
+        },
+        
+        showLocalImage(imageAddress = null) {
+            let systemUrl = this.systemUrl
+            let FullImageAddress = null;
+            
+            if (imageAddress != null && systemUrl != null) {
+                FullImageAddress = systemUrl + '/' + imageAddress
                 return FullImageAddress
             } else {
                 return null
@@ -1080,6 +1451,7 @@ app = createApp({
                 this.SshNamePreviousValue = this.themachinessh;
             }
         },
+ 
 
         openConfirmDialog(action) {
             this.actionWouldBeHappened = action
@@ -1128,32 +1500,26 @@ app = createApp({
             return Number(price).toFixed(decimal)
         },
 
-        formatUserBalance(UserBalnce) {
-            if(isNaN(UserBalnce) || UserBalnce == null){
+        formatUserBalanceInEuro(UserBalnce) {
+            if (isNaN(UserBalnce) || UserBalnce == null) {
                 console.error('UserBalnce is null')
                 return NaN
             }
 
             let FloatUserBalnce = parseFloat(UserBalnce);
-            if(isNaN(FloatUserBalnce) || FloatUserBalnce == null){
+            if (isNaN(FloatUserBalnce) || FloatUserBalnce == null) {
                 console.error('FloatUserBalnce is not Float')
                 return NaN
             }
 
             let UserBalnceWithCommission = this.addCommision(FloatUserBalnce)
-            if(isNaN(UserBalnceWithCommission) || UserBalnceWithCommission == null){
+            if (isNaN(UserBalnceWithCommission) || UserBalnceWithCommission == null) {
                 console.error('UserBalnceWithCommission is null')
                 return NaN
             }
 
-            let UserBalanceInWhCurrency = this.ConvertFromCaasifyToWhmcs(UserBalnceWithCommission)
-            if(isNaN(UserBalanceInWhCurrency) || UserBalanceInWhCurrency == null){
-                console.error('UserBalanceInWhCurrency is null')
-                return NaN
-            }
-
-            let FormattedUserBalance = this.showBalanceWhmcsUnit(UserBalanceInWhCurrency)
-            if(isNaN(FormattedUserBalance) || FormattedUserBalance == null){
+            let FormattedUserBalance = this.showBalanceCloudUnit(UserBalnceWithCommission)
+            if (isNaN(FormattedUserBalance) || FormattedUserBalance == null) {
                 console.error('FormattedUserBalance is null')
                 return NaN
             }
@@ -1162,66 +1528,104 @@ app = createApp({
 
         },
         
+        formatUserBalance(UserBalnce) {
+            if (isNaN(UserBalnce) || UserBalnce == null) {
+                console.error('UserBalnce is null')
+                return NaN
+            }
+
+            let FloatUserBalnce = parseFloat(UserBalnce);
+            if (isNaN(FloatUserBalnce) || FloatUserBalnce == null) {
+                console.error('FloatUserBalnce is not Float')
+                return NaN
+            }
+
+            let UserBalnceWithCommission = this.addCommision(FloatUserBalnce)
+            if (isNaN(UserBalnceWithCommission) || UserBalnceWithCommission == null) {
+                console.error('UserBalnceWithCommission is null')
+                return NaN
+            }
+
+            let UserBalanceInWhCurrency = this.ConvertFromCaasifyToWhmcs(UserBalnceWithCommission)
+            if (isNaN(UserBalanceInWhCurrency) || UserBalanceInWhCurrency == null) {
+                console.error('UserBalanceInWhCurrency is null')
+                return NaN
+            }
+
+            let FormattedUserBalance = this.showBalanceWhmcsUnit(UserBalanceInWhCurrency)
+            if (isNaN(FormattedUserBalance) || FormattedUserBalance == null) {
+                console.error('FormattedUserBalance is null')
+                return NaN
+            }
+            
+            return FormattedUserBalance.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+            // return FormattedUserBalance
+
+        },
+
         formatTotalMachinePrice(TotalMachinePrice) {
-            if(isNaN(TotalMachinePrice) || TotalMachinePrice == null){
+            if (isNaN(TotalMachinePrice) || TotalMachinePrice == null) {
                 console.error('TotalMachinePrice is null')
                 return NaN
             }
 
             let FloatTotalMachinePrice = parseFloat(TotalMachinePrice);
-            if(isNaN(FloatTotalMachinePrice) || FloatTotalMachinePrice == null){
+            if (isNaN(FloatTotalMachinePrice) || FloatTotalMachinePrice == null) {
                 console.error('FloatTotalMachinePrice is not Float')
                 return NaN
             }
 
             let TotalMachinePriceWithCommission = this.addCommision(FloatTotalMachinePrice)
-            if(isNaN(TotalMachinePriceWithCommission) || TotalMachinePriceWithCommission == null){
+            if (isNaN(TotalMachinePriceWithCommission) || TotalMachinePriceWithCommission == null) {
                 console.error('TotalMachinePriceWithCommission is null')
                 return NaN
             }
-            
+
             let TotalPriceInWhCurrency = this.ConvertFromCaasifyToWhmcs(TotalMachinePriceWithCommission)
-            if(isNaN(TotalPriceInWhCurrency) || TotalPriceInWhCurrency == null){
+            if (isNaN(TotalPriceInWhCurrency) || TotalPriceInWhCurrency == null) {
                 console.error('TotalPriceInWhCurrency is null')
                 return NaN
             }
-            
+
             let FormattedTotalPrice = this.formatCostMonthly(TotalPriceInWhCurrency)
-            if(isNaN(FormattedTotalPrice) || FormattedTotalPrice == null){
+            if (isNaN(FormattedTotalPrice) || FormattedTotalPrice == null) {
                 console.error('FormattedTotalPrice is null')
                 return NaN
             }
 
-            return FormattedTotalPrice
+            return FormattedTotalPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+            // return FormattedTotalPrice
 
         },
-        
+
         formatConfigPrice(ConfigPrice) {
-            if(isNaN(ConfigPrice) || ConfigPrice == null){
+            if (isNaN(ConfigPrice) || ConfigPrice == null) {
                 console.error('ConfigPrice is null')
                 return NaN
             }
 
             let FloatConfigPrice = parseFloat(ConfigPrice);
-            if(isNaN(FloatConfigPrice) || FloatConfigPrice == null){
+            if (isNaN(FloatConfigPrice) || FloatConfigPrice == null) {
                 console.error('FloatConfigPrice is not Float')
                 return NaN
             }
 
             let ConfigPriceWithCommission = this.addCommision(FloatConfigPrice)
-            if(isNaN(ConfigPriceWithCommission) || ConfigPriceWithCommission == null){
+            if (isNaN(ConfigPriceWithCommission) || ConfigPriceWithCommission == null) {
                 console.error('ConfigPriceWithCommission is null')
                 return NaN
             }
-            
+
             let ConfigPriceInWhCurrency = this.ConvertFromCaasifyToWhmcs(ConfigPriceWithCommission)
-            if(isNaN(ConfigPriceInWhCurrency) || ConfigPriceInWhCurrency == null){
+            if (isNaN(ConfigPriceInWhCurrency) || ConfigPriceInWhCurrency == null) {
                 console.error('ConfigPriceInWhCurrency is null')
                 return NaN
             }
-            
+
             let FormattedConfigePrice = this.formatCostMonthly(ConfigPriceInWhCurrency)
-            if(isNaN(FormattedConfigePrice) || FormattedConfigePrice == null){
+            if (isNaN(FormattedConfigePrice) || FormattedConfigePrice == null) {
                 console.error('FormattedConfigePrice is null')
                 return NaN
             }
@@ -1229,39 +1633,41 @@ app = createApp({
             return FormattedConfigePrice
 
         },
-        
+
         formatPlanPrice(price) {
-            if(isNaN(price) || price == null){
+            if (isNaN(price) || price == null) {
                 console.error('Price in formatPlanPrice is null')
                 return NaN
             }
 
             let FloatPrice = parseFloat(price);
-            if(isNaN(FloatPrice) || FloatPrice == null){
+            if (isNaN(FloatPrice) || FloatPrice == null) {
                 console.error('FloatPrice in formatPlanPrice is not Float')
                 return NaN
             }
 
             let PriceWithCommission = this.addCommision(price)
-            if(isNaN(PriceWithCommission) || PriceWithCommission == null){
+            if (isNaN(PriceWithCommission) || PriceWithCommission == null) {
                 console.error('PriceWithCommission is null')
                 return NaN
             }
-            
+
             let PriceInWhCurrency = this.ConvertFromCaasifyToWhmcs(PriceWithCommission)
-            if(isNaN(PriceInWhCurrency) || PriceInWhCurrency == null){
+            if (isNaN(PriceInWhCurrency)) {
                 console.error('PriceInWhCurrency is null')
                 return NaN
             }
-            
+
             let FormattedPrice = this.formatCostMonthly(PriceInWhCurrency)
 
-            if(isNaN(FormattedPrice) || FormattedPrice == null){
+            if (isNaN(FormattedPrice) || FormattedPrice == null) {
                 console.error('FormattedPrice is null')
                 return NaN
             }
 
-            return FormattedPrice
+            return FormattedPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+            // return FormattedPrice
 
         },
 
@@ -1271,19 +1677,19 @@ app = createApp({
                 if (value > 1) {
                     return Number(value).toFixed(decimal)
                 } else if (value > 0.1) {
-                    return Number(value).toFixed(decimal+1)
+                    return Number(value).toFixed(decimal + 1)
                 } else if (value > 0.01) {
-                    return Number(value).toFixed(decimal+2)
+                    return Number(value).toFixed(decimal + 2)
                 } else if (value > 0.001) {
-                    return Number(value).toFixed(decimal+3)
+                    return Number(value).toFixed(decimal + 3)
                 } else if (value > 0.0001) {
-                    return Number(value).toFixed(decimal+4)
+                    return Number(value).toFixed(decimal + 4)
                 } else if (value > 0.00001) {
-                    return Number(value).toFixed(decimal+5)
+                    return Number(value).toFixed(decimal + 5)
                 } else if (value > 0.000001) {
-                    return Number(value).toFixed(decimal+6)
+                    return Number(value).toFixed(decimal + 6)
                 } else {
-                    return Number(value).toFixed(decimal+10)
+                    return Number(value).toFixed(decimal + 10)
                 }
             } else {
                 return null
@@ -1318,13 +1724,15 @@ app = createApp({
 
         selectDataCenter(DataCenter) {
             this.scrollToRegions()
-            this.PlanConfigSelectedOptions = {}
-            this.plans = [];
-            this.SelectedPlan = null
-            this.SelectedRegion = null
-            this.PlanSections = null
-            this.SelectedDataCenter = DataCenter
-            this.regions = DataCenter.categories
+            if(this.SelectedDataCenter != DataCenter){    
+                this.PlanConfigSelectedOptions = {}
+                this.plans = [];
+                this.SelectedPlan = null
+                this.SelectedRegion = null
+                this.PlanSections = null
+                this.SelectedDataCenter = DataCenter
+                this.regions = DataCenter.categories
+            }
         },
 
         isDataCenter(DataCenter) {
@@ -1338,12 +1746,14 @@ app = createApp({
         selectRegion(region) {
             this.scrollToPlans();
 
-            this.PlanConfigSelectedOptions = {}
-            this.plans = [];
-            this.SelectedPlan = null
-            this.plansAreLoading = true
-            this.plansAreLoaded = false
-            this.PlanSections = null
+            if(this.SelectedRegion != region){                
+                this.PlanConfigSelectedOptions = {}
+                this.plans = [];
+                this.SelectedPlan = null
+                this.plansAreLoading = true
+                this.plansAreLoaded = false
+                this.PlanSections = null
+            }
 
             this.SelectedRegion = region
         },

@@ -371,11 +371,82 @@ let common = {
     "FAILED" : "BAŞARISIZ",
     "PENDING" : "BEKLEMEDE",
 
-    "Warning" : "Warning",
-    "MoreThanMax" : "Not valid: it is more than allowed charge, call your admin",    
-    "DeleteIsNotAllowed" : "You are not allowed to DELETE this machine in DEMO Mode",    
-    "TrafficAlert" : "It may take more than 10 minutes",    
-    "Machine Info" : "Machine Info",
+    "Warning" : "Uyarı",
+    "MoreThanMax" : "Geçersiz: izin verilen ücreti aşıyor, yöneticinizi arayın",
+    "DeleteIsNotAllowed" : "BU MAKİNEYİ DEMO Modunda SİLME izniniz yok",
+    "TrafficAlert" : "Bu işlem 10 dakikadan daha uzun sürebilir",
+    "Machine Info" : "Makine Bilgisi",
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // New
+    "Cloud Account" : "Bulut Hesabı",
+    "InsertValidNumber" : "Bulut hesabınızı şarj etmek için lütfen geçerli bir numara girin",
+    "Creating invoice" : "Fatura oluşturuluyor",
+    "invoice created successfully" : "fatura başarıyla oluşturuldu",
+    "Go to invoice payment" : "Fatura ödemesine git",
+    "Creating invoice Failed, try again" : "Fatura oluşturma başarısız oldu, tekrar deneyin",
+    "Inbound" : "Gelen",
+    "Outbound" : "Giden",
+    "Admin Finance" : "Yönetici Finans",
+    "AdminBalance" : "Yönetici Bakiyesi (€)",
+    "Commission" : "Komisyon",
+    "User Finance" : "Kullanıcı Finans",
+    "UserBalanceReal" : "Gerçek Kullanıcı Bakiyesi (€)",
+    "UserBalanceWithCommission" : "Komisyonlu Kullanıcı Bakiyesi (€)",
+    "Charging" : "Şarj Ediliyor",
+    "With Commission" : "Komisyonlu",
+    "Increase User Balance" : "Kullanıcı Bakiyesini Artır",
+    "Decrease User Balance" : "Kullanıcı Bakiyesini Azalt",
+    "Commission is Wrong" : "Komisyon Yanlış",
+    "User Orders" : "Kullanıcı Siparişleri",
+    "User has no active order" : "Kullanıcının aktif siparişi yok",
+    "Error 670: call your admin" : "Hata 670: Komisyon geçersiz",
+    "increasebalance" : "Bakiyeyi ARTIRACAKSINIZ",
+    "decreasebalance" : "Bakiyeyi AZALTACAKSINIZ",
+    "It is not valid number" : "Geçerli bir numara değil",
+    "ChargingUserFor" : "Kullanıcı Bakiyesi Şarj Ediliyor",
+    "DeChargingUserFor" : "Kullanıcı Bakiyesi Azaltılıyor",
+    "Charge action has done Successfully" : "Şarj işlemi başarıyla tamamlandı",
+    "headcharge" : "Bulut Bakiyesini Yükleyin",
+    "euro" : " €",
+    "amounttochargewithcommission" : "Komisyonlu şarj tutarı €",
+    "amounttochargereal" : "Gerçek şarj tutarı €",
+    "doTransaction" : "İşlem Yap",
+    "BalanceIsLow" : "Hesap bakiyeniz düşük",
+    "MachienWouldDelete" : "Makineniz yakın gelecekte silinecek",
+    "hours or less" : "saat veya daha az kaldı",
+    "an hour or less" : "bir saat veya daha az kaldı",
+    "24 hours or less" : "24 saat veya daha az kaldı",
+    "I am aware of the Risk" : "Riski biliyorum",
+    "Confirm Alert and Close" : "Uyarıyı Onayla ve Kapat",
+    "SpotAlert01" : "Dikkat: Spot VM'ler geçici, esnek iş yükleri için tasarlanmıştır ve kritik veya üretim ortamlarında kullanılmamalıdır.",
+    "SpotAlert02" : "Dikkate Alınacak Önemli Noktalar:",
+    "SpotAlert03" : "Öncelik Riski:",
+    "SpotAlert04" : "Spot VM'ler, bulut sağlayıcısı tarafından başka bir yerde kapasite gerektiğinde herhangi bir zamanda sonlandırılabilir.",
+    "SpotAlert05" : "Garanti Yok:",
+    "SpotAlert06" : "Spot VM'ler için kullanılabilirlik veya çalışma süresi garantisi yoktur.",
+    "SpotAlert07" : "En İyi Kullanım Alanları:",
+    "SpotAlert08" : "Toplu işlem, geliştirme, test ve diğer kritik olmayan iş yükleri için uygundur.",
+    "SpotAlert09" : "Kararlı, güvenilir ve garantili performans için standart VM tekliflerini seçmenizi öneririz."
+    
     
 }
 

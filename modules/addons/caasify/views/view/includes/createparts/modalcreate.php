@@ -202,7 +202,7 @@
                 <!-- Balance -->
                 <div class="m-0 p-0 mx-3">
                     <span class="fw-medium me-2" :class="CreateIsLoading ? 'text-secondary' : 'text-dark'">
-                        {{ lang('balance') }} : 
+                        {{ lang('cloudbalance') }} : 
                     </span>
                     <span v-if="user?.balance" class="fw-medium" :class="CreateIsLoading ? 'text-secondary' : 'text-primary'">
                         <span v-if="CurrenciesRatioCloudToWhmcs != null">

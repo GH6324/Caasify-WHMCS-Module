@@ -5,6 +5,7 @@
 <body class="container-fluid p-1 p-md-3" style="background-color: #ff000000 !important;">
     <div id="app" class="row px-1 px-md-2 py-5 mx-auto" style="max-width: 1200px;">
         <div class="p-0 m-0" :class="{ loading: CreateIsLoading }" v-cloak v-if="CommissionIsValid">
+            <?php include('./includes/baselayout/balancealertmodal.php');     ?>
             <?php  include('./includes/baselayout/backflash.php');     ?>
             <?php  include('./includes/createparts/modalcreate.php');     ?>
             <?php if(isset($DemoMode) && $DemoMode == 'on' ): ?>
@@ -20,7 +21,7 @@
                     <div class="col-12">
                         <div class="py-5 px-4">
                             <div class="float-end d-none d-md-block">
-                                <div class="col-auto btn bg-primary text-dark m-0 p-0" style="--bs-bg-opacity: 0.2">
+                                <div class="col-auto m-0 p-0">
                                     <?php include('./includes/baselayout/langbtn.php'); ?>
                                 </div>
                             </div>

@@ -7,6 +7,20 @@ use PG\Request\Request;
 $path = dirname(__FILE__);
 require $path . '/vendor/autoload.php';
 
+// Add mycaasify if exist
+$MyCaasifyAddress = $path . '/mycaasify.php';
+if (file_exists($MyCaasifyAddress)) {
+    include($MyCaasifyAddress);
+}
+
+function caasify_get_mycaasify_status(){
+    global $MyCaasifyIsEnabled;
+    if(!isset($MyCaasifyIsEnabled) || $MyCaasifyIsEnabled != true){
+        return 'off';
+    }
+    return 'on';
+}
+
 function caasify_has_array($name, $array){
     if (array_key_exists($name, $array)) {
         return true;
@@ -128,6 +142,8 @@ function get_config_array_temp(){
         'Commission' => null,
         'CloudTopupLink' => null,
         'AdminClientsSummaryLink' => null,
+        'CaasifyMenuTitle' => null,
+        'CaasifyMenuPlace' => null,
         'ChargeModule' => null,
         'ViewExchanges' => null,
         'MinimumCharge' => null,
@@ -166,6 +182,12 @@ function caasify_get_config(){
                 }
             }
         }
+    }
+
+    $Commission = $ModuleConfigArray['Commission'];
+    if(isset($Commission)){
+        $encodedCommission = base64_encode($Commission);
+        $ModuleConfigArray['Commission'] = $encodedCommission;
     }
 
     $ModuleConfigArray['systemUrl'] = caasify_get_systemUrl();
@@ -315,6 +337,7 @@ function caasify_get_userInfo_from_db_if_exist($WhUserId){
     return $user;
 }
 
+// create ordinary user 
 function caasify_create_user($BackendUrl, $ResellerToken, $UserFullName, $UserEmail, $password){
     
     $params = [
@@ -331,6 +354,26 @@ function caasify_create_user($BackendUrl, $ResellerToken, $UserFullName, $UserEm
     ];
     
     return Request::instance()->setAddress($address)->setHeaders($headers)->setParams($params)->getResponse()->asObject();
+}
+
+// Create Reseller user for MyCaasify
+function caasify_create_reseller_user($BackendUrl, $ResellerToken, $UserFullName, $UserEmail, $password){
+    
+    $params = [
+        'name' => $UserFullName, 'email' => $UserEmail, 'password' => $password
+    ];
+
+    $headers = [
+        'Accept' =>  'application/json',
+        'Authorization' => 'Bearer ' . $ResellerToken
+    ];
+    
+    $address = [
+        $BackendUrl, 'api', 'auth', 'register'
+    ];
+    
+    return Request::instance()->setAddress($address)->setHeaders($headers)->setParams($params)->getResponse()->asObject();
+
 }
 
 function caasify_createPassword(){
@@ -397,12 +440,14 @@ function caasify_get_Whmcs_Currencies()
 
 function caasify_get_token_by_handling($ResellerToken, $BackendUrl, $WhUserId)
 {
+
+
     $client = Client::find($WhUserId);
     if(empty($client)) {
         echo('can not find the client in token handling');
         return false;
     }
-    
+
     $token = caasify_get_user_token_from_db($WhUserId);
     
     if(empty($token)) {
@@ -419,12 +464,29 @@ function caasify_get_token_by_handling($ResellerToken, $BackendUrl, $WhUserId)
             return false;
         }
 
-        $password = caasify_createPassword();
-        if($BackendUrl != null && $ResellerToken != null && $UserFullName != null && $UserEmail != null && $password != null){   
-            $CreateResponse = caasify_create_user($BackendUrl, $ResellerToken, $UserFullName, $UserEmail, $password);
+        
+        global $MyCaasifyIsEnabled;
+        if(!isset($MyCaasifyIsEnabled) || $MyCaasifyIsEnabled != true){
+            $MyCaasifyStatus = 'off';
         } else {
-            echo('something is missing');
-            return false;
+            $MyCaasifyStatus = 'on';
+        }
+
+        $password = caasify_createPassword();
+        if($MyCaasifyStatus == 'on'){
+            if($BackendUrl != null && $ResellerToken != null && $UserFullName != null && $UserEmail != null && $password != null){   
+                $CreateResponse = caasify_create_reseller_user($BackendUrl, $ResellerToken, $UserFullName, $UserEmail, $password);
+            } else {
+                echo('something is missing');
+                return false;
+            }
+        } else {
+            if($BackendUrl != null && $ResellerToken != null && $UserFullName != null && $UserEmail != null && $password != null){   
+                $CreateResponse = caasify_create_user($BackendUrl, $ResellerToken, $UserFullName, $UserEmail, $password);
+            } else {
+                echo('something is missing');
+                return false;
+            }
         }
 
         if(empty($CreateResponse)) {
@@ -515,4 +577,39 @@ function caasify_get_token_by_handling($ResellerToken, $BackendUrl, $WhUserId)
     }
 
     return $token;
+}
+
+function caasify_charge_user_from_invoice_hook($ResellerToken, $BackendUrl, $CaasifyUserId, $chargeamount, $invoiceid){
+    
+    $params = [
+        'amount' => $chargeamount,
+        'type' => 'balance',
+        'invoiceid' => $invoiceid,
+        'status' => 'paid'
+    ];
+
+    $headers = [
+        'Accept' =>  'application/json',
+        'Authorization' => 'Bearer ' . $ResellerToken
+    ];
+    
+    $address = [
+        $BackendUrl, 'api', 'users', $CaasifyUserId, 'transactions', 'increase'
+    ];
+    
+    return Request::instance()->setAddress($address)->setHeaders($headers)->setParams($params)->getResponse()->asObject();
+
+}
+
+
+function Caasify_Set_Log($message = 'Unknown error'){
+    $uid = caasify_get_session('uid');
+    $command = 'LogActivity';
+    $postData = array(
+        'action' => 'Caasify Charging from Invoice',
+        'clientid' => $uid,
+        'description' => $message,
+    );
+    $results = localAPI($command, $postData);
+    return true;
 }

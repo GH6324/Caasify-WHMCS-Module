@@ -17,31 +17,6 @@ $caasifyAddress = $root . $directoryPath . 'modules/addons/caasify/caasify.php';
 require_once($initAdress);
 require_once ($caasifyAddress);
 
-// READY TO READ DATA
-
-// TODO : Check Auth: finished
-// if(isset($parentFileName) && ($parentFileName  == 'index' || $parentFileName  == 'create' || $parentFileName  == 'view' || $parentFileName  == 'admin')){
-//     if($parentFileName  == 'admin'){
-//         if(isset($_SESSION['adminid'])){
-//             // echo('admin');
-//         } else {
-//             header('Location: /admin/login.php');
-//             exit();     
-//         }
-//     } else {
-//         if(isset($_SESSION['uid'])){
-//             // echo('clinet');
-//         } else {
-//             header('Location: /index.php?rp=/login');
-//             exit();         
-//         }
-//     }
-// } else {
-//     header('Location: /index.php?rp=/login');
-//     exit();     
-// }
-
-
 // Get and Set Language
 $templatelang = caasify_GetDefaulLanguage();
 if(empty($templatelang)){
@@ -95,5 +70,11 @@ if(!isset($MinBalanceAllowToCreate) || !is_numeric($MinBalanceAllowToCreate) ){
 }
 
 
+$MyCaasifyStatus = caasify_get_mycaasify_status();
+if(!isset($MyCaasifyStatus) || $MyCaasifyStatus != 'on'){
+    $MyCaasifyStatus = 'off';
+} else {
+    $MyCaasifyStatus = 'on';
+}
 
 ?>

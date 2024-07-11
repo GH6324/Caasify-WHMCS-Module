@@ -372,11 +372,88 @@ let common = {
     "FAILED" : "FALHOU",
     "PENDING" : "PENDENTE",
 
-    "Warning" : "Warning",
-    "MoreThanMax" : "Not valid: it is more than allowed charge, call your admin",    
-    "DeleteIsNotAllowed" : "You are not allowed to DELETE this machine in DEMO Mode",    
-    "TrafficAlert" : "It may take more than 10 minutes",  
-    "Machine Info" : "Machine Info",  
+    "Warning" : "Uyarı",
+    "MoreThanMax" : "Geçersiz: izin verilen ücretten fazla, yöneticinizi arayın",
+    "DeleteIsNotAllowed" : "BU MAKİNEYİ SİLMEK DEMO MODUNDA YASAKTIR",
+    "TrafficAlert" : "10 dakikadan fazla sürebilir",
+    "Machine Info" : "Makine Bilgisi",
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // New
+    "Cloud Account" : "Conta na Nuvem",
+    "InsertValidNumber" : "Para carregar sua conta na nuvem, por favor, insira um número válido",
+    "Creating invoice" : "Criando fatura",
+    "invoice created successfully" : "fatura criada com sucesso",
+    "Go to invoice payment" : "Ir para o pagamento da fatura",
+    "Creating invoice Failed, try again" : "Criação da fatura falhou, tente novamente",
+    "Inbound" : "Entrada",
+    "Outbound" : "Saída",
+    "Admin Finance" : "Finanças do Admin",
+    "AdminBalance" : "Saldo do Admin (€)",
+    "Commission" : "Comissão",
+    "User Finance" : "Finanças do Usuário",
+    "UserBalanceReal" : "Saldo Real do Usuário (€)",
+    "UserBalanceWithCommission" : "Saldo do Usuário com Comissão (€)",
+    "Charging" : "Carregando",
+    "With Commission" : "Com Comissão",
+    "Increase User Balance" : "Aumentar Saldo do Usuário",
+    "Decrease User Balance" : "Diminuir Saldo do Usuário",
+    "Commission is Wrong" : "Comissão está Errada",
+    "User Orders" : "Pedidos do Usuário",
+    "User has no active order" : "O usuário não tem pedidos ativos",
+    "Error 670: call your admin" : "Erro 670: Comissão inválida",
+    "increasebalance" : "Você vai AUMENTAR o saldo",
+    "decreasebalance" : "Você vai DIMINUIR o saldo",
+    "It is not valid number" : "Não é um número válido",
+    "ChargingUserFor" : "Carregando Saldo do Usuário para",
+    "DeChargingUserFor" : "Diminuindo Saldo do Usuário para",
+    "Charge action has done Successfully" : "Ação de carga realizada com sucesso",
+    "headcharge" : "Recarregar o Saldo da Nuvem",
+    "euro" : " €",
+    "amounttochargewithcommission" : "Valor a carregar com comissão €",
+    "amounttochargereal" : "Valor a carregar em Real €",
+    "doTransaction" : "Efetuar Transação",
+    "BalanceIsLow" : "Seu saldo está baixo",
+    "MachienWouldDelete" : "Sua máquina será excluída em breve",
+    "hours or less" : "horas ou menos restantes",
+    "an hour or less" : "uma hora ou menos restantes",
+    "24 hours or less" : "24 horas ou menos restantes",
+    "I am aware of the Risk" : "Estou ciente do risco",
+    "Confirm Alert and Close" : "Confirmar Alerta e Fechar",
+    "SpotAlert01" : "Atenção: VMs Spot são projetadas para cargas de trabalho temporárias e flexíveis e não devem ser usadas para ambientes críticos ou de produção.",
+    "SpotAlert02" : "Pontos Chave a Considerar:",
+    "SpotAlert03" : "Risco de Preempção:",
+    "SpotAlert04" : "VMs Spot podem ser preemptadas (terminadas) pelo provedor de nuvem a qualquer momento quando a capacidade for necessária em outro lugar.",
+    "SpotAlert05" : "Sem Garantias:",
+    "SpotAlert06" : "Não há garantia de disponibilidade ou tempo de atividade para VMs Spot.",
+    "SpotAlert07" : "Melhores Casos de Uso:",
+    "SpotAlert08" : "Adequado para processamento em lote, desenvolvimento, teste e outras cargas de trabalho não críticas.",
+    "SpotAlert09" : "Para desempenho estável, confiável e garantido, recomendamos escolher as ofertas padrão de VM."    
+
+
+
+
+
+
+
 
 
 }

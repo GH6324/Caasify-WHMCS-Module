@@ -371,13 +371,82 @@ let common = {
     "PENDING" : "В ОЖИДАНИИ",
 
 
-    "Warning" : "Warning",
-    "MoreThanMax" : "Not valid: it is more than allowed charge, call your admin",  
-    "DeleteIsNotAllowed" : "You are not allowed to DELETE this machine in DEMO Mode",    
-    "TrafficAlert" : "It may take more than 10 minutes",    
+   "Warning" : "Предупреждение",
+    "MoreThanMax" : "Недопустимо: сумма превышает разрешённое значение, свяжитесь с вашим администратором",
+    "DeleteIsNotAllowed" : "Вы не можете УДАЛИТЬ эту машину в режиме ДЕМО",
+    "TrafficAlert" : "Это может занять более 10 минут",
+    "Machine Info" : "Информация о машине",
     
-    "Machine Info" : "Machine Info",
-    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // New
+    "Cloud Account" : "Облачный Аккаунт",
+    "InsertValidNumber" : "Для пополнения вашего облачного аккаунта, пожалуйста, введите действительный номер",
+    "Creating invoice" : "Создание счета",
+    "invoice created successfully" : "счет успешно создан",
+    "Go to invoice payment" : "Перейти к оплате счета",
+    "Creating invoice Failed, try again" : "Создание счета не удалось, попробуйте снова",
+    "Inbound" : "Входящий",
+    "Outbound" : "Исходящий",
+    "Admin Finance" : "Финансы Админа",
+    "AdminBalance" : "Баланс Админа (€)",
+    "Commission" : "Комиссия",
+    "User Finance" : "Финансы Пользователя",
+    "UserBalanceReal" : "Баланс Пользователя Реальный (€)",
+    "UserBalanceWithCommission" : "Баланс Пользователя с Комиссией (€)",
+    "Charging" : "Зарядка",
+    "With Commission" : "С Комиссией",
+    "Increase User Balance" : "Увеличить Баланс Пользователя",
+    "Decrease User Balance" : "Уменьшить Баланс Пользователя",
+    "Commission is Wrong" : "Комиссия неверна",
+    "User Orders" : "Заказы Пользователя",
+    "User has no active order" : "У пользователя нет активных заказов",
+    "Error 670: call your admin" : "Ошибка 670: Комиссия недействительна",
+    "increasebalance" : "Вы собираетесь УВЕЛИЧИТЬ баланс",
+    "decreasebalance" : "Вы собираетесь УМЕНЬШИТЬ баланс",
+    "It is not valid number" : "Это недействительный номер",
+    "ChargingUserFor" : "Зарядка Баланса Пользователя для",
+    "DeChargingUserFor" : "Уменьшение Баланса Пользователя для",
+    "Charge action has done Successfully" : "Действие по зарядке выполнено успешно",
+    "headcharge" : "Пополнение Облачного Баланса",
+    "euro" : " €",
+    "amounttochargewithcommission" : "Сумма к зарядке с комиссией €",
+    "amounttochargereal" : "Сумма к зарядке в Реальных €",
+    "doTransaction" : "Совершить транзакцию",
+    "BalanceIsLow" : "Баланс вашего аккаунта низкий",
+    "MachienWouldDelete" : "Ваша машина будет удалена в ближайшем будущем",
+    "hours or less" : "часов или меньше осталось",
+    "an hour or less" : "час или меньше осталось",
+    "24 hours or less" : "24 часа или меньше осталось",
+    "I am aware of the Risk" : "Я осведомлен о риске",
+    "Confirm Alert and Close" : "Подтвердить и закрыть уведомление",
+    "SpotAlert01" : "Внимание: Спотовые виртуальные машины предназначены для временных, гибких рабочих нагрузок и не должны использоваться для критически важных или производственных сред.",
+    "SpotAlert02" : "Ключевые моменты для рассмотрения:",
+    "SpotAlert03" : "Риск прерывания:",
+    "SpotAlert04" : "Спотовые виртуальные машины могут быть прерваны (удалены) облачным провайдером в любое время, когда мощности нужны в другом месте.",
+    "SpotAlert05" : "Без гарантий:",
+    "SpotAlert06" : "Нет никаких гарантий доступности или времени работы для спотовых виртуальных машин.",
+    "SpotAlert07" : "Лучшие случаи использования:",
+    "SpotAlert08" : "Подходит для пакетной обработки, разработки, тестирования и других некритичных рабочих нагрузок.",
+    "SpotAlert09" : "Для стабильной, надежной и гарантированной производительности мы рекомендуем выбирать стандартные предложения виртуальных машин."    
+
 
 }
 

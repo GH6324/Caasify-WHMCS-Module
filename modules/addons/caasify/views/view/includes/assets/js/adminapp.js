@@ -33,10 +33,10 @@ app = createApp({
 
             CaasifyUserInfo: null,
             UserInfoIsLoaded: false,
-            UserInfoIsLoading: false,
+            UserInfoIsLoading: true,
             
             CaasifyResellerInfo: null,
-            ResellerInfoIsLoaded: null,
+            ResellerInfoIsLoaded: false,
             
             
             UserOrders: null,
@@ -70,7 +70,7 @@ app = createApp({
             this.config.CloudTopupLink = NewCaasifyConfigs.CloudTopupLink
             this.config.AdminClientsSummaryLink = NewCaasifyConfigs.AdminClientsSummaryLink
             this.config.ChargeModule = NewCaasifyConfigs.ChargeModule
-            this.config.Commission = parseFloat(NewCaasifyConfigs.Commission)
+            this.config.Commission = parseFloat(atob(NewCaasifyConfigs.Commission))
             this.config.ViewExchanges = NewCaasifyConfigs.ViewExchanges
             this.config.MinimumCharge = parseFloat(NewCaasifyConfigs.MinimumCharge)
             this.config.MaximumCharge = parseFloat(NewCaasifyConfigs.MaximumCharge)
@@ -91,11 +91,15 @@ app = createApp({
             this.checkReadyToLoad();
         },
 
-        readyToLoad(newValue){
+        async readyToLoad(newValue){
             if(newValue == true){
-                this.LoadCaasifyReseller();
-                this.LoadCaasifyUser();
-                this.LoadUserOrders();
+                await this.LoadCaasifyReseller();
+                setTimeout(() => {
+                    this.LoadCaasifyUser();
+                }, 1 * 1000);
+                setTimeout(() => {
+                    this.LoadUserOrders();
+                }, 2 * 1000);
             }
         },
         
@@ -323,8 +327,8 @@ app = createApp({
 
         loadPolling(){
             setInterval(this.LoadCaasifyReseller, 20 * 1000)
-            setInterval(this.LoadCaasifyUser, 20 * 1000)
-            setInterval(this.LoadUserOrders, 20 * 1000)
+            setInterval(this.LoadCaasifyUser, 25 * 1000)
+            setInterval(this.LoadUserOrders, 30 * 1000)
         },
         
         lang(name) {

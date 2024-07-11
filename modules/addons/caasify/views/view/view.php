@@ -5,6 +5,7 @@
 <body class="container-fluid p-1 p-md-3 bg-body-secondary">
     <div id="app" class="row py-5 mx-auto px-0 px-md-2 px-lg-4" style="max-width: 1200px;">
         <div class="" v-cloak>
+            <?php include('./includes/baselayout/balancealertmodal.php');     ?>
             <?php if(isset($DemoMode) && $DemoMode == 'on' ): ?>
                 <?php  include('./includes/baselayout/DemoHeader.php');   ?>
                 <p class="mt-4"></p>

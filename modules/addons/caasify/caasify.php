@@ -63,6 +63,11 @@ function caasify_config(){
         '5' => '5',
     );
 
+    $MenuPlaceOptions = array (
+        'MainMenu' => 'Main Menu',
+        'InsideServices' => 'Inside Services'
+    );
+
     
     // Labels
     $BackendUrlLabel = "Default is (https://api.caasify.com)";
@@ -75,6 +80,9 @@ function caasify_config(){
     $ViewExchangesLabel = 'Switch on if wish to see exchange in both Caasify and user profile currency';
     $CloudTopupLinkLabel = 'Insert relative TopUp Link, as an Example <strong>"/clientarea.php?action=addfunds"</strong>';
     $AdminClientsSummaryLinkLabel = 'Insert admin panel URL for the Clients Summary Page, e.g <strong>(' . $SystemUrl . '/admin/clientssummary.php)</strong>';
+    $CaasifyMenuTitleLabel = 'Insert label to show on Menu, default is <strong>"Marketplace"</strong>';
+    $CaasifyMenuPlaceLabel = 'Select where Menu Title will show, default is <strong>"Main Menu"</strong>';
+
 
     // Configs Label
     $MinimumChargeLabel = 'in EURO , insert MIN amount users are allowed to charge their Balance';
@@ -91,7 +99,7 @@ function caasify_config(){
     $configarray = array(
         "name" => "Caasify",
         "description" => "This addon utility allows you to easily connect to Caasify Marketpalce to sell almost everything",
-        "version" => "1.0.5",
+        "version" => "1.1.0",
         "author" => "Caasify",
         "fields" => array(
             "BackendUrl" => array ("FriendlyName" => "Backend URL", "Type" => "dropdown", "Options" => 'https://api.caasify.com', "Description" => $BackendUrlLabel, "Default" => 'https://api.caasify.com'),
@@ -101,6 +109,8 @@ function caasify_config(){
             "Commission" => array ("FriendlyName" => "<strong>Commission</strong>", "Type" => "text", "Description" => $CommissionCurrencyLabel, "Default" => '10'),
             "CloudTopupLink" => array ("FriendlyName" => "Topup Link", "Type" => "text", "Size" => "31", "Description" => $CloudTopupLinkLabel, "Default" => "/clientarea.php?action=addfunds"),
             "AdminClientsSummaryLink" => array ("FriendlyName" => "Admin Panel URL", "Type" => "text", "Size" => "31", "Description" => $AdminClientsSummaryLinkLabel, "Default" => $SystemUrl . '/admin/clientssummary.php'),
+            "CaasifyMenuTitle" => array ("FriendlyName" => "Menu Title", "Type" => "text", "Size" => "31", "Description" => $CaasifyMenuTitleLabel, "Default" => "Marketplace"),
+            "CaasifyMenuPlace" => array ("FriendlyName" => "Menu Place", "Type" => "dropdown", "Options" => $MenuPlaceOptions, "Description" => $CaasifyMenuPlaceLabel, "Default" => 'MainMenu'),
 
             "ChargeModule" => array ("FriendlyName" => "Chargeing Module", "Type" => "dropdown", "Options" => $YesNoOptions, "Description" => $ChargeModuleLabel, "Default" => 'on'),
             "ViewExchanges" => array ("FriendlyName" => "View Exchange", "Type" => "dropdown", "Options" => $YesNoOptions, "Description" => $ViewExchangesLabel, "Default" => 'off'),

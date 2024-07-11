@@ -371,12 +371,82 @@ let common = {
     "FAILED" : "FEHLGESCHLAGEN",
     "PENDING" : "AUSSTEHEND",
 
-    "Warning" : "Warning",
-    "MoreThanMax" : "Not valid: it is more than allowed charge, call your admin",    
-    "DeleteIsNotAllowed" : "You are not allowed to DELETE this machine in DEMO Mode",    
-    "TrafficAlert" : "It may take more than 10 minutes",   
-    "Machine Info" : "Machine Info", 
+    "Warning" : "Warnung",
+    "MoreThanMax" : "Ungültig: Der Betrag übersteigt das erlaubte Limit, kontaktieren Sie Ihren Administrator",
+    "DeleteIsNotAllowed" : "Sie dürfen diese Maschine im DEMO-Modus nicht LÖSCHEN",
+    "TrafficAlert" : "Es könnte länger als 10 Minuten dauern",
+    "Machine Info" : "Maschineninformation",
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // New
+    "Cloud Account" : "Cloud-Konto",
+    "InsertValidNumber" : "Um Ihr Cloud-Konto aufzuladen, geben Sie bitte eine gültige Nummer ein",
+    "Creating invoice" : "Rechnung wird erstellt",
+    "invoice created successfully" : "Rechnung erfolgreich erstellt",
+    "Go to invoice payment" : "Zur Rechnungszahlung gehen",
+    "Creating invoice Failed, try again" : "Rechnungserstellung fehlgeschlagen, bitte versuchen Sie es erneut",
+    "Inbound" : "Eingehend",
+    "Outbound" : "Ausgehend",
+    "Admin Finance" : "Admin-Finanzen",
+    "AdminBalance" : "Admin-Saldo (€)",
+    "Commission" : "Provision",
+    "User Finance" : "Benutzerfinanzen",
+    "UserBalanceReal" : "Benutzersaldo in Echt (€)",
+    "UserBalanceWithCommission" : "Benutzersaldo mit Provision (€)",
+    "Charging" : "Aufladen",
+    "With Commission" : "Mit Provision",
+    "Increase User Balance" : "Benutzersaldo erhöhen",
+    "Decrease User Balance" : "Benutzersaldo verringern",
+    "Commission is Wrong" : "Provision ist falsch",
+    "User Orders" : "Benutzerbestellungen",
+    "User has no active order" : "Benutzer hat keine aktive Bestellung",
+    "Error 670: call your admin" : "Fehler 670: Provision ist ungültig",
+    "increasebalance" : "Sie werden den Saldo ERHÖHEN",
+    "decreasebalance" : "Sie werden den Saldo VERRINGERN",
+    "It is not valid number" : "Es ist keine gültige Nummer",
+    "ChargingUserFor" : "Benutzersaldo aufladen für",
+    "DeChargingUserFor" : "Benutzersaldo verringern für",
+    "Charge action has done Successfully" : "Aufladevorgang erfolgreich abgeschlossen",
+    "headcharge" : "Cloud-Saldo aufladen",
+    "euro" : " €",
+    "amounttochargewithcommission" : "Aufladebetrag mit Provision €",
+    "amounttochargereal" : "Aufladebetrag in Echt €",
+    "doTransaction" : "Transaktion durchführen",
+    "BalanceIsLow" : "Ihr Kontostand ist niedrig",
+    "MachienWouldDelete" : "Ihre Maschine wird in naher Zukunft gelöscht",
+    "hours or less" : "Stunden oder weniger verbleiben",
+    "an hour or less" : "eine Stunde oder weniger verbleiben",
+    "24 hours or less" : "24 Stunden oder weniger verbleiben",
+    "I am aware of the Risk" : "Ich bin mir des Risikos bewusst",
+    "Confirm Alert and Close" : "Warnung bestätigen und schließen",
+    "SpotAlert01" : "Achtung: Spot-VMs sind für temporäre, flexible Arbeitslasten ausgelegt und sollten nicht für kritische oder produktive Umgebungen verwendet werden.",
+    "SpotAlert02" : "Wichtige Punkte zu beachten:",
+    "SpotAlert03" : "Risiko der Vorwegnahme:",
+    "SpotAlert04" : "Spot-VMs können jederzeit vom Cloud-Anbieter beendet werden, wenn die Kapazität anderweitig benötigt wird.",
+    "SpotAlert05" : "Keine Garantien:",
+    "SpotAlert06" : "Es gibt keine Garantie für Verfügbarkeit oder Betriebszeit für Spot-VMs.",
+    "SpotAlert07" : "Beste Anwendungsfälle:",
+    "SpotAlert08" : "Geeignet für Batch-Verarbeitung, Entwicklung, Testen und andere nicht-kritische Arbeitslasten.",
+    "SpotAlert09" : "Für stabile, zuverlässige und garantierte Leistung empfehlen wir die Wahl der Standard-VM-Angebote."    
 
 }
 
