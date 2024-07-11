@@ -40,26 +40,6 @@
                 </div>
             </div>
         </div>
-        <div class="m-0 p-0 order-3">
-            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#chargeModal">{{ lang('movebalance') }}</button>
-        </div>
-        
-        <!-- Balance in cloud currency -->
-        <?php if($ChargeModuleDetailsViews): ?>
-            <div class="m-0 p-0 order-2" v-if="CaasifyDefaultCurrencyID != userCurrencyIdFromWhmcs">
-                <div v-if="user.balance != null" class="btn btn-secondary px-4 ms-2 rounded-5 order-2">
-                    <span v-if="user.balance != null" class="p-0 m-0 fw-medium">
-                        <span class="px-1" v-if="addCommision(user.balance) != NaN">{{ formatUserBalance(user.balance) }}</span>
-                        <span v-if="CaasifyDefaultCurrencySymbol != null">
-                            {{ CaasifyDefaultCurrencySymbol }}
-                        </span>
-                    </span>  
-                    <span v-else class="fw-medium ps-2">
-                        --- 
-                    </span>
-                </div>
-            </div>
-        <?php endif ?>
     </div>
-</div>
+</div> 
 <?php endif ?>

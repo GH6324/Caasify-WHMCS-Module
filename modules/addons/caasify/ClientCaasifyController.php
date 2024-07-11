@@ -37,6 +37,29 @@ class ClientCaasifyController
     {
         return ['templatefile' => 'views/view'];
     }
+    
+    public function pageReseller()
+    {
+        return ['templatefile' => 'views/reseller'];
+    }
+
+    // MyCaasify
+    public function CaasifyGetUsertoken()
+    {
+        $UserToken = $this->UserToken;
+        
+        if(empty($UserToken)){
+            $response = [
+                'message' => 'Token not founded',
+            ];    
+        } else {
+            $response = [
+                'data' => $UserToken,
+            ];
+        }
+
+        $this->response($response);
+    }
 
     public function WhmcsUserInfo()
     {
@@ -97,6 +120,60 @@ class ClientCaasifyController
         $headers = [
             'Accept' => 'application/json',
             'Authorization' => 'Bearer ' . $UserToken
+        ];
+
+        $address = [
+            $BackendUrl, 'api', 'profile', 'show'
+        ];
+
+        return Request::instance()->setAddress($address)->setHeaders($headers)->getResponse()->asObject();
+    }
+
+    public function CaasifyResellerUserInfo()
+    {
+        $UserToken = $this->UserToken;
+        $response = null;
+
+        if($UserToken){
+            $response = $this->sendCaasifyResellerUserInfoRequest($UserToken);
+        }
+        $this->response($response);
+    }
+
+    public function sendCaasifyResellerUserInfoRequest($UserToken)
+    {
+        $BackendUrl = $this->BackendUrl;
+
+        $headers = [
+            'Accept' => 'application/json',
+            'Authorization' => 'Bearer ' . $UserToken
+        ];
+
+        $address = [
+            $BackendUrl, 'api', 'profile', 'show'
+        ];
+
+        return Request::instance()->setAddress($address)->setHeaders($headers)->getResponse()->asObject();
+    }
+    
+    public function TheCaasifyResellerInfo()
+    {
+        $ResellerToken = $this->ResellerToken;
+        $response = null;
+
+        if($ResellerToken){
+            $response = $this->sendTheCaasifyResellerInfoRequest($ResellerToken);
+        }
+        $this->response($response);
+    }
+
+    public function sendTheCaasifyResellerInfoRequest($ResellerToken)
+    {
+        $BackendUrl = $this->BackendUrl;
+
+        $headers = [
+            'Accept' => 'application/json',
+            'Authorization' => 'Bearer ' . $ResellerToken
         ];
 
         $address = [
@@ -391,6 +468,48 @@ class ClientCaasifyController
         return Request::instance()->setAddress($address)->setHeaders($headers)->getResponse()->asObject();
     }
 
+    public function CreateNewUnpaidInvoice()
+    {
+        $requestData = json_decode(file_get_contents("php://input"), true);
+        if(isset($requestData['Chargeamount'])){
+            $Chargeamount = $requestData['Chargeamount'];
+        } else {
+            echo 'can not access charge amount (NE01-Create Invoice)';
+            return false;
+        }
+        
+        if(isset($requestData['R'])){
+            $R = $requestData['R'];
+        } else {
+            echo 'can not access charge amount (NE02-Create Invoice)';
+            return false;
+        }
+        
+        $notes = 'R' . $R . 'POAWMM';
+
+        $WhUserId = $this->WhUserId;
+        $currentDateTime = date('Y-m-d');
+        $nextDay = date('Y-m-d', strtotime($currentDateTime . ' +1 day'));
+
+        if(isset($Chargeamount) && isset($WhUserId) && isset($notes)){
+            $command = 'CreateInvoice';
+            $postData = array(
+                'userid' => $WhUserId,
+                'taxrate' => '0',
+                'date' => $currentDateTime,
+                'duedate' => $nextDay,
+                'itemdescription1' => 'Cloud Account Charging',
+                'itemamount1' => $Chargeamount,
+                'itemtaxed1' => '0',
+                'notes' => $notes,
+                'autoapplycredit' => '0',
+            );
+
+            $results = localAPI($command, $postData);
+            $this->response($results); 
+        } 
+    }
+
     public function CreateUnpaidInvoice()
     {
         $requestData = json_decode(file_get_contents("php://input"), true);
@@ -470,7 +589,14 @@ class ClientCaasifyController
         
         $ResellerToken = $this->ResellerToken;
     
-        $response = $this->sendChargeCaasifyRequest($CaasifyUserId, $chargeamount, $invoiceid);
+
+        $status = caasify_get_mycaasify_status();
+
+        if(isset($status) && $status == 'on'){
+            $response = $this->sendResellerChargeCaasifyRequest($CaasifyUserId, $chargeamount, $invoiceid);
+        } else {
+            $response = $this->sendChargeCaasifyRequest($CaasifyUserId, $chargeamount, $invoiceid);
+        }
         $this->response($response);
     }
 
@@ -498,6 +624,57 @@ class ClientCaasifyController
         return Request::instance()->setAddress($address)->setHeaders($headers)->setParams($params)->getResponse()->asObject();
     }
 
+    public function resellerChargeCaasify()
+    {
+        $requestData = json_decode(file_get_contents("php://input"), true);
+
+        if($requestData['invoiceid']){
+            $invoiceid = $requestData['invoiceid'];
+        } else {
+            echo 'can not access invoice id (E03-Charge Caasify)';
+        }
+        
+        if($requestData['chargeamount']){
+            $chargeamount = $requestData['chargeamount'];
+        } else {
+            echo 'can not access charge amount (E03-Charge Caasify)';
+        }
+
+        $CaasifyUserId = $this->CaasifyUserId;
+        if(empty($CaasifyUserId)){
+            return false;
+        }
+        
+        $ResellerToken = $this->ResellerToken;
+    
+        $response = $this->sendResellerChargeCaasifyRequest($CaasifyUserId, $chargeamount, $invoiceid);
+        $this->response($response);
+    }
+
+    public function sendResellerChargeCaasifyRequest($CaasifyUserId, $chargeamount, $invoiceid)
+    {
+        $ResellerToken = $this->ResellerToken;
+        $BackendUrl = $this->BackendUrl;
+
+        $headers = [
+            'Accept' => 'application/json',
+            'Authorization' => 'Bearer ' . $ResellerToken
+        ];
+
+        $params = [
+            'amount' => $chargeamount,
+            'type' => 'balance',
+            'invoiceid' => $invoiceid,
+            'status' => 'paid'
+        ];
+
+        $address = [
+            $BackendUrl, 'api', 'backend', 'users', $CaasifyUserId, 'transactions', 'increase'
+        ];
+        
+        return Request::instance()->setAddress($address)->setHeaders($headers)->setParams($params)->getResponse()->asObject();
+    }
+    
     public function applyTheCredit()
     {
         $requestData = json_decode(file_get_contents("php://input"), true);

@@ -183,7 +183,7 @@
                                         <i class="bi bi-cloud-arrow-down fs-5 pe-2"></i>
                                     </span>
                                     <span class="ps-1 text-secondary">
-                                        Inbound
+                                        {{ lang('Inbound') }}
                                     </span>
                                     <span class="px-1 text-secondary">:</span>
                                     
@@ -201,7 +201,7 @@
                                         <i class="bi bi-cloud-arrow-up-fill fs-5 pe-2"></i>
                                     </span>
                                     <span class="ps-1 text-secondary">
-                                        Outbound
+                                        {{ lang('Outbound') }}
                                     </span>
                                     <span class="px-1 text-secondary">:</span>
                                     <span class="text-primary" v-if="TrafficOutbound">

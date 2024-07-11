@@ -308,7 +308,7 @@ let common = {
     "costonegigtraffic" : "Cost for one GB traffic",
     "freeprice" : "Free",
     "pricestartsfrom" : "Price Starts From",
-    "confirmationtext" : "I affirm my agreement with all the terms and regulations for utilizing CAASIFY.",
+    "confirmationtext" : "I affirm my agreement with all the terms and regulations.",
     "optional" : "Optional",
     "readmore" : "Read More ...",
     
@@ -387,6 +387,68 @@ let common = {
     "CreateDemoText" : "You are not allowed to create machine in DEMO",
     "TrafficAlert" : "It may take more than 10 minutes",
     "Machine Info" : "Machine Info",
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    // new
+    "Cloud Account" : "Cloud Account",
+    "InsertValidNumber" : "To charge your cloud account, please enter a valid number",
+    "Creating invoice" : "Creating invoice",
+    "invoice created successfully" : "invoice created successfully",
+    "Go to invoice payment" : "Go to invoice payment",
+    "Creating invoice Failed, try again" : "Creating invoice Failed, try again",
+    "Inbound" : "Inbound",
+    "Outbound" : "Outbound",
+    "Admin Finance" : "Admin Finance",
+    "AdminBalance" : "Admin Balance (€)",
+    "Commission" : "Commission",
+    "User Finance" : "User Finance",
+    "UserBalanceReal" : "User Balance in Real (€)",
+    "UserBalanceWithCommission" : "User Balance with Commission (€)",
+    "Charging" : "Charging",
+    "With Commission" : "With Commission",
+    "Increase User Balance" : "Increase User Balance",
+    "Decrease User Balance" : "Decrease User Balance",
+    "Commission is Wrong" : "Commission is Wrong",
+    "User Orders" : "User Orders",
+    "User has no active order" : "User has no active order",
+    "Error 670: call your admin" : "Error 670: Commission is not valid",
+    "increasebalance" : "Your are going to INCREASE balance",
+    "decreasebalance" : "Your are going to DECREASE balance",
+    "It is not valid number" : "It is not valid number",
+    "ChargingUserFor" : "Charging User Balance for",
+    "DeChargingUserFor" : "Decreasing User Balance for",
+    "Charge action has done Successfully" : "Charge action has done Successfully",
+    "headcharge" : "TopUp the Cloud Balance",
+    "euro" : " €",
+    "amounttochargewithcommission" : "Charge amount with commission €",
+    "amounttochargereal" : "Charge amount in Real €",
+    "doTransaction" : "Transact",
+    "BalanceIsLow" : "Your account Balance is low",
+    "MachienWouldDelete" : "Your machine would be Deleted in near future",
+    "hours or less" : "hours or less remain",
+    "an hour or less" : "an hour or less remain",
+    "24 hours or less" : "24 hours or less remain",
+    "I am aware of the Risk" : "I am aware of the Risk",
+    "Confirm Alert and Close" : "Confirm Alert and Close",
+    "SpotAlert01" : "Attention: Spot VMs are designed for temporary, flexible workloads and should not be used for critical or production environments.",
+    "SpotAlert02" : "Key Points to Consider:",
+    "SpotAlert03" : "Preemption Risk:",
+    "SpotAlert04" : "Spot VMs can be preempted (terminated) by the cloud provider at any time when the capacity is needed elsewhere.",
+    "SpotAlert05" : "No Guarantees:",
+    "SpotAlert06" : "There is no guarantee of availability or uptime for Spot VMs.",
+    "SpotAlert07" : "Best Use Cases:",
+    "SpotAlert08" : "Suitable for batch processing, development, testing, and other non-critical workloads.",
+    "SpotAlert09" : "For stable, reliable, and guaranteed performance, we recommend choosing the standard VM offerings.",
+    
+    
     
 }
 

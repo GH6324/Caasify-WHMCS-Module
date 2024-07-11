@@ -1,9 +1,19 @@
-<?php $parentFile = __FILE__; ?>
 <?php
-// This file get neede data from config.php and latest $config params
-
-// In case be installed whmcs in a subfolder, this file can get url from host data
 require_once('./config.php');
-header('Content-Type: application/json');
-echo json_encode(['configs' => $configs]);
+$MyCaasifyStatus = caasify_get_mycaasify_status();
+
+if(isset($configs)){
+    if(!isset($MyCaasifyStatus) || $MyCaasifyStatus != 'on'){
+        $extraData = [ 'MyCaasifyStatus' => 'off' ];
+    } else {
+        $extraData = [ 'MyCaasifyStatus' => 'on' ];
+    }
+
+    $ConfigData = array_merge($configs, $extraData);
+    
+    header('Content-Type: application/json');
+    echo json_encode(['configs' => $ConfigData]);
+} else {
+    echo json_encode(['message' => 'can not find configs form configApi']);
+}
 ?>

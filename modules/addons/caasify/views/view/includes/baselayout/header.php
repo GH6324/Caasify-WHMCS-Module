@@ -2,7 +2,7 @@
 $AssetsPath = __DIR__;
 ?>
 <!doctype html>    
-    <html lang="<?php echo($templatelang) ?>" <?php if($templatelang == 'Farsi'){ echo("dir='rtl'"); } ?> style="font-size: 0.8em !important; background-color: #ff000000" !important;>
+    <html lang="<?php echo($templatelang) ?>" <?php if($templatelang == 'Farsi'){ echo("dir='rtl'"); } ?> style="font-size: 0.8em !important;>
 
     <head>
         <meta charset="utf-8">

@@ -372,12 +372,86 @@ let common = {
     "FAILED" : "ÉCHOUÉ",
     "PENDING" : "EN ATTENTE",
 
-    "Warning" : "Warning",
-    "MoreThanMax" : "Not valid: it is more than allowed charge, call your admin",    
-    "DeleteIsNotAllowed" : "You are not allowed to DELETE this machine in DEMO Mode",    
-    "TrafficAlert" : "It may take more than 10 minutes",    
+    "Warning" : "Avertissement",
+    "MoreThanMax" : "Non valide : dépasse le montant autorisé, appelez votre administrateur",
+    "DeleteIsNotAllowed" : "Vous n'êtes pas autorisé à SUPPRIMER cette machine en mode DÉMO",
+    "TrafficAlert" : "Cela peut prendre plus de 10 minutes",
+    "Machine Info" : "Informations sur la machine",
 
-    "Machine Info" : "Machine Info",
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+        // New
+        "Cloud Account" : "Compte Cloud",
+        "InsertValidNumber" : "Pour recharger votre compte cloud, veuillez entrer un numéro valide",
+        "Creating invoice" : "Création de facture",
+        "invoice created successfully" : "facture créée avec succès",
+        "Go to invoice payment" : "Aller au paiement de la facture",
+        "Creating invoice Failed, try again" : "La création de la facture a échoué, veuillez réessayer",
+        "Inbound" : "Entrant",
+        "Outbound" : "Sortant",
+        "Admin Finance" : "Finance Admin",
+        "AdminBalance" : "Solde Admin (€)",
+        "Commission" : "Commission",
+        "User Finance" : "Finance Utilisateur",
+        "UserBalanceReal" : "Solde Utilisateur Réel (€)",
+        "UserBalanceWithCommission" : "Solde Utilisateur avec Commission (€)",
+        "Charging" : "Chargement",
+        "With Commission" : "Avec Commission",
+        "Increase User Balance" : "Augmenter le Solde Utilisateur",
+        "Decrease User Balance" : "Diminuer le Solde Utilisateur",
+        "Commission is Wrong" : "La commission est incorrecte",
+        "User Orders" : "Commandes Utilisateur",
+        "User has no active order" : "L'utilisateur n'a pas de commande active",
+        "Error 670: call your admin" : "Erreur 670 : Commission non valide",
+        "increasebalance" : "Vous allez AUGMENTER le solde",
+        "decreasebalance" : "Vous allez DIMINUER le solde",
+        "It is not valid number" : "Ce n'est pas un numéro valide",
+        "ChargingUserFor" : "Chargement du solde utilisateur pour",
+        "DeChargingUserFor" : "Diminution du solde utilisateur pour",
+        "Charge action has done Successfully" : "L'action de chargement a été réalisée avec succès",
+        "headcharge" : "Recharger le Solde Cloud",
+        "euro" : " €",
+        "amounttochargewithcommission" : "Montant à charger avec commission €",
+        "amounttochargereal" : "Montant à charger en Réel €",
+        "doTransaction" : "Effectuer la transaction",
+        "BalanceIsLow" : "Le solde de votre compte est faible",
+        "MachienWouldDelete" : "Votre machine sera supprimée prochainement",
+        "hours or less" : "heures ou moins restantes",
+        "an hour or less" : "une heure ou moins restantes",
+        "24 hours or less" : "24 heures ou moins restantes",
+        "I am aware of the Risk" : "Je suis conscient du risque",
+        "Confirm Alert and Close" : "Confirmer l'alerte et fermer",
+        "SpotAlert01" : "Attention : Les VM Spot sont conçues pour des charges de travail temporaires et flexibles et ne doivent pas être utilisées pour des environnements critiques ou de production.",
+        "SpotAlert02" : "Points Clés à Considérer :",
+        "SpotAlert03" : "Risque de Préemption :",
+        "SpotAlert04" : "Les VM Spot peuvent être préemptées (terminées) par le fournisseur cloud à tout moment lorsque la capacité est nécessaire ailleurs.",
+        "SpotAlert05" : "Aucune Garantie :",
+        "SpotAlert06" : "Il n'y a aucune garantie de disponibilité ou de temps de fonctionnement pour les VM Spot.",
+        "SpotAlert07" : "Meilleures Utilisations :",
+        "SpotAlert08" : "Convient pour le traitement par lots, le développement, les tests et d'autres charges de travail non critiques.",
+        "SpotAlert09" : "Pour des performances stables, fiables et garanties, nous recommandons de choisir les offres de VM standard."
+
+    
+
+
+
+
 
 
 }

@@ -4,25 +4,25 @@
         <div class="row">
             <div class="col-12 border border-2 border-danger rounded-4 p-4">
                 <p class="alert alert-danger h5 bg-danger text-light">
-                    Attention: Spot VMs are designed for temporary, flexible workloads and should not be used for critical or production environments.
+                    {{ lang('SpotAlert01') }}
                 </p>
                 <p class="pt-4">
                     <span class="h5">
-                        Key Points to Consider:
+                        {{ lang('SpotAlert02') }}
                     </span>
                     <ul class="h6 lh-lg">
                         <li>
-                            <b>Preemption Risk:</b> Spot VMs can be preempted (terminated) by the cloud provider at any time when the capacity is needed elsewhere.
+                            <b>{{ lang('SpotAlert03') }} </b> {{ lang('SpotAlert04') }}
                         </li>
                         <li>
-                            <b>No Guarantees:</b> There is no guarantee of availability or uptime for Spot VMs.
+                            <b>{{ lang('SpotAlert05') }} </b> {{ lang('SpotAlert06') }}
                         </li>
                         <li>
-                            <b>Best Use Cases:</b> Suitable for batch processing, development, testing, and other non-critical workloads.
+                            <b>{{ lang('SpotAlert07') }} </b> {{ lang('SpotAlert08') }}
                         </li>
                     </ul>
                     <p class="h6 mt-4">
-                        For stable, reliable, and guaranteed performance, we recommend choosing the standard VM offerings.
+                        {{ lang('SpotAlert09') }}
                     </p>
                 </p>
             </div>
