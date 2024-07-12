@@ -1,41 +1,46 @@
 <div class="dropdown m-0 p-0">
 <span class="" type="button" data-bs-toggle="dropdown" aria-expanded="false" >
     <?php 
+        if(!isset($systemUrl)){
+            $systemUrl = '';
+        }
+        
         switch ($templatelang) {
             case "Farsi":
-            echo '<img src="https://caasify.local:8890/modules/addons/caasify/views/view/includes/assets/img/flags/farsi.png" alt="farsi" style="width:34px;">';
+                
+            echo '<img src="' . $systemUrl . '/modules/addons/caasify/views/view/includes/assets/img/flags/farsi.png" alt="farsi" style="width:34px;">';
             break;
 
             case "English":
-            echo '<img src="https://caasify.local:8890/modules/addons/caasify/views/view/includes/assets/img/flags/english.png" alt="english" style="width:34px;">';
+            echo '<img src="' . $systemUrl . '/modules/addons/caasify/views/view/includes/assets/img/flags/english.png" alt="english" style="width:34px;">';
             break;
 
             case "Turkish":
-            echo '<img src="https://caasify.local:8890/modules/addons/caasify/views/view/includes/assets/img/flags/turkish.png" alt="turkish" style="width:34px;">';
+            echo '<img src="' . $systemUrl . '/modules/addons/caasify/views/view/includes/assets/img/flags/turkish.png" alt="turkish" style="width:34px;">';
             break;
 
             case "French":
-            echo '<img src="https://caasify.local:8890/modules/addons/caasify/views/view/includes/assets/img/flags/france.png" alt="france" style="width:34px;">';
+            echo '<img src="' . $systemUrl . '/modules/addons/caasify/views/view/includes/assets/img/flags/france.png" alt="france" style="width:34px;">';
             break;
             
             case "Deutsch":
-            echo '<img src="https://caasify.local:8890/modules/addons/caasify/views/view/includes/assets/img/flags/deutsch.png" alt="deutsch" style="width:34px;">';
+            echo '<img src="' . $systemUrl . '/modules/addons/caasify/views/view/includes/assets/img/flags/deutsch.png" alt="deutsch" style="width:34px;">';
             break;
             
             case "Russian":
-            echo '<img src="https://caasify.local:8890/modules/addons/caasify/views/view/includes/assets/img/flags/russian.png" alt="russian" style="width:34px;">';
+            echo '<img src="' . $systemUrl . '/modules/addons/caasify/views/view/includes/assets/img/flags/russian.png" alt="russian" style="width:34px;">';
             break;
                 
             case "Brizilian":
-            echo '<img src="https://caasify.local:8890/modules/addons/caasify/views/view/includes/assets/img/flags/brizilian.png" alt="brizilian" style="width:34px;">';
+            echo '<img src="' . $systemUrl . '/modules/addons/caasify/views/view/includes/assets/img/flags/brizilian.png" alt="brizilian" style="width:34px;">';
             break;
             
             case "Italian":
-            echo '<img src="https://caasify.local:8890/modules/addons/caasify/views/view/includes/assets/img/flags/italian.png" alt="italian" style="width:34px;">';
+            echo '<img src="' . $systemUrl . '/modules/addons/caasify/views/view/includes/assets/img/flags/italian.png" alt="italian" style="width:34px;">';
             break;
 
             default:
-            echo '<img src="https://caasify.local:8890/modules/addons/caasify/views/view/includes/assets/img/flags/farsi.png" altfarsi style="width:34px;">';
+            echo '<img src="' . $systemUrl . '/modules/addons/caasify/views/view/includes/assets/img/flags/farsi.png" altfarsi style="width:34px;">';
         }
         ?>
     </span>
